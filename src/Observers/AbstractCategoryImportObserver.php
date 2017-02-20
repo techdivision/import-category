@@ -96,13 +96,15 @@ abstract class AbstractCategoryImportObserver extends AbstractObserver implement
     }
 
     /**
-     * Queries whether or not the SKU has already been processed.
+     * Queries whether or not the path has already been processed.
      *
-     * @return boolean TRUE if the SKU has been processed, else FALSE
+     * @param string $path The path to check
+     *
+     * @return boolean TRUE if the path has been processed, else FALSE
      */
-    protected function hasBeenProcessed($sku)
+    protected function hasBeenProcessed($path)
     {
-        return $this->getSubject()->hasBeenProcessed($sku);
+        return $this->getSubject()->hasBeenProcessed($path);
     }
 
     /**
