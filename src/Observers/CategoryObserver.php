@@ -49,11 +49,9 @@ class CategoryObserver extends AbstractCategoryImportObserver
         }
 
         if ($path = $this->explode($path, '/')) {
-
             $this->categoryIds = array();
 
             foreach ($path as $category) {
-
                 if ($existingCategory = $this->loadCategoryByPath($category)) {
                     $this->categoryIds[] = $existingCategory[MemberNames::ENTITY_ID];
                 }
