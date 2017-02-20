@@ -43,7 +43,7 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
     {
 
         // query whether or not, we've found a new path => means we've found a new category
-        if ($this->isLastSku($path = $this->getValue(ColumnKeys::PATH))) {
+        if ($this->isLastPath($path = $this->getValue(ColumnKeys::PATH))) {
             return;
         }
 

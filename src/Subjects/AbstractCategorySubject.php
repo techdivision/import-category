@@ -20,10 +20,13 @@
 
 namespace TechDivision\Import\Category\Subjects;
 
+use Psr\Log\LoggerInterface;
 use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Subjects\AbstractSubject;
+use TechDivision\Import\Services\RegistryProcessorInterface;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Services\CategoryProcessorInterface;
+use TechDivision\Import\Configuration\SubjectConfigurationInterface;
 
 /**
  * The abstract product subject implementation that provides basic category
@@ -44,13 +47,6 @@ abstract class AbstractCategorySubject extends AbstractSubject
      * @var \TechDivision\Import\Category\Services\CategoryProcessorInterface
      */
     protected $categoryProcessor;
-
-    /**
-     * The available EAV attribute sets.
-     *
-     * @var array
-     */
-    protected $attributeSets = array();
 
     /**
      * The available stores.
@@ -102,6 +98,27 @@ abstract class AbstractCategorySubject extends AbstractSubject
     protected $lastEntityId;
 
     /**
+     * The path of the category that has been created recently.
+     *
+     * @var string
+     */
+    protected $lastPath;
+
+    /**
+     * The mapping for the paths to the created entity IDs.
+     *
+     * @var array
+     */
+    protected $pathEntityIdMapping = array();
+
+    /**
+     * The mapping for the paths to the store view codes.
+     *
+     * @var array
+     */
+    protected $pathStoreViewCodeMapping = array();
+
+    /**
      * The store view code the create the product/attributes for.
      *
      * @var string
@@ -121,6 +138,28 @@ abstract class AbstractCategorySubject extends AbstractSubject
      * @var array
      */
     protected $coreConfigData;
+
+    /**
+     * Initialize the subject instance.
+     *
+     * @param \Psr\Log\LoggerInterface                                          $systemLogger       The system logger instance
+     * @param \TechDivision\Import\Configuration\SubjectConfigurationInterface  $configuration      The subject configuration instance
+     * @param \TechDivision\Import\Services\RegistryProcessorInterface          $registryProcessor  The registry processor instance
+     * @param \TechDivision\Import\Category\Services\CategoryProcessorInterface $categoryProcessor  The category processor instance
+     */
+    public function __construct(
+        LoggerInterface $systemLogger,
+        SubjectConfigurationInterface $configuration,
+        RegistryProcessorInterface $registryProcessor,
+        CategoryProcessorInterface $categoryProcessor
+    ) {
+
+        // pass the arguments to the parent constructor
+        parent::__construct($systemLogger, $configuration, $registryProcessor);
+
+        // initialize the category processor
+        $this->categoryProcessor = $categoryProcessor;
+    }
 
     /**
      * Set's the category processor instance.
@@ -164,6 +203,65 @@ abstract class AbstractCategorySubject extends AbstractSubject
     public function getLastEntityId()
     {
         return $this->lastEntityId;
+    }
+
+    /**
+     * Set's the path of the last imported category.
+     *
+     * @param string $lastPath The path
+     *
+     * @return void
+     */
+    public function setLastPath($lastPath)
+    {
+        $this->lastPath = $lastPath;
+    }
+
+    /**
+     * Return's the path of the last imported category.
+     *
+     * @return string|null The path
+     */
+    public function getLastPath()
+    {
+        return $this->lastPath;
+    }
+
+    /**
+     * Queries whether or not the path has already been processed.
+     *
+     * @param string $path The path to check been processed
+     *
+     * @return boolean TRUE if the path has been processed, else FALSE
+     */
+    public function hasBeenProcessed($path)
+    {
+        return isset($this->pathEntityIdMapping[$path]);
+    }
+
+    /**
+     * Add the passed path => entity ID mapping.
+     *
+     * @param string $path The path
+     *
+     * @return void
+     */
+    public function addPathEntityIdMapping($path)
+    {
+        $this->pathEntityIdMapping[$path] = $this->getLastEntityId();
+    }
+
+    /**
+     * Add the passed path => store view code mapping.
+     *
+     * @param string $path          The SKU
+     * @param string $storeViewCode The store view code
+     *
+     * @return void
+     */
+    public function addPathStoreViewCodeMapping($path, $storeViewCode)
+    {
+        $this->pathStoreViewCodeMapping[$path] = $storeViewCode;
     }
 
     /**
@@ -223,7 +321,6 @@ abstract class AbstractCategorySubject extends AbstractSubject
         $status = $this->getRegistryProcessor()->getAttribute($this->getSerial());
 
         // load the global data we've prepared initially
-        $this->attributeSets = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::ATTRIBUTE_SETS];
         $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
         $this->attributes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::EAV_ATTRIBUTES];
         $this->stores = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORES];
@@ -359,30 +456,16 @@ abstract class AbstractCategorySubject extends AbstractSubject
     }
 
     /**
-     * Return's the attribute set with the passed attribute set name.
+     * Add's the passed category to the internal list.
      *
-     * @param string $attributeSetName The name of the requested attribute set
+     * @param string $path     The path of the category to add
+     * @param array  $category The category to add
      *
-     * @return array The attribute set data
-     * @throws \Exception Is thrown, if the attribute set with the passed name is not available
+     * @return void
      */
-    public function getAttributeSetByAttributeSetName($attributeSetName)
+    public function addCategory($path, $category)
     {
-
-        // query whether or not, the requested attribute set is available
-        if (isset($this->attributeSets[$attributeSetName])) {
-            return $this->attributeSets[$attributeSetName];
-        }
-
-        // throw an exception, if not
-        throw new \Exception(
-            sprintf(
-                'Found invalid attribute set name %s in file %s on line %d',
-                $attributeSetName,
-                $this->getFilename(),
-                $this->getLineNumber()
-            )
-        );
+        $this->categories[$path] = $category;
     }
 
     /**

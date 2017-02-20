@@ -36,6 +36,13 @@ class CategoryObserver extends AbstractCategoryImportObserver
 {
 
     /**
+     * The array with the parent category IDs.
+     *
+     * @var array
+     */
+    protected $categoryIds = array();
+
+    /**
      * Process the observer's business logic.
      *
      * @return void
@@ -48,20 +55,33 @@ class CategoryObserver extends AbstractCategoryImportObserver
             return;
         }
 
-        if ($path = $this->explode($path, '/')) {
+        if ($categories = $this->explode($path, '/')) {
+
             $this->categoryIds = array();
 
-            foreach ($path as $category) {
-                if ($existingCategory = $this->loadCategoryByPath($category)) {
-                    $this->categoryIds[] = $existingCategory[MemberNames::ENTITY_ID];
+            for ($i = sizeof($categories); $i > 0; $i--) {
+
+                try {
+
+                    $categoryPath = implode('/', array_slice($categories, 0, $i));
+
+                    $this->getSystemLogger()->info("Now try to load category path $categoryPath");
+
+                    $existingCategory = $this->getCategoryByPath($categoryPath);
+                    array_unshift($this->categoryIds, $existingCategory[MemberNames::ENTITY_ID]);
+
+                } catch(\Exception $e) {
+                    $this->getSystemLogger()->info("Can't load category $categoryPath");
                 }
-
-                // prepare the static entity values
-                $category = $this->initializeCategory($this->prepareAttributes());
-
-                // insert the entity and set the entity ID
-                $this->setLastEntityId($this->persistCategory($category));
             }
+
+            // prepare the static entity values
+            $category = $this->initializeCategory($this->prepareAttributes());
+            $category[MemberNames::ENTITY_ID] = $this->persistCategory($category);
+
+            // insert the entity and set the entity ID
+            $this->setLastEntityId($category[MemberNames::ENTITY_ID]);
+            $this->addCategory($path, $category);
         }
     }
 
@@ -82,13 +102,25 @@ class CategoryObserver extends AbstractCategoryImportObserver
         $attributeSetId = $attributeSet[MemberNames::ATTRIBUTE_SET_ID];
         $this->setAttributeSet($attributeSet);
 
+        // prepend the ID of the Root Catalog to the category IDs
+        array_unshift($this->categoryIds, 1);
+
+        $position = 0;
+        $parentId = end($this->categoryIds);
+        $level = sizeof($this->categoryIds);
+        $childrenCount = 0;
+
         // return the prepared product
         return $this->initializeEntity(
             array(
                 MemberNames::CREATED_AT       => $createdAt,
                 MemberNames::UPDATED_AT       => $updatedAt,
                 MemberNames::ATTRIBUTE_SET_ID => $attributeSetId,
-                MemberNames::PATH             => $this->categoryIds
+                MemberNames::PATH             => implode('/', $this->categoryIds),
+                MemberNames::PARENT_ID        => $parentId,
+                MemberNames::POSITION         => $position,
+                MemberNames::LEVEL            => $level,
+                MemberNames::CHILDREN_COUNT   => $childrenCount
             )
         );
     }
@@ -103,6 +135,31 @@ class CategoryObserver extends AbstractCategoryImportObserver
     protected function initializeCategory(array $attr)
     {
         return $attr;
+    }
+
+    /**
+     * Add's the passed category to the internal list.
+     *
+     * @param string $path     The path of the category to add
+     * @param array  $category The category to add
+     *
+     * @return void
+     */
+    protected function addCategory($path, $category)
+    {
+        $this->getSubject()->addCategory($path, $category);
+    }
+
+    /**
+     * Return's the category with the passed path.
+     *
+     * @param string $path The path of the category to return
+     *
+     * @return array The category
+     */
+    protected function getCategoryByPath($path)
+    {
+        return $this->getSubject()->getCategoryByPath($path);
     }
 
     /**

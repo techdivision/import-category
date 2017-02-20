@@ -202,15 +202,15 @@ abstract class AbstractCategoryImportObserver extends AbstractObserver implement
     }
 
     /**
-     * Return's TRUE if the passed SKU is the actual one.
+     * Return's TRUE if the passed path is the actual one.
      *
-     * @param string $sku The SKU to check
+     * @param string $path The path to check
      *
-     * @return boolean TRUE if the passed SKU is the actual one
+     * @return boolean TRUE if the passed path is the actual one
      */
-    protected function isLastSku($sku)
+    protected function isLastPath($path)
     {
-        return $this->getSubject()->getLastSku() === $sku;
+        return $this->getSubject()->getLastPath() === $path;
     }
 
     /**
