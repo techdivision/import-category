@@ -20,10 +20,13 @@
 
 namespace TechDivision\Import\Category\Subjects;
 
+use Psr\Log\LoggerInterface;
 use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Subjects\AbstractSubject;
+use TechDivision\Import\Services\RegistryProcessorInterface;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Services\CategoryProcessorInterface;
+use TechDivision\Import\Configuration\SubjectConfigurationInterface;
 
 /**
  * The abstract product subject implementation that provides basic category
@@ -46,13 +49,6 @@ abstract class AbstractCategorySubject extends AbstractSubject
     protected $categoryProcessor;
 
     /**
-     * The available EAV attribute sets.
-     *
-     * @var array
-     */
-    protected $attributeSets = array();
-
-    /**
      * The available stores.
      *
      * @var array
@@ -65,13 +61,6 @@ abstract class AbstractCategorySubject extends AbstractSubject
      * @var array
      */
     protected $storeWebsites = array();
-
-    /**
-     * The available EAV attributes, grouped by their attribute set and the attribute set name as keys.
-     *
-     * @var array
-     */
-    protected $attributes = array();
 
     /**
      * The available tax classes.
@@ -102,6 +91,27 @@ abstract class AbstractCategorySubject extends AbstractSubject
     protected $lastEntityId;
 
     /**
+     * The path of the category that has been created recently.
+     *
+     * @var string
+     */
+    protected $lastPath;
+
+    /**
+     * The mapping for the paths to the created entity IDs.
+     *
+     * @var array
+     */
+    protected $pathEntityIdMapping = array();
+
+    /**
+     * The mapping for the paths to the store view codes.
+     *
+     * @var array
+     */
+    protected $pathStoreViewCodeMapping = array();
+
+    /**
      * The store view code the create the product/attributes for.
      *
      * @var string
@@ -121,6 +131,28 @@ abstract class AbstractCategorySubject extends AbstractSubject
      * @var array
      */
     protected $coreConfigData;
+
+    /**
+     * Initialize the subject instance.
+     *
+     * @param \Psr\Log\LoggerInterface                                          $systemLogger      The system logger instance
+     * @param \TechDivision\Import\Configuration\SubjectConfigurationInterface  $configuration     The subject configuration instance
+     * @param \TechDivision\Import\Services\RegistryProcessorInterface          $registryProcessor The registry processor instance
+     * @param \TechDivision\Import\Category\Services\CategoryProcessorInterface $categoryProcessor The category processor instance
+     */
+    public function __construct(
+        LoggerInterface $systemLogger,
+        SubjectConfigurationInterface $configuration,
+        RegistryProcessorInterface $registryProcessor,
+        CategoryProcessorInterface $categoryProcessor
+    ) {
+
+        // pass the arguments to the parent constructor
+        parent::__construct($systemLogger, $configuration, $registryProcessor);
+
+        // initialize the category processor
+        $this->categoryProcessor = $categoryProcessor;
+    }
 
     /**
      * Set's the category processor instance.
@@ -164,6 +196,85 @@ abstract class AbstractCategorySubject extends AbstractSubject
     public function getLastEntityId()
     {
         return $this->lastEntityId;
+    }
+
+    /**
+     * Set's the path of the last imported category.
+     *
+     * @param string $lastPath The path
+     *
+     * @return void
+     */
+    public function setLastPath($lastPath)
+    {
+        $this->lastPath = $lastPath;
+    }
+
+    /**
+     * Return's the path of the last imported category.
+     *
+     * @return string|null The path
+     */
+    public function getLastPath()
+    {
+        return $this->lastPath;
+    }
+
+    /**
+     * Queries whether or not the path has already been processed.
+     *
+     * @param string $path The path to check been processed
+     *
+     * @return boolean TRUE if the path has been processed, else FALSE
+     */
+    public function hasBeenProcessed($path)
+    {
+        return isset($this->pathEntityIdMapping[$path]);
+    }
+
+    /**
+     * Add the passed path => entity ID mapping.
+     *
+     * @param string $path The path
+     *
+     * @return void
+     */
+    public function addPathEntityIdMapping($path)
+    {
+        $this->pathEntityIdMapping[$path] = $this->getLastEntityId();
+    }
+
+    /**
+     * Return's the entity ID for the passed path.
+     *
+     * @param string $path The path to return the entity ID for
+     *
+     * @return integer The mapped entity ID
+     * @throws \Exception Is thrown, if the path can not be mapped
+     */
+    public function mapPathEntityId($path)
+    {
+
+        // query whether or not a entity ID for the passed path has been mapped
+        if (isset($this->pathEntityIdMapping[$path])) {
+            return $this->pathEntityIdMapping[$path];
+        }
+
+        // throw an exception if not
+        throw new \Exception(sprintf('Can\'t map path %s to any entity ID', $path));
+    }
+
+    /**
+     * Add the passed path => store view code mapping.
+     *
+     * @param string $path          The SKU
+     * @param string $storeViewCode The store view code
+     *
+     * @return void
+     */
+    public function addPathStoreViewCodeMapping($path, $storeViewCode)
+    {
+        $this->pathStoreViewCodeMapping[$path] = $storeViewCode;
     }
 
     /**
@@ -223,15 +334,16 @@ abstract class AbstractCategorySubject extends AbstractSubject
         $status = $this->getRegistryProcessor()->getAttribute($this->getSerial());
 
         // load the global data we've prepared initially
-        $this->attributeSets = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::ATTRIBUTE_SETS];
         $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
         $this->attributes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::EAV_ATTRIBUTES];
         $this->stores = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORES];
         $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
-        $this->categories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CATEGORIES];
         $this->rootCategories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::ROOT_CATEGORIES];
         $this->defaultStore = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::DEFAULT_STORE];
         $this->coreConfigData = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CORE_CONFIG_DATA];
+
+        // load the available categories
+        $this->categories = $this->getCategoryProcessor()->getCategoriesWithResolvedPath();
 
         // prepare the callbacks
         parent::setUp();
@@ -248,48 +360,11 @@ abstract class AbstractCategorySubject extends AbstractSubject
         // invoke the parent method
         parent::tearDown();
 
-        // load the registry processor
-        $registryProcessor = $this->getRegistryProcessor();
-
-        // update the status with the SKU => entity ID mapping
-        $registryProcessor->mergeAttributesRecursive(
-            $this->getSerial(),
-            array()
-        );
-
         // update the status
-        $registryProcessor->mergeAttributesRecursive(
+        $this->getRegistryProcessor()->mergeAttributesRecursive(
             $this->getSerial(),
             array(
                 RegistryKeys::FILES => array($this->getFilename() => array(RegistryKeys::STATUS => 1))
-            )
-        );
-    }
-
-    /**
-     * Return's the attributes for the attribute set of the product that has to be created.
-     *
-     * @return array The attributes
-     * @throws \Exception Is thrown if the attributes for the actual attribute set are not available
-     */
-    public function getAttributes()
-    {
-
-        // load the attribute set of the product that has to be created.
-        $attributeSet = $this->getAttributeSet();
-
-        // query whether or not, the requested EAV attributes are available
-        if (isset($this->attributes[$attributeSetName = $attributeSet[MemberNames::ATTRIBUTE_SET_NAME]])) {
-            return $this->attributes[$attributeSetName];
-        }
-
-        // throw an exception, if not
-        throw new \Exception(
-            sprintf(
-                'Found invalid attribute set name %s in file %s on line %d',
-                $attributeSetName,
-                $this->getFilename(),
-                $this->getLineNumber()
             )
         );
     }
@@ -359,33 +434,6 @@ abstract class AbstractCategorySubject extends AbstractSubject
     }
 
     /**
-     * Return's the attribute set with the passed attribute set name.
-     *
-     * @param string $attributeSetName The name of the requested attribute set
-     *
-     * @return array The attribute set data
-     * @throws \Exception Is thrown, if the attribute set with the passed name is not available
-     */
-    public function getAttributeSetByAttributeSetName($attributeSetName)
-    {
-
-        // query whether or not, the requested attribute set is available
-        if (isset($this->attributeSets[$attributeSetName])) {
-            return $this->attributeSets[$attributeSetName];
-        }
-
-        // throw an exception, if not
-        throw new \Exception(
-            sprintf(
-                'Found invalid attribute set name %s in file %s on line %d',
-                $attributeSetName,
-                $this->getFilename(),
-                $this->getLineNumber()
-            )
-        );
-    }
-
-    /**
      * Return's the category with the passed path.
      *
      * @param string $path The path of the category to return
@@ -410,6 +458,19 @@ abstract class AbstractCategorySubject extends AbstractSubject
                 $this->getLineNumber()
             )
         );
+    }
+
+    /**
+     * Add the passed category to the available categories.
+     *
+     * @param string $path     The path to register the category with
+     * @param array  $category The category to add
+     *
+     * @return void
+     */
+    public function addCategory($path, $category)
+    {
+        $this->categories[$path] = $category;
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Utils\SqlStatements
+ * TechDivision\Import\Category\Utils\SqlStatements
  *
  * NOTICE OF LICENSE
  *
@@ -14,11 +14,11 @@
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
- * @link      https://github.com/techdivision/import-product
+ * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Product\Utils;
+namespace TechDivision\Import\Category\Utils;
 
 /**
  * Utility class with the SQL statements to use.
@@ -26,18 +26,25 @@ namespace TechDivision\Import\Product\Utils;
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
- * @link      https://github.com/techdivision/import-product
+ * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
 class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
 {
 
     /**
+     * The SQL statement to load the category with the passed entity ID.
+     *
+     * @var string
+     */
+    const CATEGORY = 'SELECT * FROM catalog_category_entity WHERE entity_id = :entity_id';
+
+    /**
      * The SQL statement to load the category with the passed path.
      *
      * @var string
      */
-    const CATEGORY = 'SELECT * FROM catalog_category_entity WHERE path = :path';
+    const CATEGORY_BY_PATH = 'SELECT * FROM catalog_category_entity WHERE path = :path';
 
     /**
      * The SQL statement to load the category datetime attribute with the passed entity/attribute/store ID.
@@ -108,7 +115,7 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
                                                              position,
                                                              level,
                                                              children_count)
-                             VALUES (:attribute_set_id
+                             VALUES (:attribute_set_id,
                                      :parent_id,
                                      :created_at,
                                      :updated_at,
@@ -286,4 +293,11 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
     const DELETE_CATEGORY = 'DELETE
                                FROM catalog_category_entity
                               WHERE path = :path';
+
+    /**
+     * The SQL statement to count the children of the category with the passed path.
+     *
+     * @var string
+     */
+    const CATEGORY_COUNT_CHILDREN = 'SELECT COUNT(*) FROM catalog_category_entity WHERE path LIKE :path';
 }
