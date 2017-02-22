@@ -21,7 +21,6 @@
 namespace TechDivision\Import\Category\Repositories;
 
 use TechDivision\Import\Category\Utils\MemberNames;
-use TechDivision\Import\Repositories\AbstractRepository;
 
 /**
  * Repository implementation to load category data.
@@ -32,7 +31,7 @@ use TechDivision\Import\Repositories\AbstractRepository;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-class CategoryRepository extends AbstractRepository
+class CategoryRepository extends \TechDivision\Import\Repositories\CategoryRepository
 {
 
     /**
@@ -43,6 +42,20 @@ class CategoryRepository extends AbstractRepository
     protected $categoryStmt;
 
     /**
+     * The prepared statement to load an existing category by it's path
+     *
+     * @var \PDOStatement
+     */
+    protected $categoryByPathStmt;
+
+    /**
+     * The prepared statement to load the children count of an existing category.
+     *
+     * @var \PDOStatement
+     */
+    protected $categoryCountChildrenStmt;
+
+    /**
      * Initializes the repository's prepared statements.
      *
      * @return void
@@ -50,11 +63,30 @@ class CategoryRepository extends AbstractRepository
     public function init()
     {
 
+        // initialize the parend class
+        parent::init();
+
         // load the utility class name
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
         $this->categoryStmt = $this->getConnection()->prepare($utilityClassName::CATEGORY);
+        $this->categoryByPathStmt = $this->getConnection()->prepare($utilityClassName::CATEGORY_BY_PATH);
+        $this->categoryCountChildrenStmt = $this->getConnection()->prepare($utilityClassName::CATEGORY_COUNT_CHILDREN);
+    }
+
+    /**
+     * Return's the category with the passed ID.
+     *
+     * @param string $id The ID of the category to return
+     *
+     * @return array The category
+     */
+    public function load($id)
+    {
+        // load and return the category with the passed ID
+        $this->categoryStmt->execute(array(MemberNames::ENTITY_ID => $id));
+        return $this->categoryStmt->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -67,7 +99,21 @@ class CategoryRepository extends AbstractRepository
     public function findOneByPath($path)
     {
         // load and return the category with the passed path
-        $this->categoryStmt->execute(array(MemberNames::PATH => $path));
-        return $this->categoryStmt->fetch(\PDO::FETCH_ASSOC);
+        $this->categoryByPathStmt->execute(array(MemberNames::PATH => $path));
+        return $this->categoryByPathStmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Return's the children count of the category with the passed path.
+     *
+     * @param string $path The path of the category to count the children for
+     *
+     * @return integer The children count of the category with the passed path
+     */
+    public function countChildren($path)
+    {
+        // load and return the category with the passed path
+        $this->categoryCountChildrenStmt->execute(array(MemberNames::PATH => $path));
+        return $this->categoryCountChildrenStmt->fetchColumn();
     }
 }

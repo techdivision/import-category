@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Category\Observers;
 
 use TechDivision\Import\Category\Utils\ColumnKeys;
+use TechDivision\Import\Category\Utils\MemberNames;
 
 /**
  * Observer that removes the category with the path found in the CSV file.
@@ -35,6 +36,13 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
 {
 
     /**
+     * The artefact type.
+     *
+     * @var string
+     */
+    const ARTEFACT_TYPE = 'category-create';
+
+    /**
      * Process the observer's business logic.
      *
      * @return array The processed row
@@ -47,8 +55,65 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
             return;
         }
 
+        // initialize the array for the artefacts
+        $artefacts = array();
+
+        // load the category by it's path
+        $category = $this->getCategoryByPath($path);
+
         // delete the category with the passed path
-        $this->deleteCategory(array(ColumnKeys::PATH => $path));
+        $this->deleteCategory(array(ColumnKeys::PATH => $category[MemberNames::PATH]));
+
+        // initialize the artefacts
+        $artefact = array();
+        foreach (array_keys($this->getHeaders()) as $columnName) {
+            $artefact[$columnName] = $this->getValue($columnName);
+        }
+
+        // add the artefacts to the subject
+        array_push($artefacts, $artefact);
+        $this->addArtefacts($artefacts);
+
+        // store the ID of the last deleted category
+        $this->setLastEntityId($category[MemberNames::ENTITY_ID]);
+    }
+
+    /**
+     * Set's the ID of the product that has been created recently.
+     *
+     * @param string $lastEntityId The entity ID
+     *
+     * @return void
+     */
+    protected function setLastEntityId($lastEntityId)
+    {
+        $this->getSubject()->setLastEntityId($lastEntityId);
+    }
+
+    /**
+     * Add the passed category artefacts to the category with the
+     * last entity ID.
+     *
+     * @param array $artefacts The category artefacts
+     *
+     * @return void
+     * @uses \TechDivision\Import\Category\BunchSubject::getLastEntityId()
+     */
+    protected function addArtefacts(array $artefacts)
+    {
+        $this->getSubject()->addArtefacts(ClearCategoryObserver::ARTEFACT_TYPE, $artefacts);
+    }
+
+    /**
+     * Return's the category with the passed path.
+     *
+     * @param string $path The path of the category to return
+     *
+     * @return array The category
+     */
+    protected function getCategoryByPath($path)
+    {
+        return $this->getSubject()->getCategoryByPath($path);
     }
 
     /**
@@ -59,7 +124,7 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
      *
      * @return void
      */
-    public function deleteCategory($row, $name = null)
+    protected function deleteCategory($row, $name = null)
     {
         $this->getSubject()->deleteCategory($row, $name);
     }

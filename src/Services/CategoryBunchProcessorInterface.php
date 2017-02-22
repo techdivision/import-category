@@ -98,13 +98,54 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface
     public function getEavAttributeByIsUserDefined($isUserDefined = 1);
 
     /**
-     * Load's and return's the category with the passed path.
+     * Returns an array with the available categories and their
+     * resolved path as keys.
      *
-     * @param string $path The path of the category to load
+     * @return array The array with the categories
+     */
+    public function getCategoriesWithResolvedPath();
+
+    /**
+     * Return's an array with all available categories.
+     *
+     * @return array The available categories
+     */
+    public function getCategories();
+
+    /**
+     * Return's an array with the root categories with the store code as key.
+     *
+     * @return array The root categories
+     */
+    public function getRootCategories();
+
+    /**
+     * Returns the category varchar values for the categories with
+     * the passed with the passed entity IDs.
+     *
+     * @param array $entityIds The array with the category IDs
+     *
+     * @return mixed The category varchar values
+     */
+    public function getCategoryVarcharsByEntityIds(array $entityIds);
+
+    /**
+     * Return's the children count of the category with the passed ID.
+     *
+     * @param integer $entityId The ID of the category to count the children for
+     *
+     * @return integer The children count of the category with the passed ID
+     */
+    public function loadCategoryChildrenChildrenCount($entityId);
+
+    /**
+     * Return's the category with the passed ID.
+     *
+     * @param string $id The ID of the category to return
      *
      * @return array The category
      */
-    public function loadCategory($path);
+    public function loadCategory($id);
 
     /**
      * Load's and return's the datetime attribute with the passed entity/attribute/store ID.

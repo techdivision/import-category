@@ -40,6 +40,13 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     protected $connection;
 
     /**
+     * The category assembler instance.
+     *
+     * @var \TechDivision\Import\Assembler\CategoryAssembler
+     */
+    protected $categoryAssembler;
+
+    /**
      * The repository to access EAV attributes.
      *
      * @var \TechDivision\Import\Repositories\EavAttributeRepository
@@ -219,18 +226,6 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     }
 
     /**
-     * Return's an array with the available EAV attributes for the passed is user defined flag.
-     *
-     * @param integer $isUserDefined The flag itself
-     *
-     * @return array The array with the EAV attributes matching the passed flag
-     */
-    public function getEavAttributeByIsUserDefined($isUserDefined = 1)
-    {
-        return $this->getEavAttributeRepository()->findAllByIsUserDefined($isUserDefined);
-    }
-
-    /**
      * Set's the action with the category CRUD methods.
      *
      * @param \TechDivision\Import\Category\Actions\CategoryAction $categoryAction The action with the category CRUD methods
@@ -363,6 +358,28 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     }
 
     /**
+     * Set's the category assembler.
+     *
+     * @param \TechDivision\Import\Assembler\CategoryAssembler $categoryAssembler The category assembler
+     *
+     * @return void
+     */
+    public function setCategoryAssembler($categoryAssembler)
+    {
+        $this->categoryAssembler = $categoryAssembler;
+    }
+
+    /**
+     * Return's the category assembler.
+     *
+     * @return \TechDivision\Import\Assembler\CategoryAssembler The category assembler instance
+     */
+    public function getCategoryAssembler()
+    {
+        return $this->categoryAssembler;
+    }
+
+    /**
      * Set's the repository to load the categories with.
      *
      * @param \TechDivision\Import\Category\Repositories\CategoryRepository $categoryRepository The repository instance
@@ -445,7 +462,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
      *
      * @return \TechDivision\Import\Category\Repositories\CategoryIntRepository The repository instance
      */
-    public function getCroductIntRepository()
+    public function getCategoryIntRepository()
     {
         return $this->categoryIntRepository;
     }
@@ -495,15 +512,83 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     }
 
     /**
-     * Load's and return's the category with the passed path.
+     * Return's an array with the available EAV attributes for the passed is user defined flag.
      *
-     * @param string $path The path of the category to load
+     * @param integer $isUserDefined The flag itself
+     *
+     * @return array The array with the EAV attributes matching the passed flag
+     */
+    public function getEavAttributeByIsUserDefined($isUserDefined = 1)
+    {
+        return $this->getEavAttributeRepository()->findAllByIsUserDefined($isUserDefined);
+    }
+
+    /**
+     * Returns an array with the available categories and their
+     * resolved path as keys.
+     *
+     * @return array The array with the categories
+     */
+    public function getCategoriesWithResolvedPath()
+    {
+        return $this->getCategoryAssembler()->getCategoriesWithResolvedPath();
+    }
+
+    /**
+     * Return's an array with all available categories.
+     *
+     * @return array The available categories
+     */
+    public function getCategories()
+    {
+        return $this->getCategoryRepository()->findAll();
+    }
+
+    /**
+     * Return's an array with the root categories with the store code as key.
+     *
+     * @return array The root categories
+     */
+    public function getRootCategories()
+    {
+        return $this->getCategoryRepository()->findAllRootCategories();
+    }
+
+    /**
+     * Returns the category varchar values for the categories with
+     * the passed with the passed entity IDs.
+     *
+     * @param array $entityIds The array with the category IDs
+     *
+     * @return mixed The category varchar values
+     */
+    public function getCategoryVarcharsByEntityIds(array $entityIds)
+    {
+        return $this->getCategoryVarcharRepository()->findAllByEntityIds($entityIds);
+    }
+
+    /**
+     * Return's the children count of the category with the passed path.
+     *
+     * @param string $path The path of the category to count the children for
+     *
+     * @return integer The children count of the category with the passed path
+     */
+    public function loadCategoryChildrenChildrenCount($path)
+    {
+        return $this->getCategoryRepository()->countChildren($path);
+    }
+
+    /**
+     * Return's the category with the passed ID.
+     *
+     * @param string $id The ID of the category to return
      *
      * @return array The category
      */
-    public function loadCategory($path)
+    public function loadCategory($id)
     {
-        return $this->getCategoryRepository()->findOneByPath($path);
+        return $this->getCategoryRepository()->load($id);
     }
 
     /**

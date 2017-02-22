@@ -33,11 +33,18 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
 {
 
     /**
+     * The SQL statement to load the category with the passed entity ID.
+     *
+     * @var string
+     */
+    const CATEGORY = 'SELECT * FROM catalog_category_entity WHERE entity_id = :entity_id';
+
+    /**
      * The SQL statement to load the category with the passed path.
      *
      * @var string
      */
-    const CATEGORY = 'SELECT * FROM catalog_category_entity WHERE path = :path';
+    const CATEGORY_BY_PATH = 'SELECT * FROM catalog_category_entity WHERE path = :path';
 
     /**
      * The SQL statement to load the category datetime attribute with the passed entity/attribute/store ID.
@@ -286,4 +293,11 @@ class SqlStatements extends \TechDivision\Import\Utils\SqlStatements
     const DELETE_CATEGORY = 'DELETE
                                FROM catalog_category_entity
                               WHERE path = :path';
+
+    /**
+     * The SQL statement to count the children of the category with the passed path.
+     *
+     * @var string
+     */
+    const CATEGORY_COUNT_CHILDREN = 'SELECT COUNT(*) FROM catalog_category_entity WHERE path LIKE :path';
 }

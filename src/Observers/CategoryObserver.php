@@ -36,6 +36,13 @@ class CategoryObserver extends AbstractCategoryImportObserver
 {
 
     /**
+     * The artefact type.
+     *
+     * @var string
+     */
+    const ARTEFACT_TYPE = 'category-path';
+
+    /**
      * The array with the parent category IDs.
      *
      * @var array
@@ -55,33 +62,50 @@ class CategoryObserver extends AbstractCategoryImportObserver
             return;
         }
 
+        // explode the path into the category names
         if ($categories = $this->explode($path, '/')) {
-
+            // initialize the artefacts and reset the category IDs
+            $artefacts = array();
             $this->categoryIds = array();
 
+            // iterate over the category names and try to load the categegory therefore
             for ($i = sizeof($categories); $i > 0; $i--) {
-
                 try {
-
+                    // prepare the expected category name
                     $categoryPath = implode('/', array_slice($categories, 0, $i));
-
-                    $this->getSystemLogger()->info("Now try to load category path $categoryPath");
-
+                    // load the existing category and prepend the ID the array with the category IDs
                     $existingCategory = $this->getCategoryByPath($categoryPath);
                     array_unshift($this->categoryIds, $existingCategory[MemberNames::ENTITY_ID]);
 
-                } catch(\Exception $e) {
-                    $this->getSystemLogger()->info("Can't load category $categoryPath");
+                } catch (\Exception $e) {
+                    $this->getSystemLogger()->debug(sprintf('Can\'t load category %s, create a new one', $categoryPath));
                 }
             }
 
-            // prepare the static entity values
+            // prepare the static entity values, insert the entity and set the entity ID
             $category = $this->initializeCategory($this->prepareAttributes());
-            $category[MemberNames::ENTITY_ID] = $this->persistCategory($category);
+            $this->setLastEntityId($entityId = $this->persistCategory($category));
 
-            // insert the entity and set the entity ID
-            $this->setLastEntityId($category[MemberNames::ENTITY_ID]);
+            //update the persisted category with the entity ID
+            $category[MemberNames::ENTITY_ID] = $entityId;
+
+            // append the category to the list
             $this->addCategory($path, $category);
+
+            // append the ID of the new category to array with the IDs
+            array_push($this->categoryIds, $entityId);
+
+            // prepare the artefact
+            $artefact = array(
+                MemberNames::ENTITY_ID => $entityId,
+                MemberNames::PATH      => implode('/', $this->categoryIds)
+            );
+
+            // put the artefact on the stack
+            $artefacts[] = $artefact;
+
+            // add the artefacts
+            $this->addArtefacts($artefacts);
         }
     }
 
@@ -105,10 +129,12 @@ class CategoryObserver extends AbstractCategoryImportObserver
         // prepend the ID of the Root Catalog to the category IDs
         array_unshift($this->categoryIds, 1);
 
-        $position = 0;
+        // initialize parent ID, category level + path
         $parentId = end($this->categoryIds);
         $level = sizeof($this->categoryIds);
-        $childrenCount = 0;
+
+        // load the position, if available
+        $position = $this->getValue(ColumnKeys::POSITION, 0);
 
         // return the prepared product
         return $this->initializeEntity(
@@ -116,11 +142,11 @@ class CategoryObserver extends AbstractCategoryImportObserver
                 MemberNames::CREATED_AT       => $createdAt,
                 MemberNames::UPDATED_AT       => $updatedAt,
                 MemberNames::ATTRIBUTE_SET_ID => $attributeSetId,
-                MemberNames::PATH             => implode('/', $this->categoryIds),
+                MemberNames::PATH             => '',
                 MemberNames::PARENT_ID        => $parentId,
                 MemberNames::POSITION         => $position,
                 MemberNames::LEVEL            => $level,
-                MemberNames::CHILDREN_COUNT   => $childrenCount
+                MemberNames::CHILDREN_COUNT   => 0
             )
         );
     }
@@ -218,5 +244,19 @@ class CategoryObserver extends AbstractCategoryImportObserver
     protected function setLastEntityId($lastEntityId)
     {
         $this->getSubject()->setLastEntityId($lastEntityId);
+    }
+
+    /**
+     * Add the passed category artefacts to the category with the
+     * last entity ID.
+     *
+     * @param array $artefacts The category artefacts
+     *
+     * @return void
+     * @uses \TechDivision\Import\Category\BunchSubject::getLastEntityId()
+     */
+    protected function addArtefacts(array $artefacts)
+    {
+        $this->getSubject()->addArtefacts(CategoryObserver::ARTEFACT_TYPE, $artefacts);
     }
 }

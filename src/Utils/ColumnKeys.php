@@ -32,9 +32,6 @@ namespace TechDivision\Import\Category\Utils;
 class ColumnKeys extends \TechDivision\Import\Utils\ColumnKeys
 {
 
-
-    // ,attribute_set_code,path,description,short_description,url_key,meta_title,meta_keywords,meta_description,base_image,base_image_label,created_at,updated_at,additional_attributes
-
     /**
      * Name for the column 'store_view_code'.
      *
@@ -69,6 +66,13 @@ class ColumnKeys extends \TechDivision\Import\Utils\ColumnKeys
      * @var string
      */
     const URL_KEY = 'url_key';
+
+    /**
+     * Name for the column 'url_path'.
+     *
+     * @var string
+     */
+    const URL_PATH = 'url_path';
 
     /**
      * Name for the column 'meta_title'.
@@ -120,9 +124,30 @@ class ColumnKeys extends \TechDivision\Import\Utils\ColumnKeys
     const UPDATED_AT = 'updated_at';
 
     /**
-     * Name for the column 'additional_attributes'.
+     * Name for the column 'position'.
      *
      * @var string
      */
-    const ADDITIONAL_ATTRIBUTES = 'additional_attributes';
+    const POSITION = 'position';
+
+    /**
+     * Name for the column 'entity_id'.
+     *
+     * @var string
+     */
+    const ENTITY_ID = 'entity_id';
+
+    /**
+     * Name for the column 'category_path'.
+     *
+     * @var string
+     */
+    const CATEGORY_PATH = 'category_path';
+
+    /**
+     * Name for the column 'name'.
+     *
+     * @var string
+     */
+    const NAME = 'name';
 }

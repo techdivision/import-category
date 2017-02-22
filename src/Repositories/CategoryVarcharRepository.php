@@ -21,7 +21,6 @@
 namespace TechDivision\Import\Category\Repositories;
 
 use TechDivision\Import\Category\Utils\MemberNames;
-use TechDivision\Import\Repositories\AbstractRepository;
 
 /**
  * Repository implementation to load category varchar attribute data.
@@ -32,7 +31,7 @@ use TechDivision\Import\Repositories\AbstractRepository;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-class CategoryVarcharRepository extends AbstractRepository
+class CategoryVarcharRepository extends \TechDivision\Import\Repositories\CategoryVarcharRepository
 {
 
     /**
@@ -49,6 +48,9 @@ class CategoryVarcharRepository extends AbstractRepository
      */
     public function init()
     {
+
+        // initialize the parend class
+        parent::init();
 
         // load the utility class name
         $utilityClassName = $this->getUtilityClassName();

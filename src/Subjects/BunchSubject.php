@@ -20,6 +20,9 @@
 
 namespace TechDivision\Import\Category\Subjects;
 
+use TechDivision\Import\Subjects\ExportableTrait;
+use TechDivision\Import\Subjects\ExportableSubjectInterface;
+
 /**
  * The subject implementation that handles the business logic to persist products.
  *
@@ -29,20 +32,27 @@ namespace TechDivision\Import\Category\Subjects;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-class BunchSubject extends AbstractCategorySubject
+class BunchSubject extends AbstractCategorySubject implements ExportableSubjectInterface
 {
 
     /**
-     * The mapping for the supported backend types (for the product entity) => persist methods.
+     * The trait that implements the export functionality.
+     *
+     * @var \TechDivision\Import\Subjects\ExportableTrait
+     */
+    use ExportableTrait;
+
+    /**
+     * The mapping for the supported backend types (for the category entity) => persist methods.
      *
      * @var array
      */
     protected $backendTypes = array(
-        'datetime' => array('persistProductDatetimeAttribute', 'loadProductDatetimeAttribute'),
-        'decimal'  => array('persistProductDecimalAttribute', 'loadProductDecimalAttribute'),
-        'int'      => array('persistProductIntAttribute', 'loadProductIntAttribute'),
-        'text'     => array('persistProductTextAttribute', 'loadProductTextAttribute'),
-        'varchar'  => array('persistProductVarcharAttribute', 'loadProductVarcharAttribute')
+        'datetime' => array('persistCategoryDatetimeAttribute', 'loadCategoryDatetimeAttribute'),
+        'decimal'  => array('persistCategoryDecimalAttribute', 'loadCategoryDecimalAttribute'),
+        'int'      => array('persistCategoryIntAttribute', 'loadCategoryIntAttribute'),
+        'text'     => array('persistCategoryTextAttribute', 'loadCategoryTextAttribute'),
+        'varchar'  => array('persistCategoryVarcharAttribute', 'loadCategoryVarcharAttribute')
     );
 
     /**
@@ -115,15 +125,15 @@ class BunchSubject extends AbstractCategorySubject
     }
 
     /**
-     * Load's and return's the category with the passed path.
+     * Return's the category with the passed ID.
      *
-     * @param string $path The path of the category to load
+     * @param string $id The ID of the category to return
      *
      * @return array The category
      */
-    public function loadCategory($path)
+    public function loadCategory($id)
     {
-        return $this->getCategoryProcessor()->loadCategory($path);
+        return $this->getCategoryProcessor()->loadCategory($id);
     }
 
     /**
