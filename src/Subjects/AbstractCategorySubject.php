@@ -77,13 +77,6 @@ abstract class AbstractCategorySubject extends AbstractSubject
     protected $categories = array();
 
     /**
-     * The available root categories.
-     *
-     * @var array
-     */
-    protected $rootCategories = array();
-
-    /**
      * The ID of the product that has been created recently.
      *
      * @var string
@@ -110,20 +103,6 @@ abstract class AbstractCategorySubject extends AbstractSubject
      * @var array
      */
     protected $pathStoreViewCodeMapping = array();
-
-    /**
-     * The store view code the create the product/attributes for.
-     *
-     * @var string
-     */
-    protected $storeViewCode;
-
-    /**
-     * The default store.
-     *
-     * @var array
-     */
-    protected $defaultStore;
 
     /**
      * The Magento 2 configuration.
@@ -278,50 +257,6 @@ abstract class AbstractCategorySubject extends AbstractSubject
     }
 
     /**
-     * Set's the store view code the create the product/attributes for.
-     *
-     * @param string $storeViewCode The store view code
-     *
-     * @return void
-     */
-    public function setStoreViewCode($storeViewCode)
-    {
-        $this->storeViewCode = $storeViewCode;
-    }
-
-    /**
-     * Return's the store view code the create the product/attributes for.
-     *
-     * @param string|null $default The default value to return, if the store view code has not been set
-     *
-     * @return string The store view code
-     */
-    public function getStoreViewCode($default = null)
-    {
-
-        // return the store view code, if available
-        if ($this->storeViewCode != null) {
-            return $this->storeViewCode;
-        }
-
-        // if NOT and a default code is available
-        if ($default != null) {
-            // return the default value
-            return $default;
-        }
-    }
-
-    /**
-     * Return's the default store.
-     *
-     * @return array The default store
-     */
-    public function getDefaultStore()
-    {
-        return $this->defaultStore;
-    }
-
-    /**
      * Intializes the previously loaded global data for exactly one bunch.
      *
      * @return void
@@ -338,8 +273,6 @@ abstract class AbstractCategorySubject extends AbstractSubject
         $this->attributes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::EAV_ATTRIBUTES];
         $this->stores = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORES];
         $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
-        $this->rootCategories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::ROOT_CATEGORIES];
-        $this->defaultStore = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::DEFAULT_STORE];
         $this->coreConfigData = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CORE_CONFIG_DATA];
 
         // load the available categories
@@ -500,29 +433,5 @@ abstract class AbstractCategorySubject extends AbstractSubject
                 $this->getLineNumber()
             )
         );
-    }
-
-    /**
-     * Return's the root category for the actual view store.
-     *
-     * @return array The store's root category
-     * @throws \Exception Is thrown if the root category for the passed store code is NOT available
-     */
-    public function getRootCategory()
-    {
-
-        // load the default store
-        $defaultStore = $this->getDefaultStore();
-
-        // load the actual store view code
-        $storeViewCode = $this->getStoreViewCode($defaultStore[MemberNames::CODE]);
-
-        // query weather or not we've a root category or not
-        if (isset($this->rootCategories[$storeViewCode])) {
-            return $this->rootCategories[$storeViewCode];
-        }
-
-        // throw an exception if the root category is NOT available
-        throw new \Exception(sprintf('Root category for %s is not available', $storeViewCode));
     }
 }

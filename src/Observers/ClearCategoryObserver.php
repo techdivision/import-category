@@ -22,6 +22,7 @@ namespace TechDivision\Import\Category\Observers;
 
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Category\Utils\SqlStatements;
 
 /**
  * Observer that removes the category with the path found in the CSV file.
@@ -60,6 +61,9 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
 
         // load the category by it's path
         $category = $this->getCategoryByPath($path);
+
+        // FIRST delete the data related with the category with the passed category path
+        $this->deleteUrlRewrite(array(ColumnKeys::PATH => $category[MemberNames::PATH]), SqlStatements::DELETE_URL_REWRITE_BY_PATH);
 
         // delete the category with the passed path
         $this->deleteCategory(array(ColumnKeys::PATH => $category[MemberNames::PATH]));
@@ -114,6 +118,19 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
     protected function getCategoryByPath($path)
     {
         return $this->getSubject()->getCategoryByPath($path);
+    }
+
+    /**
+     * Delete's the URL rewrite(s) with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    protected function deleteUrlRewrite($row, $name = null)
+    {
+        $this->getSubject()->deleteUrlRewrite($row, $name);
     }
 
     /**

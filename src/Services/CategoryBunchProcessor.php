@@ -96,6 +96,13 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     protected $categoryDatetimeAction;
 
     /**
+     * The action for URL rewrite CRUD methods.
+     *
+     * @var \TechDivision\Import\Product\Actions\UrlRewriteAction
+     */
+    protected $urlRewriteAction;
+
+    /**
      * The repository to load the categories with.
      *
      * @var \TechDivision\Import\Category\Repositories\CategoryRepository
@@ -355,6 +362,28 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     public function getCategoryDatetimeAction()
     {
         return $this->categoryDatetimeAction;
+    }
+
+    /**
+     * Set's the action with the URL rewrite CRUD methods.
+     *
+     * @param \TechDivision\Import\Product\Actions\UrlRewriteAction $urlRewriteAction The action with the URL rewrite CRUD methods
+     *
+     * @return void
+     */
+    public function setUrlRewriteAction($urlRewriteAction)
+    {
+        $this->urlRewriteAction = $urlRewriteAction;
+    }
+
+    /**
+     * Return's the action with the URL rewrite CRUD methods.
+     *
+     * @return \TechDivision\Import\Product\Actions\UrlRewriteAction The action instance
+     */
+    public function getUrlRewriteAction()
+    {
+        return $this->urlRewriteAction;
     }
 
     /**
@@ -737,6 +766,32 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     public function persistCategoryTextAttribute($attribute, $name = null)
     {
         $this->getCategoryTextAction()->persist($attribute, $name);
+    }
+
+    /**
+     * Persist's the URL rewrite with the passed data.
+     *
+     * @param array       $row  The URL rewrite to persist
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return string The ID of the persisted entity
+     */
+    public function persistUrlRewrite($row, $name = null)
+    {
+        return $this->getUrlRewriteAction()->persist($row, $name);
+    }
+
+    /**
+     * Delete's the URL rewrite with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function deleteUrlRewrite($row, $name = null)
+    {
+        $this->getUrlRewriteAction()->delete($row, $name);
     }
 
     /**
