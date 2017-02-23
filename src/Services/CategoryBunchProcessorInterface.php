@@ -75,6 +75,13 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface
     public function getCategoryDatetimeAction();
 
     /**
+     * Return's the action with the URL rewrite CRUD methods.
+     *
+     * @return \TechDivision\Import\Product\Actions\UrlRewriteAction The action instance
+     */
+    public function getUrlRewriteAction();
+
+    /**
      * Return's the repository to load the products with.
      *
      * @return \TechDivision\Import\Product\Repositories\ProductRepository The repository instance
@@ -261,6 +268,15 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface
      * @return void
      */
     public function persistCategoryTextAttribute($attribute, $name = null);
+
+    /**
+     * Persist's the URL rewrite with the passed data.
+     *
+     * @param array $row The URL rewrite to persist
+     *
+     * @return string The ID of the persisted entity
+     */
+    public function persistUrlRewrite($row);
 
     /**
      * Delete's the entity with the passed attributes.

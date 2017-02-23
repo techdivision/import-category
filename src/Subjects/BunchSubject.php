@@ -20,8 +20,11 @@
 
 namespace TechDivision\Import\Category\Subjects;
 
+use TechDivision\Import\Category\Utils\DisplayModeKeys;
 use TechDivision\Import\Subjects\ExportableTrait;
 use TechDivision\Import\Subjects\ExportableSubjectInterface;
+use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Category\Utils\PageLayoutKeys;
 
 /**
  * The subject implementation that handles the business logic to persist products.
@@ -52,36 +55,157 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
         'decimal'  => array('persistCategoryDecimalAttribute', 'loadCategoryDecimalAttribute'),
         'int'      => array('persistCategoryIntAttribute', 'loadCategoryIntAttribute'),
         'text'     => array('persistCategoryTextAttribute', 'loadCategoryTextAttribute'),
-        'varchar'  => array('persistCategoryVarcharAttribute', 'loadCategoryVarcharAttribute')
+        'varchar'  => array('persistCategoryVarcharAttribute', 'loadCategoryVarcharAttribute'),
+        'image'    => array('persistCategoryVarcharAttribute', 'loadCategoryVarcharAttribute')
     );
 
     /**
-     * The attribute set of the product that has to be created.
+     * The array with the available display mode keys.
      *
      * @var array
      */
-    protected $attributeSet = array();
+    protected $availableDisplayModes = array(
+        'Products only'             => DisplayModeKeys::DISPLAY_MODE_PRODUCTS_ONLY,
+        'Static block only'         => DisplayModeKeys::DISPLAY_MODE_STATIC_BLOCK_ONLY,
+        'Static block and products' => DisplayModeKeys::DISPLAY_MODE_BOTH
+    );
 
     /**
-     * Set's the attribute set of the product that has to be created.
+     * The array with the available page layout keys.
      *
-     * @param array $attributeSet The attribute set
-     *
-     * @return void
+     * @var array
      */
-    public function setAttributeSet(array $attributeSet)
+    protected $availablePageLayouts = array(
+        '1 column'                 => PageLayoutKeys::PAGE_LAYOUT_1_COLUMN,
+        '2 columns with left bar'  => PageLayoutKeys::PAGE_LAYOUT_2_COLUMNS_LEFT,
+        '2 columns with right bar' => PageLayoutKeys::PAGE_LAYOUT_2_COLUMNS_RIGHT,
+        '3 columns'                => PageLayoutKeys::PAGE_LAYOUT_3_COLUMNS,
+        'Empty'                    => PageLayoutKeys::PAGE_LAYOUT_EMPTY
+    );
+
+    /**
+     * The default callback mappings for the Magento standard category attributes.
+     *
+     * @var array
+     */
+    protected $defaultCallbackMappings = array(
+        'display_mode' => array('TechDivision\\Import\\Category\\Callbacks\\DisplayModeCallback'),
+        'page_layout'  => array('TechDivision\\Import\\Category\\Callbacks\\PageLayoutCallback'),
+    );
+
+    /**
+     * Return's an array with the available EAV attributes for the passed is user defined flag.
+     *
+     * @param integer $isUserDefined The flag itself
+     *
+     * @return array The array with the EAV attributes matching the passed flag
+     */
+    public function getEavAttributeByIsUserDefined($isUserDefined = 1)
     {
-        $this->attributeSet = $attributeSet;
+        return $this->getCategoryProcessor()->getEavAttributeByIsUserDefined($isUserDefined);
     }
 
     /**
-     * Return's the attribute set of the product that has to be created.
+     * Intializes the previously loaded global data for exactly one bunch.
      *
-     * @return array The attribute set
+     * @return void
+     * @see \Importer\Csv\Actions\ProductImportAction::prepare()
      */
-    public function getAttributeSet()
+    public function setUp()
     {
-        return $this->attributeSet;
+
+        // initialize the callback mappings with the default mappings
+        $this->callbackMappings = array_merge($this->callbackMappings, $this->defaultCallbackMappings);
+
+        // load the user defined attributes and add the callback mappings
+        foreach ($this->getEavAttributeByIsUserDefined() as $eavAttribute) {
+            // load attribute code and frontend input type
+            $attributeCode = $eavAttribute[MemberNames::ATTRIBUTE_CODE];
+            $frontendInput = $eavAttribute[MemberNames::FRONTEND_INPUT];
+
+            // query whether or not the array for the mappings has been initialized
+            if (!isset($this->callbackMappings[$attributeCode])) {
+                $this->callbackMappings[$attributeCode] = array();
+            }
+
+            // set the appropriate callback mapping for the attributes input type
+            if (isset($this->defaultFrontendInputCallbackMapping[$frontendInput])) {
+                $this->callbackMappings[$attributeCode][] = $this->defaultFrontendInputCallbackMapping[$frontendInput];
+            }
+        }
+
+        // merge the callback mappings the the one from the configuration file
+        foreach ($this->getConfiguration()->getCallbacks() as $callbackMappings) {
+            foreach ($callbackMappings as $attributeCode => $mappings) {
+                // write a log message, that default callback configuration will
+                // be overwritten with the one from the configuration file
+                if (isset($this->callbackMappings[$attributeCode])) {
+                    $this->getSystemLogger()->notice(
+                        sprintf('Now override callback mappings for attribute %s with values found in configuration file', $attributeCode)
+                    );
+                }
+
+                // override the attributes callbacks
+                $this->callbackMappings[$attributeCode] = $mappings;
+            }
+        }
+
+        // invoke the parent method
+        parent::setUp();
+    }
+
+    /**
+     * Return's the display mode for the passed display mode string.
+     *
+     * @param string $displayMode The display mode string to return the key for
+     *
+     * @return integer The requested display mode
+     * @throws \Exception Is thrown, if the requested display mode is not available
+     */
+    public function getDisplayModeByValue($displayMode)
+    {
+
+        // query whether or not, the requested display mode is available
+        if (isset($this->availableDisplayModes[$displayMode])) {
+            return $this->availableDisplayModes[$displayMode];
+        }
+
+        // throw an exception, if not
+        throw new \Exception(
+            sprintf(
+                'Found invalid display mode %s in file %s on line %d',
+                $visibility,
+                $this->getFilename(),
+                $this->getLineNumber()
+            )
+        );
+    }
+
+    /**
+     * Return's the page layout for the passed page layout string.
+     *
+     * @param string $pageLayout The page layout string to return the key for
+     *
+     * @return integer The requested page layout
+     * @throws \Exception Is thrown, if the requested page layout is not available
+     */
+    public function getPageLayoutByValue($pageLayout)
+    {
+
+        // query whether or not, the requested display mode is available
+        if (isset($this->availablePageLayouts[$pageLayout])) {
+            return $this->availablePageLayouts[$pageLayout];
+        }
+
+        // throw an exception, if not
+        throw new \Exception(
+            sprintf(
+                'Found invalid page layout %s in file %s on line %d',
+                $visibility,
+                $this->getFilename(),
+                $this->getLineNumber()
+            )
+        );
     }
 
     /**
@@ -276,6 +400,31 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
     public function persistCategoryTextAttribute($attribute)
     {
         $this->getCategoryProcessor()->persistCategoryTextAttribute($attribute);
+    }
+
+    /**
+     * Persist's the URL rewrite with the passed data.
+     *
+     * @param array $row The URL rewrite to persist
+     *
+     * @return string The ID of the persisted entity
+     */
+    public function persistUrlRewrite($row)
+    {
+        $this->getCategoryProcessor()->persistUrlRewrite($row);
+    }
+
+    /**
+     * Delete's the URL rewrite(s) with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function deleteUrlRewrite($row, $name = null)
+    {
+        $this->getCategoryProcessor()->deleteUrlRewrite($row, $name);
     }
 
     /**
