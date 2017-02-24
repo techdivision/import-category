@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha4
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Refactor URL rewrite handling
+
 # Version 1.0.0-alpha3
 
 ## Bugfixes
