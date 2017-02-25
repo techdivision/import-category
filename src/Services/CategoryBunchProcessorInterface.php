@@ -102,7 +102,7 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface
      *
      * @return array The array with the EAV attributes matching the passed flag
      */
-    public function getEavAttributeByIsUserDefined($isUserDefined = 1);
+    public function getEavAttributesByIsUserDefined($isUserDefined = 1);
 
     /**
      * Returns an array with the available categories and their

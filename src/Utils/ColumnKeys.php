@@ -96,18 +96,18 @@ class ColumnKeys extends \TechDivision\Import\Utils\ColumnKeys
     const META_DESCRIPTION = 'meta_description';
 
     /**
-     * Name for the column 'base_image'.
+     * Name for the column 'image_path'.
      *
      * @var string
      */
-    const BASE_IMAGE = 'base_image';
+    const IMAGE_PATH = 'image_path';
 
     /**
-     * Name for the column 'base_image_label'.
+     * Name for the column 'image_path_new'.
      *
      * @var string
      */
-    const BASE_IMAGE_LABEL = 'base_image_label';
+    const IMAGE_PATH_NEW = 'image_path_new';
 
     /**
      * Name for the column 'created_at'.
