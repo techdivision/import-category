@@ -37,13 +37,27 @@ class FileUploadObserver extends AbstractFileUploadObserver
 {
 
     /**
+     * Process the observer's business logic.
+     *
+     * @return array The processed row
+     */
+    protected function process()
+    {
+
+        // process the file upload
+        parent::process();
+
+        // temporarily persist the image name
+        $this->setParentImage($this->getValue($this->getSourceColumn()));
+    }
+    /**
      * Return's the name of the source column with the image path.
      *
      * @return string The image path
      */
     protected function getSourceColumn()
     {
-        return ColumnKeys::IMAGE_PATH;
+        return ColumnKeys::IMAGE;
     }
 
     /**
@@ -54,5 +68,17 @@ class FileUploadObserver extends AbstractFileUploadObserver
     protected function getTargetColumn()
     {
         return ColumnKeys::IMAGE_PATH_NEW;
+    }
+
+    /**
+     * Set's the name of the created image.
+     *
+     * @param string $parentImage The name of the created image
+     *
+     * @return void
+     */
+    protected function setParentImage($parentImage)
+    {
+        $this->getSubject()->setParentImage($parentImage);
     }
 }

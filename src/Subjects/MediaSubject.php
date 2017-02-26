@@ -23,8 +23,8 @@ namespace TechDivision\Import\Category\Subjects;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
 use TechDivision\Import\Utils\RegistryKeys;
-use TechDivision\Import\Utils\ConfigurationKeys;
 use TechDivision\Import\Subjects\FileUploadTrait;
+use TechDivision\Import\Category\Utils\ConfigurationKeys;
 use TechDivision\Import\Category\Subjects\AbstractCategorySubject;
 
 /**
