@@ -20,11 +20,10 @@
 
 namespace TechDivision\Import\Category\Subjects;
 
-use TechDivision\Import\Category\Utils\DisplayModeKeys;
 use TechDivision\Import\Subjects\ExportableTrait;
 use TechDivision\Import\Subjects\ExportableSubjectInterface;
-use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Utils\PageLayoutKeys;
+use TechDivision\Import\Category\Utils\DisplayModeKeys;
 
 /**
  * The subject implementation that handles the business logic to persist products.
@@ -108,7 +107,7 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
         throw new \Exception(
             sprintf(
                 'Found invalid display mode %s in file %s on line %d',
-                $visibility,
+                $displayMode,
                 $this->getFilename(),
                 $this->getLineNumber()
             )
@@ -135,7 +134,7 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
         throw new \Exception(
             sprintf(
                 'Found invalid page layout %s in file %s on line %d',
-                $visibility,
+                $pageLayout,
                 $this->getFilename(),
                 $this->getLineNumber()
             )

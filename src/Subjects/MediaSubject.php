@@ -22,7 +22,6 @@ namespace TechDivision\Import\Category\Subjects;
 
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
-use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Subjects\FileUploadTrait;
 use TechDivision\Import\Category\Utils\ConfigurationKeys;
 use TechDivision\Import\Category\Subjects\AbstractCategorySubject;
@@ -57,12 +56,6 @@ class MediaSubject extends AbstractCategorySubject
 
         // invoke parent method
         parent::setUp();
-
-        // load the entity manager and the registry processor
-        $registryProcessor = $this->getRegistryProcessor();
-
-        // load the status of the actual import process
-        $status = $registryProcessor->getAttribute($this->getSerial());
 
         // initialize the flag to decide copy images or not
         $this->setCopyImages($this->getConfiguration()->getParam(ConfigurationKeys::COPY_IMAGES));

@@ -22,7 +22,6 @@ namespace TechDivision\Import\Category\Observers;
 
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
-use TechDivision\Import\Utils\Filter\ConvertLiteralUrl;
 
 /**
  * Observer that creates/updates the category's URL rewrites.
