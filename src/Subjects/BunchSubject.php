@@ -20,11 +20,10 @@
 
 namespace TechDivision\Import\Category\Subjects;
 
-use TechDivision\Import\Category\Utils\DisplayModeKeys;
 use TechDivision\Import\Subjects\ExportableTrait;
 use TechDivision\Import\Subjects\ExportableSubjectInterface;
-use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Utils\PageLayoutKeys;
+use TechDivision\Import\Category\Utils\DisplayModeKeys;
 
 /**
  * The subject implementation that handles the business logic to persist products.
@@ -44,20 +43,6 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
      * @var \TechDivision\Import\Subjects\ExportableTrait
      */
     use ExportableTrait;
-
-    /**
-     * The mapping for the supported backend types (for the category entity) => persist methods.
-     *
-     * @var array
-     */
-    protected $backendTypes = array(
-        'datetime' => array('persistCategoryDatetimeAttribute', 'loadCategoryDatetimeAttribute'),
-        'decimal'  => array('persistCategoryDecimalAttribute', 'loadCategoryDecimalAttribute'),
-        'int'      => array('persistCategoryIntAttribute', 'loadCategoryIntAttribute'),
-        'text'     => array('persistCategoryTextAttribute', 'loadCategoryTextAttribute'),
-        'varchar'  => array('persistCategoryVarcharAttribute', 'loadCategoryVarcharAttribute'),
-        'image'    => array('persistCategoryVarcharAttribute', 'loadCategoryVarcharAttribute')
-    );
 
     /**
      * The array with the available display mode keys.
@@ -82,7 +67,6 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
         '3 columns'                => PageLayoutKeys::PAGE_LAYOUT_3_COLUMNS,
         'Empty'                    => PageLayoutKeys::PAGE_LAYOUT_EMPTY
     );
-
     /**
      * The default callback mappings for the Magento standard category attributes.
      *
@@ -94,64 +78,13 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
     );
 
     /**
-     * Return's an array with the available EAV attributes for the passed is user defined flag.
+     * Return's the default callback mappings.
      *
-     * @param integer $isUserDefined The flag itself
-     *
-     * @return array The array with the EAV attributes matching the passed flag
+     * @return array The default callback mappings
      */
-    public function getEavAttributeByIsUserDefined($isUserDefined = 1)
+    public function getDefaultCallbackMappings()
     {
-        return $this->getCategoryProcessor()->getEavAttributeByIsUserDefined($isUserDefined);
-    }
-
-    /**
-     * Intializes the previously loaded global data for exactly one bunch.
-     *
-     * @return void
-     * @see \Importer\Csv\Actions\ProductImportAction::prepare()
-     */
-    public function setUp()
-    {
-
-        // initialize the callback mappings with the default mappings
-        $this->callbackMappings = array_merge($this->callbackMappings, $this->defaultCallbackMappings);
-
-        // load the user defined attributes and add the callback mappings
-        foreach ($this->getEavAttributeByIsUserDefined() as $eavAttribute) {
-            // load attribute code and frontend input type
-            $attributeCode = $eavAttribute[MemberNames::ATTRIBUTE_CODE];
-            $frontendInput = $eavAttribute[MemberNames::FRONTEND_INPUT];
-
-            // query whether or not the array for the mappings has been initialized
-            if (!isset($this->callbackMappings[$attributeCode])) {
-                $this->callbackMappings[$attributeCode] = array();
-            }
-
-            // set the appropriate callback mapping for the attributes input type
-            if (isset($this->defaultFrontendInputCallbackMapping[$frontendInput])) {
-                $this->callbackMappings[$attributeCode][] = $this->defaultFrontendInputCallbackMapping[$frontendInput];
-            }
-        }
-
-        // merge the callback mappings the the one from the configuration file
-        foreach ($this->getConfiguration()->getCallbacks() as $callbackMappings) {
-            foreach ($callbackMappings as $attributeCode => $mappings) {
-                // write a log message, that default callback configuration will
-                // be overwritten with the one from the configuration file
-                if (isset($this->callbackMappings[$attributeCode])) {
-                    $this->getSystemLogger()->notice(
-                        sprintf('Now override callback mappings for attribute %s with values found in configuration file', $attributeCode)
-                    );
-                }
-
-                // override the attributes callbacks
-                $this->callbackMappings[$attributeCode] = $mappings;
-            }
-        }
-
-        // invoke the parent method
-        parent::setUp();
+        return $this->defaultCallbackMappings;
     }
 
     /**
@@ -174,7 +107,7 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
         throw new \Exception(
             sprintf(
                 'Found invalid display mode %s in file %s on line %d',
-                $visibility,
+                $displayMode,
                 $this->getFilename(),
                 $this->getLineNumber()
             )
@@ -201,51 +134,11 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
         throw new \Exception(
             sprintf(
                 'Found invalid page layout %s in file %s on line %d',
-                $visibility,
+                $pageLayout,
                 $this->getFilename(),
                 $this->getLineNumber()
             )
         );
-    }
-
-    /**
-     * Cast's the passed value based on the backend type information.
-     *
-     * @param string $backendType The backend type to cast to
-     * @param mixed  $value       The value to be casted
-     *
-     * @return mixed The casted value
-     */
-    public function castValueByBackendType($backendType, $value)
-    {
-
-        // cast the value to a valid timestamp
-        if ($backendType === 'datetime') {
-            return \DateTime::createFromFormat($this->getSourceDateFormat(), $value)->format('Y-m-d H:i:s');
-        }
-
-        // cast the value to a float value
-        if ($backendType === 'float') {
-            return (float) $value;
-        }
-
-        // cast the value to an integer
-        if ($backendType === 'int') {
-            return (int) $value;
-        }
-
-        // we don't need to cast strings
-        return $value;
-    }
-
-    /**
-     * Return's mapping for the supported backend types (for the product entity) => persist methods.
-     *
-     * @return array The mapping for the supported backend types
-     */
-    public function getBackendTypes()
-    {
-        return $this->backendTypes;
     }
 
     /**

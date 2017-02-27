@@ -22,7 +22,6 @@ namespace TechDivision\Import\Category\Observers;
 
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
-use TechDivision\Import\Utils\Filter\ConvertLiteralUrl;
 
 /**
  * Observer that creates/updates the category's URL rewrites.
@@ -53,6 +52,11 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
 
         // query whether or not, we've found a new path => means we've found a new category
         if ($this->hasBeenProcessed($this->getValue(ColumnKeys::PATH))) {
+            return;
+        }
+
+        // try to load the URL key, return immediately if not possible
+        if (!$this->hasValue(ColumnKeys::URL_PATH)) {
             return;
         }
 

@@ -22,7 +22,7 @@ namespace TechDivision\Import\Category\Subjects;
 
 use Psr\Log\LoggerInterface;
 use TechDivision\Import\Utils\RegistryKeys;
-use TechDivision\Import\Subjects\AbstractSubject;
+use TechDivision\Import\Subjects\AbstractEavSubject;
 use TechDivision\Import\Services\RegistryProcessorInterface;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Services\CategoryProcessorInterface;
@@ -38,7 +38,7 @@ use TechDivision\Import\Configuration\SubjectConfigurationInterface;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-abstract class AbstractCategorySubject extends AbstractSubject
+abstract class AbstractCategorySubject extends AbstractEavSubject
 {
 
     /**
@@ -112,6 +112,15 @@ abstract class AbstractCategorySubject extends AbstractSubject
     protected $coreConfigData;
 
     /**
+     * Mappings for attribute code => CSV column header.
+     *
+     * @var array
+     */
+    protected $headerMappings = array(
+        'image_path' => 'image'
+    );
+
+    /**
      * Initialize the subject instance.
      *
      * @param \Psr\Log\LoggerInterface                                          $systemLogger      The system logger instance
@@ -131,6 +140,29 @@ abstract class AbstractCategorySubject extends AbstractSubject
 
         // initialize the category processor
         $this->categoryProcessor = $categoryProcessor;
+    }
+
+    /**
+     * Return's the attribute option value with the passed value and store ID.
+     *
+     * @param mixed   $value   The option value
+     * @param integer $storeId The ID of the store
+     *
+     * @return array|boolean The attribute option value instance
+     */
+    public function getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId)
+    {
+        return $this->getCategoryProcessor()->getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId);
+    }
+
+    /**
+     * Return's the header mappings for the actual entity.
+     *
+     * @return array The header mappings
+     */
+    public function getHeaderMappings()
+    {
+        return $this->headerMappings;
     }
 
     /**
@@ -270,7 +302,6 @@ abstract class AbstractCategorySubject extends AbstractSubject
 
         // load the global data we've prepared initially
         $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
-        $this->attributes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::EAV_ATTRIBUTES];
         $this->stores = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORES];
         $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
         $this->coreConfigData = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CORE_CONFIG_DATA];
