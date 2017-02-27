@@ -51,14 +51,14 @@ class ChildrenCountPlugin extends AbstractPlugin
         // update the categories children count
         foreach ($categories as $category) {
             // load the category itself
-            $this->category = $this->loadCategory($entityId = $category[MemberNames::ENTITY_ID]);
+            $this->category = $this->loadCategory($pk = $this->getPrimaryKey($category));
 
             // update the category's children count
             $this->persistCategory($this->initializeCategory($this->prepareAttributes()));
 
             // write a log message
             $this->getSystemLogger()->debug(
-                sprintf('Successfully updated category with ID %d', $entityId)
+                sprintf('Successfully updated category with primary key %d', $pk)
             );
         }
     }
@@ -95,6 +95,18 @@ class ChildrenCountPlugin extends AbstractPlugin
             $this->category,
             $attr
         );
+    }
+
+    /**
+     * Return's the primary key of the passed category.
+     *
+     * @param array $category The category to return the primary key for
+     *
+     * @return integer The primary key of the category
+     */
+    protected function getPrimaryKey(array $category)
+    {
+        return $category[MemberNames::ENTITY_ID];
     }
 
     /**

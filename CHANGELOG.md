@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha6
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Make ChildrenCountPlugin more generic
+
 # Version 1.0.0-alpha5
 
 ## Bugfixes

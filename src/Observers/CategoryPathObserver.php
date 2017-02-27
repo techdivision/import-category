@@ -73,10 +73,17 @@ class CategoryPathObserver extends AbstractCategoryImportObserver
      */
     protected function initializeCategory(array $attr)
     {
-        return $this->mergeEntity(
-            $this->loadCategory($this->getValue(ColumnKeys::ENTITY_ID)),
-            $attr
-        );
+        return $this->mergeEntity($this->loadCategory($this->getPrimaryKey()), $attr);
+    }
+
+    /**
+     * Return's the primary key of the category to load.
+     *
+     * @return integer The primary key of the category
+     */
+    protected function getPrimaryKey()
+    {
+        return $this->getValue(ColumnKeys::ENTITY_ID);
     }
 
     /**
