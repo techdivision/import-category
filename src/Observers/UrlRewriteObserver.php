@@ -56,6 +56,11 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
             return;
         }
 
+        // try to load the URL key, return immediately if not possible
+        if (!$this->hasValue(ColumnKeys::URL_PATH)) {
+            return;
+        }
+
         // initialize the store view code
         $this->prepareStoreViewCode();
 

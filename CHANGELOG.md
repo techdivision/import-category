@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha5
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add basic catgory update functionality
+
 # Version 1.0.0-alpha4
 
 ## Bugfixes
