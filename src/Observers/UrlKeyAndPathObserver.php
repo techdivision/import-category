@@ -22,6 +22,7 @@ namespace TechDivision\Import\Category\Observers;
 
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Utils\Filter\UrlKeyFilterTrait;
+use TechDivision\Import\Category\Utils\MemberNames;
 
 /**
  * Observer that extracts the URL key/path from the category path
@@ -56,46 +57,60 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
         $urlPath = array();
         $categories = array();
 
-        // explode the category names from the path
-        if ($path = $this->getValue(ColumnKeys::PATH)) {
-            $categories = $this->explode($path, '/');
-        }
-
         // query whether or not the URL key column has a value
         if ($this->hasValue(ColumnKeys::URL_KEY)) {
             $urlKey = $this->getValue(ColumnKeys::URL_KEY);
-        } elseif (sizeof($categories) > 0) {
-            $this->setValue(ColumnKeys::URL_KEY, $urlKey = $this->convertNameToUrlKey(end($categories)));
         } else {
-            $this->getSystemLogger()->debug(
-                sprintf(
-                    'Can\'t find an URL key or a path in CSV file %s on line %d',
-                    $this->getFilename(),
-                    $this->getLineNumber()
-                )
+            $this->setValue(
+                ColumnKeys::URL_KEY,
+                $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME))
             );
-            return;
         }
 
-        // add the column for the URL path, if not yet available
-        if (!$this->hasHeader(ColumnKeys::URL_PATH)) {
-            $this->addHeader(ColumnKeys::URL_PATH);
+        // explode the path into the category names
+        if ($categories = $this->explode($path = $this->getValue(ColumnKeys::PATH), '/')) {
+            // initialize the category with the actual category's URL key
+            $categoryPaths = array($urlKey);
+
+            // iterate over the category names and try to load the category therefore
+            for ($i = sizeof($categories); $i > 1; $i--) {
+                try {
+                    // prepare the expected category name
+                    $categoryPath = implode('/', array_slice($categories, 0, $i));
+
+                    // load the existing category and prepend the URL key the array with the category URL keys
+                    $existingCategory = $this->getCategoryByPath($categoryPath);
+                    if (isset($existingCategory[MemberNames::URL_KEY])) {
+                        array_unshift($categoryPaths, $existingCategory[MemberNames::URL_KEY]);
+                    } else {
+                        error_log(var_export($existingCategory, true));
+                        $this->getSystemLogger()->debug(sprintf('Can\'t find URL key for category %s', $categoryPath));
+                    }
+
+                } catch (\Exception $e) {
+                    $this->getSystemLogger()->debug(sprintf('Can\'t load parent category %s', $categoryPath));
+                }
+            }
+
+            // create the header for the URL path
+            if (!$this->hasHeader(ColumnKeys::URL_PATH)) {
+                $this->addHeader(ColumnKeys::URL_PATH);
+            }
+
+            // set the URL path
+            $this->setValue(ColumnKeys::URL_PATH, implode('/', $categoryPaths));
         }
+    }
 
-        // prepare the URL path
-        if (sizeof($categories) > 0) {
-            $urlPath = array_slice($categories, 1, sizeof($categories) - 2);
-        }
-
-        // convert the elements of the URL path
-        array_walk($urlPath, function (&$value) {
-            $value = $this->convertNameToUrlKey($value);
-        });
-
-        // add the URL key to the URL path
-        array_push($urlPath, $urlKey);
-
-        // append the column with the URL path
-        $this->setValue(ColumnKeys::URL_PATH, implode('/', $urlPath));
+    /**
+     * Return's the category with the passed path.
+     *
+     * @param string $path The path of the category to return
+     *
+     * @return array The category
+     */
+    protected function getCategoryByPath($path)
+    {
+        return $this->getSubject()->getCategoryByPath($path);
     }
 }

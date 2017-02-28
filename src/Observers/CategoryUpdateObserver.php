@@ -57,7 +57,7 @@ class CategoryUpdateObserver extends CategoryObserver
             return $this->mergeEntity($entity, $attr);
 
         } catch (\Exception $e) {
-            $this->getSystemLogger()->info(sprintf('Can\'t load category with path %s', $path));
+            $this->getSystemLogger()->debug(sprintf('Can\'t load category with path %s', $path));
         }
 
         // otherwise simply return the attributes
