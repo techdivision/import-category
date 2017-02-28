@@ -88,6 +88,7 @@ class CategoryObserver extends AbstractCategoryImportObserver
 
             //update the persisted category with the entity ID
             $category[MemberNames::ENTITY_ID] = $entityId;
+            $category[MemberNames::URL_KEY] = $this->getValue(ColumnKeys::URL_KEY);
 
             // append the category to the list
             $this->addCategory($path, $category);
