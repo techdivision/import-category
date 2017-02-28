@@ -409,7 +409,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
     {
 
         // query whether or not the category with the passed path exists
-        if (array_key_exists($path, $this->categories)) {
+        if (isset($this->categories[$path])) {
             return $this->categories[$path];
         }
 
