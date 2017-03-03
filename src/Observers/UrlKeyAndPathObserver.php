@@ -54,7 +54,6 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
 
         // initialize the URL key and array for the categories
         $urlKey = null;
-        $urlPath = array();
         $categories = array();
 
         // query whether or not the URL key column has a value
@@ -68,7 +67,7 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
         }
 
         // explode the path into the category names
-        if ($categories = $this->explode($path = $this->getValue(ColumnKeys::PATH), '/')) {
+        if ($categories = $this->explode($this->getValue(ColumnKeys::PATH), '/')) {
             // initialize the category with the actual category's URL key
             $categoryPaths = array($urlKey);
 

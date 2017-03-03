@@ -22,6 +22,7 @@ namespace TechDivision\Import\Category\Subjects;
 
 use Psr\Log\LoggerInterface;
 use TechDivision\Import\Utils\RegistryKeys;
+use TechDivision\Import\Utils\Generators\GeneratorInterface;
 use TechDivision\Import\Subjects\AbstractEavSubject;
 use TechDivision\Import\Services\RegistryProcessorInterface;
 use TechDivision\Import\Category\Utils\MemberNames;
@@ -123,20 +124,22 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
     /**
      * Initialize the subject instance.
      *
-     * @param \Psr\Log\LoggerInterface                                          $systemLogger      The system logger instance
-     * @param \TechDivision\Import\Configuration\SubjectConfigurationInterface  $configuration     The subject configuration instance
-     * @param \TechDivision\Import\Services\RegistryProcessorInterface          $registryProcessor The registry processor instance
-     * @param \TechDivision\Import\Category\Services\CategoryProcessorInterface $categoryProcessor The category processor instance
+     * @param \Psr\Log\LoggerInterface                                          $systemLogger               The system logger instance
+     * @param \TechDivision\Import\Configuration\SubjectConfigurationInterface  $configuration              The subject configuration instance
+     * @param \TechDivision\Import\Services\RegistryProcessorInterface          $registryProcessor          The registry processor instance
+     * @param \TechDivision\Import\Utils\Generators\GeneratorInterface          $coreConfigDataUidGenerator The UID generator for the core config data
+     * @param \TechDivision\Import\Category\Services\CategoryProcessorInterface $categoryProcessor          The category processor instance
      */
     public function __construct(
         LoggerInterface $systemLogger,
         SubjectConfigurationInterface $configuration,
         RegistryProcessorInterface $registryProcessor,
+        GeneratorInterface $coreConfigDataUidGenerator,
         CategoryProcessorInterface $categoryProcessor
     ) {
 
         // pass the arguments to the parent constructor
-        parent::__construct($systemLogger, $configuration, $registryProcessor);
+        parent::__construct($systemLogger, $configuration, $registryProcessor, $coreConfigDataUidGenerator);
 
         // initialize the category processor
         $this->categoryProcessor = $categoryProcessor;
@@ -301,10 +304,8 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
         $status = $this->getRegistryProcessor()->getAttribute($this->getSerial());
 
         // load the global data we've prepared initially
-        $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
-        $this->stores = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORES];
         $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
-        $this->coreConfigData = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CORE_CONFIG_DATA];
+        $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
 
         // load the available categories
         $this->categories = $this->getCategoryProcessor()->getCategoriesWithResolvedPath();
