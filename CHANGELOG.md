@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha9
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Fixed PSR-2 errors
+
 # Version 1.0.0-alpha8
 
 ## Bugfixes
