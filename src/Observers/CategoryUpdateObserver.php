@@ -51,7 +51,7 @@ class CategoryUpdateObserver extends CategoryObserver
         try {
             // try to load the category and the entity with the passed path
             $category = $this->getCategoryByPath($path);
-            $entity = $this->loadCategory($category[MemberNames::ENTITY_ID]);
+            $entity = $this->loadCategory($this->getPrimaryKey($category));
 
             // merge it with the attributes, if we can find it
             return $this->mergeEntity($entity, $attr);
@@ -62,6 +62,18 @@ class CategoryUpdateObserver extends CategoryObserver
 
         // otherwise simply return the attributes
         return $attr;
+    }
+
+    /**
+     * Return's the primary key of the category.
+     *
+     * @param array $category The category
+     *
+     * @return integer The primary key
+     */
+    protected function getPrimaryKey($category)
+    {
+        return $category[MemberNames::ENTITY_ID];
     }
 
     /**

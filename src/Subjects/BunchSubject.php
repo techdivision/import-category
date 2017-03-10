@@ -142,6 +142,19 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
     }
 
     /**
+     * Return's the URL rewrites for the passed URL entity type and ID.
+     *
+     * @param string  $entityType The entity type to load the URL rewrites for
+     * @param integer $entityId   The entity ID to laod the rewrites for
+     *
+     * @return array The URL rewrites
+     */
+    public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId)
+    {
+        return $this->getCategoryProcessor()->getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
+    }
+
+    /**
      * Return's the category with the passed ID.
      *
      * @param string $id The ID of the category to return

@@ -96,6 +96,13 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface
     public function getEavAttributeRepository();
 
     /**
+     * Return's the repository to load the URL rewrites with.
+     *
+     * @return \TechDivision\Import\Repositories\UrlRewriteRepository The repository instance
+     */
+    public function getUrlRewriteRepository();
+
+    /**
      * Return's an array with the available EAV attributes for the passed is user defined flag.
      *
      * @param integer $isUserDefined The flag itself
@@ -135,6 +142,16 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface
      * @return mixed The category varchar values
      */
     public function getCategoryVarcharsByEntityIds(array $entityIds);
+
+    /**
+     * Return's the URL rewrites for the passed URL entity type and ID.
+     *
+     * @param string  $entityType The entity type to load the URL rewrites for
+     * @param integer $entityId   The entity ID to laod the rewrites for
+     *
+     * @return array The URL rewrites
+     */
+    public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
 
     /**
      * Return's the children count of the category with the passed ID.
