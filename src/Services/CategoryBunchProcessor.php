@@ -145,6 +145,13 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     protected $categoryVarcharRepository;
 
     /**
+     * The repository to load the URL rewrites with.
+     *
+     * @var \TechDivision\Import\Repositories\UrlRewriteRepository
+     */
+    protected $urlRewriteRepository;
+
+    /**
      * Set's the passed connection.
      *
      * @param \PDO $connection The connection to set
@@ -541,6 +548,28 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     }
 
     /**
+     * Set's the repository to load the URL rewrites with.
+     *
+     * @param \TechDivision\Import\Repositories\UrlRewriteRepository $urlRewriteRepository The repository instance
+     *
+     * @return void
+     */
+    public function setUrlRewriteRepository($urlRewriteRepository)
+    {
+        $this->urlRewriteRepository = $urlRewriteRepository;
+    }
+
+    /**
+     * Return's the repository to load the URL rewrites with.
+     *
+     * @return \TechDivision\Import\Repositories\UrlRewriteRepository The repository instance
+     */
+    public function getUrlRewriteRepository()
+    {
+        return $this->urlRewriteRepository;
+    }
+
+    /**
      * Return's an array with the available EAV attributes for the passed is user defined flag.
      *
      * @param integer $isUserDefined The flag itself
@@ -594,6 +623,19 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     public function getCategoryVarcharsByEntityIds(array $entityIds)
     {
         return $this->getCategoryVarcharRepository()->findAllByEntityIds($entityIds);
+    }
+
+    /**
+     * Return's the URL rewrites for the passed URL entity type and ID.
+     *
+     * @param string  $entityType The entity type to load the URL rewrites for
+     * @param integer $entityId   The entity ID to laod the rewrites for
+     *
+     * @return array The URL rewrites
+     */
+    public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId)
+    {
+        return $this->getUrlRewriteRepository()->findAllByEntityTypeAndEntityId($entityType, $entityId);
     }
 
     /**

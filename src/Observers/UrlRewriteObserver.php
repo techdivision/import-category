@@ -22,6 +22,7 @@ namespace TechDivision\Import\Category\Observers;
 
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Category\Utils\CoreConfigDataKeys;
 
 /**
  * Observer that creates/updates the category's URL rewrites.
@@ -70,11 +71,11 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
     }
 
     /**
-     * Initialize the category product with the passed attributes and returns an instance.
+     * Initialize the URL rewrite with the passed attributes and returns an instance.
      *
-     * @param array $attr The category product attributes
+     * @param array $attr The URL rewrite attributes
      *
-     * @return array The initialized category product
+     * @return array The initialized URL rewrite
      */
     protected function initializeUrlRewrite(array $attr)
     {
@@ -130,7 +131,12 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
      */
     protected function prepareRequestPath()
     {
-        return sprintf('%s.html', $this->getValue(ColumnKeys::URL_PATH));
+
+        // load the category URL suffix to use
+        $urlSuffix = $this->getCoreConfigData(CoreConfigDataKeys::CATALOG_SEO_CATEGORY_URL_SUFFIX, 'html');
+
+        // prepare and return the category URL
+        return sprintf('%s.%s', $this->getValue(ColumnKeys::URL_PATH), $urlSuffix);
     }
 
     /**

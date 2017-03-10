@@ -82,7 +82,6 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
                     if (isset($existingCategory[MemberNames::URL_KEY])) {
                         array_unshift($categoryPaths, $existingCategory[MemberNames::URL_KEY]);
                     } else {
-                        error_log(var_export($existingCategory, true));
                         $this->getSystemLogger()->debug(sprintf('Can\'t find URL key for category %s', $categoryPath));
                     }
 
