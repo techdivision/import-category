@@ -124,22 +124,22 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
     /**
      * Initialize the subject instance.
      *
-     * @param \Psr\Log\LoggerInterface                                          $systemLogger               The system logger instance
      * @param \TechDivision\Import\Configuration\SubjectConfigurationInterface  $configuration              The subject configuration instance
      * @param \TechDivision\Import\Services\RegistryProcessorInterface          $registryProcessor          The registry processor instance
      * @param \TechDivision\Import\Utils\Generators\GeneratorInterface          $coreConfigDataUidGenerator The UID generator for the core config data
+     * @param array                                                             $systemLoggers              The array with the system logger instances
      * @param \TechDivision\Import\Category\Services\CategoryProcessorInterface $categoryProcessor          The category processor instance
      */
     public function __construct(
-        LoggerInterface $systemLogger,
         SubjectConfigurationInterface $configuration,
         RegistryProcessorInterface $registryProcessor,
         GeneratorInterface $coreConfigDataUidGenerator,
+        array $systemLoggers,
         CategoryProcessorInterface $categoryProcessor
     ) {
 
         // pass the arguments to the parent constructor
-        parent::__construct($systemLogger, $configuration, $registryProcessor, $coreConfigDataUidGenerator);
+        parent::__construct($configuration, $registryProcessor, $coreConfigDataUidGenerator, $systemLoggers);
 
         // initialize the category processor
         $this->categoryProcessor = $categoryProcessor;
