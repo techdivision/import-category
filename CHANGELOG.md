@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha12
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Switch to latest callback interface and optimise error messages
+
 # Version 1.0.0-alpha11
 
 ## Bugfixes

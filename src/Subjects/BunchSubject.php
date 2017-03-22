@@ -105,11 +105,11 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
 
         // throw an exception, if not
         throw new \Exception(
-            sprintf(
-                'Found invalid display mode %s in file %s on line %d',
-                $displayMode,
-                $this->getFilename(),
-                $this->getLineNumber()
+            $this->appendExceptionSuffix(
+                sprintf(
+                    'Found invalid display mode %s',
+                    $displayMode
+                )
             )
         );
     }
@@ -132,11 +132,11 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
 
         // throw an exception, if not
         throw new \Exception(
-            sprintf(
-                'Found invalid page layout %s in file %s on line %d',
-                $pageLayout,
-                $this->getFilename(),
-                $this->getLineNumber()
+            $this->appendExceptionSuffix(
+                sprintf(
+                    'Found invalid page layout %s',
+                    $pageLayout
+                )
             )
         );
     }
