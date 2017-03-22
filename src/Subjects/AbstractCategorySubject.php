@@ -20,7 +20,6 @@
 
 namespace TechDivision\Import\Category\Subjects;
 
-use Psr\Log\LoggerInterface;
 use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Utils\Generators\GeneratorInterface;
 use TechDivision\Import\Subjects\AbstractEavSubject;
