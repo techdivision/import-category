@@ -16,8 +16,9 @@ functionality with some restrictions.
 
 * As there is **NO** unique identifier for categories, like a SKU for products, the library uses the category
   path instead. This makes it necessary, that the value specified in the column `path` is unique, whereas
-  Magento itself would basically allow the same category path. This restriction should not have a real big
-  impact on the most projects, as it usually doesn't make sense to have the same category path multiple times.
+  Magento itself would basically allow the same category path multiple times. This restriction should not 
+  have a real big impact on the most projects, as it usually doesn't make sense to have the same category path 
+  multiple times.
 * Only **ONE** store view code per row is allowed
 * Multilanguage functionality by providing the same path in multiple rows and different store view code is not
   yet tested
