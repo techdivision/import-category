@@ -20,6 +20,21 @@
 
 namespace TechDivision\Import\Category\Services;
 
+use TechDivision\Import\Assembler\CategoryAssembler;
+use TechDivision\Import\Actions\UrlRewriteAction;
+use TechDivision\Import\Category\Actions\CategoryVarcharAction;
+use TechDivision\Import\Category\Actions\CategoryTextAction;
+use TechDivision\Import\Category\Actions\CategoryIntAction;
+use TechDivision\Import\Category\Actions\CategoryDecimalAction;
+use TechDivision\Import\Repositories\UrlRewriteRepository;
+use TechDivision\Import\Repositories\EavAttributeRepository;
+use TechDivision\Import\Category\Repositories\CategoryVarcharRepository;
+use TechDivision\Import\Category\Repositories\CategoryTextRepository;
+use TechDivision\Import\Category\Repositories\CategoryIntRepository;
+use TechDivision\Import\Category\Repositories\CategoryDecimalRepository;
+use TechDivision\Import\Category\Repositories\CategoryDatetimeRepository;
+use TechDivision\Import\Category\Repositories\CategoryRepository;
+
 /**
  * The category bunch processor implementation.
  *
@@ -150,6 +165,63 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
      * @var \TechDivision\Import\Repositories\UrlRewriteRepository
      */
     protected $urlRewriteRepository;
+
+    /**
+     * Initialize the processor with the necessary assembler and repository instances.
+     *
+     * @param \PDO                                                                  $connection                 The PDO connection to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryRepository         $categoryRepository         The category repository to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryDatetimeRepository $categoryDatetimeRepository The category datetime repository to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryDecimalRepository  $categoryDecimalRepository  The category decimal repository to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryIntRepository      $categoryIntRepository      The category integer repository to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryTextRepository     $categoryTextRepository     The category text repository to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryVarcharRepository  $categoryVarcharRepository  The category varchar repository to use
+     * @param \TechDivision\Import\Repositories\EavAttributeRepository              $eavAttributeRepository     The EAV attribute repository to use
+     * @param \TechDivision\Import\Repositories\UrlRewriteRepository                $urlRewriteRepository       The URL rewrite repository to use
+     * @param \TechDivision\Import\Category\Actions\CategoryDatetimeAction          $categoryDatetimeAction     The category datetime action to use
+     * @param \TechDivision\Import\Category\Actions\CategoryDecimalAction           $categoryDecimalAction      The category decimal action to use
+     * @param \TechDivision\Import\Category\Actions\CategoryIntAction               $categoryIntAction          The category integer action to use
+     * @param \TechDivision\Import\Category\Actions\CategoryAction                  $categoryAction             The category action to use
+     * @param \TechDivision\Import\Category\Actions\CategoryTextAction              $categoryTextAction         The category text action to use
+     * @param \TechDivision\Import\Category\Actions\CategoryVarcharAction           $categoryVarcharAction      The category varchar action to use
+     * @param \TechDivision\Import\Product\Actions\UrlRewriteAction                 $urlRewriteAction           The URL rewrite action to use
+     * @param \TechDivision\Import\Assembler\CategoryAssembler                      $categoryAssembler          The category assembler to use
+     */
+    public function __construct(
+        \PDO $connection,
+        CategoryRepository $categoryRepository,
+        CategoryDatetimeRepository $categoryDatetimeRepository,
+        CategoryDecimalRepository $categoryDecimalRepository,
+        CategoryIntRepository $categoryIntRepository,
+        CategoryTextRepository $categoryTextRepository,
+        CategoryVarcharRepository $categoryVarcharRepository,
+        EavAttributeRepository $eavAttributeRepository,
+        UrlRewriteRepository $urlRewriteRepository,
+        CategoryDatetimeAction $categoryDatetimeAction,
+        CategoryDecimalAction $categoryDecimalAction,
+        CategoryIntAction $categoryIntAction,
+        CatgoryAction $categoryAction,
+        CategoryTextAction $categoryTextAction,
+        CategoryVarcharAction $categoryVarcharAction,
+        UrlRewriteAction $urlRewriteAction,
+        CategoryAssembler $categoryAssembler
+    ) {
+        $this->setConnection($connection);
+        $this->setCategoryRepository($categoryRepository);
+        $this->setCategoryDatetimeRepository($categoryDatetimeRepository);
+        $this->setCategoryDecimalRepository($categoryDecimalRepository);
+        $this->setCategoryIntRepository($categoryIntRepository);
+        $this->setCategoryVarcharRepository($categoryVarcharRepository);
+        $this->setEavAttributeRepository($eavAttributeRepository);
+        $this->setUrlRewriteRepository($urlRewriteRepository);
+        $this->setCategoryDatetimeAction($categoryDatetimeAction);
+        $this->setCategoryDecimalAction($categoryDecimalAction);
+        $this->setCategoryIntAction($categoryIntAction);
+        $this->setCategoryAction($categoryAction);
+        $this->setCategoryTextAction($categoryTextAction);
+        $this->setUrlRewriteAction($urlRewriteAction);
+        $this->setCategoryAssembler($categoryAssembler);
+    }
 
     /**
      * Set's the passed connection.
