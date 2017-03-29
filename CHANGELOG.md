@@ -1,3 +1,14 @@
+# Version 1.0.0-alpha14
+
+## Bugfixes
+
+* Fixed invalid constructor of CategoryBunchProcessor
+* Remove FilesytemTrait use statement from MediaSubject to avoid PHP 5.6 PHPUnit error
+
+## Features
+
+* None
+
 # Version 1.0.0-alpha13
 
 ## Bugfixes

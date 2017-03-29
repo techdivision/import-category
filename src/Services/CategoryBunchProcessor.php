@@ -34,6 +34,8 @@ use TechDivision\Import\Category\Repositories\CategoryIntRepository;
 use TechDivision\Import\Category\Repositories\CategoryDecimalRepository;
 use TechDivision\Import\Category\Repositories\CategoryDatetimeRepository;
 use TechDivision\Import\Category\Repositories\CategoryRepository;
+use TechDivision\Import\Category\Actions\CategoryDatetimeAction;
+use TechDivision\Import\Category\Actions\CategoryAction;
 
 /**
  * The category bunch processor implementation.
@@ -200,7 +202,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
         CategoryDatetimeAction $categoryDatetimeAction,
         CategoryDecimalAction $categoryDecimalAction,
         CategoryIntAction $categoryIntAction,
-        CatgoryAction $categoryAction,
+        CategoryAction $categoryAction,
         CategoryTextAction $categoryTextAction,
         CategoryVarcharAction $categoryVarcharAction,
         UrlRewriteAction $urlRewriteAction,
@@ -211,6 +213,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
         $this->setCategoryDatetimeRepository($categoryDatetimeRepository);
         $this->setCategoryDecimalRepository($categoryDecimalRepository);
         $this->setCategoryIntRepository($categoryIntRepository);
+        $this->setCategoryTextRepository($categoryTextRepository);
         $this->setCategoryVarcharRepository($categoryVarcharRepository);
         $this->setEavAttributeRepository($eavAttributeRepository);
         $this->setUrlRewriteRepository($urlRewriteRepository);
@@ -219,6 +222,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
         $this->setCategoryIntAction($categoryIntAction);
         $this->setCategoryAction($categoryAction);
         $this->setCategoryTextAction($categoryTextAction);
+        $this->setCategoryVarcharAction($categoryVarcharAction);
         $this->setUrlRewriteAction($urlRewriteAction);
         $this->setCategoryAssembler($categoryAssembler);
     }
