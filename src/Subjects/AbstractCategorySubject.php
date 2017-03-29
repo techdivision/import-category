@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Category\Subjects;
 
 use TechDivision\Import\Utils\RegistryKeys;
+use TechDivision\Import\Utils\FrontendInputTypes;
 use TechDivision\Import\Utils\Generators\GeneratorInterface;
 use TechDivision\Import\Subjects\AbstractEavSubject;
 use TechDivision\Import\Services\RegistryProcessorInterface;
@@ -121,6 +122,17 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
     );
 
     /**
+     * The default mappings for the user defined attributes, based on the attributes frontend input type.
+     *
+     * @var array
+     */
+    protected $defaultFrontendInputCallbackMappings = array(
+        FrontendInputTypes::SELECT      => 'TechDivision\\Import\\Category\\Callbacks\\SelectCallback',
+        FrontendInputTypes::MULTISELECT => 'TechDivision\\Import\\Category\\Callbacks\\MultiselectCallback',
+        FrontendInputTypes::BOOLEAN     => 'TechDivision\\Import\\Category\\Callbacks\\BooleanCallback'
+    );
+
+    /**
      * Initialize the subject instance.
      *
      * @param \TechDivision\Import\Configuration\SubjectConfigurationInterface  $configuration              The subject configuration instance
@@ -142,6 +154,16 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
 
         // initialize the category processor
         $this->categoryProcessor = $categoryProcessor;
+    }
+
+    /**
+     * Return's the default callback frontend input mappings for the user defined attributes.
+     *
+     * @return array The default frontend input callback mappings
+     */
+    public function getDefaultFrontendInputCallbackMappings()
+    {
+        return $this->defaultFrontendInputCallbackMappings;
     }
 
     /**

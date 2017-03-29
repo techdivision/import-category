@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Category\Callbacks\AbstractCategoryImportCallback
+ * TechDivision\Import\Category\Callbacks\MultiselectCallback
  *
  * NOTICE OF LICENSE
  *
@@ -21,10 +21,10 @@
 namespace TechDivision\Import\Category\Callbacks;
 
 use TechDivision\Import\Category\Utils\ColumnKeys;
-use TechDivision\Import\Callbacks\AbstractCallback;
+use TechDivision\Import\Callbacks\AbstractMultiselectCallback;
 
 /**
- * Abstract category import callback implementation.
+ * A callback implementation that converts the passed multiselect value.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -32,7 +32,7 @@ use TechDivision\Import\Callbacks\AbstractCallback;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-abstract class AbstractCategoryImportCallback extends AbstractCallback implements CategoryImportCallbackInterface
+class MultiselectCallback extends AbstractMultiselectCallback
 {
 
     /**
