@@ -135,6 +135,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
     /**
      * Initialize the subject instance.
      *
+     * @param string                                                           $serial                     The serial of the actual import
      * @param \TechDivision\Import\Configuration\SubjectConfigurationInterface  $configuration              The subject configuration instance
      * @param \TechDivision\Import\Services\RegistryProcessorInterface          $registryProcessor          The registry processor instance
      * @param \TechDivision\Import\Utils\Generators\GeneratorInterface          $coreConfigDataUidGenerator The UID generator for the core config data
@@ -142,6 +143,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
      * @param \TechDivision\Import\Category\Services\CategoryProcessorInterface $categoryProcessor          The category processor instance
      */
     public function __construct(
+        $serial,
         SubjectConfigurationInterface $configuration,
         RegistryProcessorInterface $registryProcessor,
         GeneratorInterface $coreConfigDataUidGenerator,
@@ -150,7 +152,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
     ) {
 
         // pass the arguments to the parent constructor
-        parent::__construct($configuration, $registryProcessor, $coreConfigDataUidGenerator, $systemLoggers);
+        parent::__construct($serial, $configuration, $registryProcessor, $coreConfigDataUidGenerator, $systemLoggers);
 
         // initialize the category processor
         $this->categoryProcessor = $categoryProcessor;
