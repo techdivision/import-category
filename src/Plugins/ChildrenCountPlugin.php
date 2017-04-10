@@ -20,9 +20,12 @@
 
 namespace TechDivision\Import\Category\Plugins;
 
+use TechDivision\Import\ApplicationInterface;
 use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Plugins\AbstractPlugin;
 use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Category\Services\CategoryProcessorInterface;
+use TechDivision\Import\Configuration\PluginConfigurationInterface;
 
 /**
  * Plugin that updates the categories children count attribute after a successfull category import.
@@ -35,6 +38,33 @@ use TechDivision\Import\Category\Utils\MemberNames;
  */
 class ChildrenCountPlugin extends AbstractPlugin
 {
+
+    /**
+     * The category processor instance.
+     *
+     * @var \TechDivision\Import\Category\Services\CategoryProcessorInterface
+     */
+    protected $processor;
+
+    /**
+     * Initializes the plugin with the application instance.
+     *
+     * @param \TechDivision\Import\ApplicationInterface                         $application         The application instance
+     * @param \TechDivision\Import\Configuration\PluginConfigurationInterface   $pluginConfiguration The plugin configuration instance
+     * @param \TechDivision\Import\Category\Services\CategoryProcessorInterface $processor           The category processor instance
+     */
+    public function __construct(
+        ApplicationInterface $application,
+        PluginConfigurationInterface $pluginConfiguration,
+        CategoryProcessorInterface $processor
+    ) {
+
+        // call the parent constructor
+        parent::__construct($application, $pluginConfiguration);
+
+        // set the passed processor instance
+        $this->processor = $processor;
+    }
 
     /**
      * Process the plugin functionality.
@@ -107,6 +137,17 @@ class ChildrenCountPlugin extends AbstractPlugin
     protected function getPrimaryKey(array $category)
     {
         return $category[MemberNames::ENTITY_ID];
+    }
+
+    /**
+     * Return's the configured processor instance.
+     *
+     * @return object The processor instance
+     * @throws \Exception Is thrown, if no processor factory has been configured
+     */
+    protected function getProcessor()
+    {
+        return $this->processor;
     }
 
     /**

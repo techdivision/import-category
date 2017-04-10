@@ -127,9 +127,9 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
      * @var array
      */
     protected $defaultFrontendInputCallbackMappings = array(
-        FrontendInputTypes::SELECT      => 'TechDivision\\Import\\Category\\Callbacks\\SelectCallback',
-        FrontendInputTypes::MULTISELECT => 'TechDivision\\Import\\Category\\Callbacks\\MultiselectCallback',
-        FrontendInputTypes::BOOLEAN     => 'TechDivision\\Import\\Category\\Callbacks\\BooleanCallback'
+        FrontendInputTypes::SELECT      => 'import_category.callback.select',
+        FrontendInputTypes::MULTISELECT => 'import_category.callback.multiselect',
+        FrontendInputTypes::BOOLEAN     => 'import_category.callback.boolean'
     );
 
     /**
