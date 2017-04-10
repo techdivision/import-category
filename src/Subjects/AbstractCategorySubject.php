@@ -135,7 +135,6 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
     /**
      * Initialize the subject instance.
      *
-     * @param string                                                           $serial                     The serial of the actual import
      * @param \TechDivision\Import\Configuration\SubjectConfigurationInterface  $configuration              The subject configuration instance
      * @param \TechDivision\Import\Services\RegistryProcessorInterface          $registryProcessor          The registry processor instance
      * @param \TechDivision\Import\Utils\Generators\GeneratorInterface          $coreConfigDataUidGenerator The UID generator for the core config data
@@ -143,7 +142,6 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
      * @param \TechDivision\Import\Category\Services\CategoryProcessorInterface $categoryProcessor          The category processor instance
      */
     public function __construct(
-        $serial,
         SubjectConfigurationInterface $configuration,
         RegistryProcessorInterface $registryProcessor,
         GeneratorInterface $coreConfigDataUidGenerator,
@@ -152,7 +150,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
     ) {
 
         // pass the arguments to the parent constructor
-        parent::__construct($serial, $configuration, $registryProcessor, $coreConfigDataUidGenerator, $systemLoggers);
+        parent::__construct($configuration, $registryProcessor, $coreConfigDataUidGenerator, $systemLoggers);
 
         // initialize the category processor
         $this->categoryProcessor = $categoryProcessor;
@@ -317,14 +315,16 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
     /**
      * Intializes the previously loaded global data for exactly one bunch.
      *
+     * @param string $serial The serial of the actual import
+     *
      * @return void
      * @see \Importer\Csv\Actions\ProductImportAction::prepare()
      */
-    public function setUp()
+    public function setUp($serial)
     {
 
         // load the status of the actual import
-        $status = $this->getRegistryProcessor()->getAttribute($this->getSerial());
+        $status = $this->getRegistryProcessor()->getAttribute($serial);
 
         // load the global data we've prepared initially
         $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
@@ -334,23 +334,25 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
         $this->categories = $this->getCategoryProcessor()->getCategoriesWithResolvedPath();
 
         // prepare the callbacks
-        parent::setUp();
+        parent::setUp($serial);
     }
 
     /**
      * Clean up the global data after importing the bunch.
      *
+     * @param string $serial The serial of the actual import
+     *
      * @return void
      */
-    public function tearDown()
+    public function tearDown($serial)
     {
 
         // invoke the parent method
-        parent::tearDown();
+        parent::tearDown($serial);
 
         // update the status
         $this->getRegistryProcessor()->mergeAttributesRecursive(
-            $this->getSerial(),
+            $serial,
             array(
                 RegistryKeys::FILES => array($this->getFilename() => array(RegistryKeys::STATUS => 1))
             )

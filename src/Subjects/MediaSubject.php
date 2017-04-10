@@ -48,14 +48,16 @@ class MediaSubject extends AbstractCategorySubject
     /**
      * Intializes the previously loaded global data for exactly one variants.
      *
+     * @param string $serial The serial of the actual import
+     *
      * @return void
      * @see \Importer\Csv\Actions\ProductImportAction::prepare()
      */
-    public function setUp()
+    public function setUp($serial)
     {
 
         // invoke parent method
-        parent::setUp();
+        parent::setUp($serial);
 
         // initialize the flag to decide copy images or not
         $this->setCopyImages($this->getConfiguration()->getParam(ConfigurationKeys::COPY_IMAGES));
