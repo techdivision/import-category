@@ -29,7 +29,8 @@
 		"psr-4" : {
 			"TechDivision\\Import\\Category\\" : [
 				"src/",
-				"tests/"
+				"tests/",
+				"symfony/"
 			]
 		}
 	}

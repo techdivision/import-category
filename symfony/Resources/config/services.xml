@@ -152,6 +152,10 @@
         <service id="import_category.observer.url.rewrite" class="TechDivision\Import\Category\Observers\UrlRewriteObserver"/>
         <service id="import_category.observer.url.rewrite.update" class="TechDivision\Import\Category\Observers\UrlRewriteUpdateObserver"/>
 
+        <service id="configuration.import_category.subject.bunch" synthetic="true" />
+        <service id="configuration.import_category.subject.media" synthetic="true" />
+        <service id="configuration.import_category.plugin.children.count" synthetic="true" />
+ 
         <service id="import_category.subject.bunch" class="TechDivision\Import\Category\Subjects\BunchSubject" shared="false">
             <argument type="service" id="configuration.import_category.subject.bunch"/>
             <argument type="service" id="import.processor.registry"/>
@@ -161,7 +165,7 @@
         </service>
 
         <service id="import_category.subject.media" class="TechDivision\Import\Category\Subjects\MediaSubject" shared="false">
-            <argument type="service" id="configuration.import_category.subject.bunch"/>
+            <argument type="service" id="configuration.import_category.subject.media"/>
             <argument type="service" id="import.processor.registry"/>
             <argument type="service" id="import.generator.core.config.data.uid"/>
             <argument type="service" id="loggers"/>
