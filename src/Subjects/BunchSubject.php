@@ -73,8 +73,8 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
      * @var array
      */
     protected $defaultCallbackMappings = array(
-        'display_mode' => array('TechDivision\\Import\\Category\\Callbacks\\DisplayModeCallback'),
-        'page_layout'  => array('TechDivision\\Import\\Category\\Callbacks\\PageLayoutCallback'),
+        'display_mode' => array('import_category.callback.display.mode'),
+        'page_layout'  => array('import_category.callback.page.layout'),
     );
 
     /**

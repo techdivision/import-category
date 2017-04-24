@@ -1,0 +1,222 @@
+{
+  "magento-edition": "CE",
+  "magento-version": "2.1.2",
+  "source-date-format": "n/d/y, g:i A",
+  "archive-artefacts" : true,
+  "archive-dir" : "archive",
+  "debug-mode" : false,
+  "ignore-pid" : false,
+  "entity-type-code" : "catalog_category",
+  "databases" : [
+  ],
+  "operations" : [
+    {
+      "name" : "delete",
+      "plugins" : [
+        {
+          "id": "import.plugin.global.data"
+        },
+        {
+          "id": "import.plugin.subject",
+          "subjects" : [
+            {
+              "id": "import.subject.move.files",
+              "identifier": "move-files",
+              "prefix": "magento-categories",
+              "ok-file-needed": true
+            },
+            {
+              "id": "import_category.subject.bunch",
+              "identifier": "files",
+              "prefix": "magento-categories",
+              "observers": [
+                {
+                  "import": [
+                    "import_category.observer.clear.category"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "import.plugin.archive"
+        }
+      ]
+    },
+    {
+      "name" : "replace",
+      "plugins" : [
+        {
+          "id": "import.plugin.global.data"
+        },
+        {
+          "id": "import.plugin.subject",
+          "subjects": [
+            {
+              "id": "import.subject.move.files",
+              "identifier": "move-files",
+              "prefix": "magento-categories",
+              "ok-file-needed": true
+            },
+            {
+              "id": "import_category.subject.bunch",
+              "identifier": "files",
+              "prefix": "magento-categories",
+              "observers": [
+                {
+                  "import": [
+                    "import_category.observer.clear.category"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_category.subject.bunch",
+              "identifier": "files",
+              "prefix": "category-create",
+              "observers": [
+                {
+                  "pre-import": [
+                    "import_category.observer.url.key.and.path",
+                    "import.observer.attribute.set",
+                    "import.observer.additional.attribute"
+                  ]
+                },
+                {
+                  "import": [
+                    "import_category.observer.category",
+                    "import_category.observer.category.image",
+                    "import_category.observer.category.attribute",
+                    "import_category.observer.url.rewrite"
+                  ]
+                },
+                {
+                  "post-import": [
+                    "import_category.observer.clean.up"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_category.subject.bunch",
+              "identifier": "files",
+              "prefix": "category-path",
+              "observers": [
+                {
+                  "import": [
+                    "import_category.observer.category.path"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_category.subject.media",
+              "prefix": "media",
+              "params" : [
+                {
+                  "copy-images" : false,
+                  "root-directory" : "/"
+                }
+              ],
+              "observers": [
+                {
+                  "import" : [
+                    "import_category.observer.file.upload"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "import_category.plugin.children.count"
+        },
+        {
+          "id": "import.plugin.archive"
+        }
+      ]
+    },
+    {
+      "name" : "add-update",
+      "plugins" : [
+        {
+          "id": "import.plugin.global.data"
+        },
+        {
+          "id": "import.plugin.subject",
+          "subjects": [
+            {
+              "id": "import.subject.move.files",
+              "identifier": "move-files",
+              "prefix": "magento-categories",
+              "ok-file-needed": true
+            },
+            {
+              "id": "import_category.subject.bunch",
+              "identifier": "files",
+              "prefix": "magento-categories",
+              "observers": [
+                {
+                  "pre-import": [
+                    "import_category.observer.url.key.and.path",
+                    "import.observer.attribute.set",
+                    "import.observer.additional.attribute"
+                  ]
+                },
+                {
+                  "import": [
+                    "import_category.observer.category.update",
+                    "import_category.observer.category.image",
+                    "import_category.observer.category.attribute.update",
+                    "import_category.observer.url.rewrite.update"
+                  ]
+                },
+                {
+                  "post-import": [
+                    "import_category.observer.clean.up"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_category.subject.bunch",
+              "identifier": "files",
+              "prefix": "category-path",
+              "observers": [
+                {
+                  "import": [
+                    "import_category.observer.category.path"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_category.subject.media",
+              "prefix": "media",
+              "params" : [
+                {
+                  "copy-images" : false,
+                  "root-directory" : "/"
+                }
+              ],
+              "observers": [
+                {
+                  "import" : [
+                    "import_category.observer.file.upload"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "import_category.plugin.children.count"
+        },
+        {
+          "id": "import.plugin.archive"
+        }
+      ]
+    }
+  ]
+}

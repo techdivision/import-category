@@ -127,9 +127,9 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
      * @var array
      */
     protected $defaultFrontendInputCallbackMappings = array(
-        FrontendInputTypes::SELECT      => 'TechDivision\\Import\\Category\\Callbacks\\SelectCallback',
-        FrontendInputTypes::MULTISELECT => 'TechDivision\\Import\\Category\\Callbacks\\MultiselectCallback',
-        FrontendInputTypes::BOOLEAN     => 'TechDivision\\Import\\Category\\Callbacks\\BooleanCallback'
+        FrontendInputTypes::SELECT      => 'import_category.callback.select',
+        FrontendInputTypes::MULTISELECT => 'import_category.callback.multiselect',
+        FrontendInputTypes::BOOLEAN     => 'import_category.callback.boolean'
     );
 
     /**
@@ -315,14 +315,16 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
     /**
      * Intializes the previously loaded global data for exactly one bunch.
      *
+     * @param string $serial The serial of the actual import
+     *
      * @return void
      * @see \Importer\Csv\Actions\ProductImportAction::prepare()
      */
-    public function setUp()
+    public function setUp($serial)
     {
 
         // load the status of the actual import
-        $status = $this->getRegistryProcessor()->getAttribute($this->getSerial());
+        $status = $this->getRegistryProcessor()->getAttribute($serial);
 
         // load the global data we've prepared initially
         $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
@@ -332,23 +334,25 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
         $this->categories = $this->getCategoryProcessor()->getCategoriesWithResolvedPath();
 
         // prepare the callbacks
-        parent::setUp();
+        parent::setUp($serial);
     }
 
     /**
      * Clean up the global data after importing the bunch.
      *
+     * @param string $serial The serial of the actual import
+     *
      * @return void
      */
-    public function tearDown()
+    public function tearDown($serial)
     {
 
         // invoke the parent method
-        parent::tearDown();
+        parent::tearDown($serial);
 
         // update the status
         $this->getRegistryProcessor()->mergeAttributesRecursive(
-            $this->getSerial(),
+            $serial,
             array(
                 RegistryKeys::FILES => array($this->getFilename() => array(RegistryKeys::STATUS => 1))
             )
