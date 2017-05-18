@@ -28,6 +28,7 @@ use TechDivision\Import\Category\Actions\CategoryIntAction;
 use TechDivision\Import\Category\Actions\CategoryDecimalAction;
 use TechDivision\Import\Repositories\UrlRewriteRepository;
 use TechDivision\Import\Repositories\EavAttributeRepository;
+use TechDivision\Import\Repositories\EavAttributeOptionValueRepository;
 use TechDivision\Import\Category\Repositories\CategoryVarcharRepository;
 use TechDivision\Import\Category\Repositories\CategoryTextRepository;
 use TechDivision\Import\Category\Repositories\CategoryIntRepository;
@@ -69,6 +70,13 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
      * @var \TechDivision\Import\Repositories\EavAttributeRepository
      */
     protected $eavAttributeRepository;
+
+    /**
+     * The repository to access EAV attribute option values.
+     *
+     * @var \TechDivision\Import\Product\Repositories\EavAttributeOptionValueRepository
+     */
+    protected $eavAttributeOptionValueRepository;
 
     /**
      * The action for category CRUD methods.
@@ -171,23 +179,24 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
-     * @param \PDO                                                                  $connection                 The PDO connection to use
-     * @param \TechDivision\Import\Category\Repositories\CategoryRepository         $categoryRepository         The category repository to use
-     * @param \TechDivision\Import\Category\Repositories\CategoryDatetimeRepository $categoryDatetimeRepository The category datetime repository to use
-     * @param \TechDivision\Import\Category\Repositories\CategoryDecimalRepository  $categoryDecimalRepository  The category decimal repository to use
-     * @param \TechDivision\Import\Category\Repositories\CategoryIntRepository      $categoryIntRepository      The category integer repository to use
-     * @param \TechDivision\Import\Category\Repositories\CategoryTextRepository     $categoryTextRepository     The category text repository to use
-     * @param \TechDivision\Import\Category\Repositories\CategoryVarcharRepository  $categoryVarcharRepository  The category varchar repository to use
-     * @param \TechDivision\Import\Repositories\EavAttributeRepository              $eavAttributeRepository     The EAV attribute repository to use
-     * @param \TechDivision\Import\Repositories\UrlRewriteRepository                $urlRewriteRepository       The URL rewrite repository to use
-     * @param \TechDivision\Import\Category\Actions\CategoryDatetimeAction          $categoryDatetimeAction     The category datetime action to use
-     * @param \TechDivision\Import\Category\Actions\CategoryDecimalAction           $categoryDecimalAction      The category decimal action to use
-     * @param \TechDivision\Import\Category\Actions\CategoryIntAction               $categoryIntAction          The category integer action to use
-     * @param \TechDivision\Import\Category\Actions\CategoryAction                  $categoryAction             The category action to use
-     * @param \TechDivision\Import\Category\Actions\CategoryTextAction              $categoryTextAction         The category text action to use
-     * @param \TechDivision\Import\Category\Actions\CategoryVarcharAction           $categoryVarcharAction      The category varchar action to use
-     * @param \TechDivision\Import\Product\Actions\UrlRewriteAction                 $urlRewriteAction           The URL rewrite action to use
-     * @param \TechDivision\Import\Assembler\CategoryAssembler                      $categoryAssembler          The category assembler to use
+     * @param \PDO                                                                        $connection                        The PDO connection to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryRepository               $categoryRepository                The category repository to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryDatetimeRepository       $categoryDatetimeRepository        The category datetime repository to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryDecimalRepository        $categoryDecimalRepository         The category decimal repository to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryIntRepository            $categoryIntRepository             The category integer repository to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryTextRepository           $categoryTextRepository            The category text repository to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryVarcharRepository        $categoryVarcharRepository         The category varchar repository to use
+     * @param \TechDivision\Import\Product\Repositories\EavAttributeOptionValueRepository $eavAttributeOptionValueRepository The EAV attribute option value repository to use
+     * @param \TechDivision\Import\Repositories\EavAttributeRepository                    $eavAttributeRepository            The EAV attribute repository to use
+     * @param \TechDivision\Import\Repositories\UrlRewriteRepository                      $urlRewriteRepository              The URL rewrite repository to use
+     * @param \TechDivision\Import\Category\Actions\CategoryDatetimeAction                $categoryDatetimeAction            The category datetime action to use
+     * @param \TechDivision\Import\Category\Actions\CategoryDecimalAction                 $categoryDecimalAction             The category decimal action to use
+     * @param \TechDivision\Import\Category\Actions\CategoryIntAction                     $categoryIntAction                 The category integer action to use
+     * @param \TechDivision\Import\Category\Actions\CategoryAction                        $categoryAction                    The category action to use
+     * @param \TechDivision\Import\Category\Actions\CategoryTextAction                    $categoryTextAction                The category text action to use
+     * @param \TechDivision\Import\Category\Actions\CategoryVarcharAction                 $categoryVarcharAction             The category varchar action to use
+     * @param \TechDivision\Import\Product\Actions\UrlRewriteAction                       $urlRewriteAction                  The URL rewrite action to use
+     * @param \TechDivision\Import\Assembler\CategoryAssembler                            $categoryAssembler                 The category assembler to use
      */
     public function __construct(
         \PDO $connection,
@@ -197,6 +206,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
         CategoryIntRepository $categoryIntRepository,
         CategoryTextRepository $categoryTextRepository,
         CategoryVarcharRepository $categoryVarcharRepository,
+        EavAttributeOptionValueRepository $eavAttributeOptionValueRepository,
         EavAttributeRepository $eavAttributeRepository,
         UrlRewriteRepository $urlRewriteRepository,
         CategoryDatetimeAction $categoryDatetimeAction,
@@ -215,6 +225,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
         $this->setCategoryIntRepository($categoryIntRepository);
         $this->setCategoryTextRepository($categoryTextRepository);
         $this->setCategoryVarcharRepository($categoryVarcharRepository);
+        $this->setEavAttributeOptionValueRepository($eavAttributeOptionValueRepository);
         $this->setEavAttributeRepository($eavAttributeRepository);
         $this->setUrlRewriteRepository($urlRewriteRepository);
         $this->setCategoryDatetimeAction($categoryDatetimeAction);
@@ -291,6 +302,28 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     public function rollBack()
     {
         return $this->connection->rollBack();
+    }
+
+    /**
+     * Set's the repository to access EAV attribute option values.
+     *
+     * @param \TechDivision\Import\Product\Repositories\EavAttributeOptionValueRepository $eavAttributeOptionValueRepository The repository to access EAV attribute option values
+     *
+     * @return void
+     */
+    public function setEavAttributeOptionValueRepository($eavAttributeOptionValueRepository)
+    {
+        $this->eavAttributeOptionValueRepository = $eavAttributeOptionValueRepository;
+    }
+
+    /**
+     * Return's the repository to access EAV attribute option values.
+     *
+     * @return \TechDivision\Import\Product\Repositories\EavAttributeOptionValueRepository The repository instance
+     */
+    public function getEavAttributeOptionValueRepository()
+    {
+        return $this->eavAttributeOptionValueRepository;
     }
 
     /**
@@ -712,6 +745,20 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId)
     {
         return $this->getUrlRewriteRepository()->findAllByEntityTypeAndEntityId($entityType, $entityId);
+    }
+
+    /**
+     * Load's and return's the EAV attribute option value with the passed code, store ID and value.
+     *
+     * @param string  $attributeCode The code of the EAV attribute option to load
+     * @param integer $storeId       The store ID of the attribute option to load
+     * @param string  $value         The value of the attribute option to load
+     *
+     * @return array The EAV attribute option value
+     */
+    public function loadEavAttributeOptionValueByAttributeCodeAndStoreIdAndValue($attributeCode, $storeId, $value)
+    {
+        return $this->getEavAttributeOptionValueRepository()->findOneByAttributeCodeAndStoreIdAndValue($attributeCode, $storeId, $value);
     }
 
     /**

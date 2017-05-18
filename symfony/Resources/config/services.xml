@@ -121,6 +121,7 @@
             <argument type="service" id="import_category.repository.category.int"/>
             <argument type="service" id="import_category.repository.category.text"/>
             <argument type="service" id="import_category.repository.category.varchar"/>
+            <argument type="service" id="import.repository.eav.attribute.option.value"/>
             <argument type="service" id="import.repository.eav.attribute"/>
             <argument type="service" id="import.repository.url.rewrite"/>
             <argument type="service" id="import_category.action.category.datetime"/>
