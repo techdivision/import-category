@@ -96,6 +96,13 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface
     public function getEavAttributeRepository();
 
     /**
+     * Return's the repository to access EAV attribute option values.
+     *
+     * @return \TechDivision\Import\Product\Repositories\EavAttributeOptionValueRepository The repository instance
+     */
+    public function getEavAttributeOptionValueRepository();
+
+    /**
      * Return's the repository to load the URL rewrites with.
      *
      * @return \TechDivision\Import\Repositories\UrlRewriteRepository The repository instance
@@ -152,6 +159,17 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface
      * @return array The URL rewrites
      */
     public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
+
+    /**
+     * Load's and return's the EAV attribute option value with the passed code, store ID and value.
+     *
+     * @param string  $attributeCode The code of the EAV attribute option to load
+     * @param integer $storeId       The store ID of the attribute option to load
+     * @param string  $value         The value of the attribute option to load
+     *
+     * @return array The EAV attribute option value
+     */
+    public function loadEavAttributeOptionValueByAttributeCodeAndStoreIdAndValue($attributeCode, $storeId, $value);
 
     /**
      * Return's the children count of the category with the passed ID.

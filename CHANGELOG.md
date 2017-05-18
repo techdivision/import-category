@@ -1,3 +1,13 @@
+# Version 1.0.0-beta3
+
+## Bugfixes
+
+* Add missing loadEavAttributeOptionValueByAttributeCodeAndStoreIdAndValue() method to AbstractCategorySubject + CategoryBunchProcessor
+
+## Features
+
+* None
+
 # Version 1.0.0-beta2
 
 ## Bugfixes
