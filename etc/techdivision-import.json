@@ -3,7 +3,7 @@
   "magento-version": "2.1.2",
   "operation-name" : "add-update",
   "source-date-format": "n/d/y, g:i A",
-  "archive-artefacts" : true,
+  "archive-artefacts" : false,
   "archive-dir" : "archive",
   "debug-mode" : false,
   "entity-type-code" : "catalog_category",
