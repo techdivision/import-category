@@ -1,3 +1,13 @@
+# Version 1.0.0-beta5
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Remove archive directory from default configuration file
+
 # Version 1.0.0-beta4
 
 ## Bugfixes
