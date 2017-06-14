@@ -56,7 +56,8 @@ class CategoryVarcharRepository extends \TechDivision\Import\Repositories\Catego
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->categoryVarcharStmt = $this->getConnection()->prepare($utilityClassName::CATEGORY_VARCHAR);
+        $this->categoryVarcharStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::CATEGORY_VARCHAR));
     }
 
     /**

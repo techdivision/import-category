@@ -70,9 +70,12 @@ class CategoryRepository extends \TechDivision\Import\Repositories\CategoryRepos
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->categoryStmt = $this->getConnection()->prepare($utilityClassName::CATEGORY);
-        $this->categoryByPathStmt = $this->getConnection()->prepare($utilityClassName::CATEGORY_BY_PATH);
-        $this->categoryCountChildrenStmt = $this->getConnection()->prepare($utilityClassName::CATEGORY_COUNT_CHILDREN);
+        $this->categoryStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::CATEGORY));
+        $this->categoryByPathStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::CATEGORY_BY_PATH));
+        $this->categoryCountChildrenStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::CATEGORY_COUNT_CHILDREN));
     }
 
     /**

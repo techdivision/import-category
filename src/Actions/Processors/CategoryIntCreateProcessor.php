@@ -48,7 +48,7 @@ class CategoryIntCreateProcessor extends AbstractCreateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_CATEGORY_INT => $utilityClassName::CREATE_CATEGORY_INT
+            $utilityClassName::CREATE_CATEGORY_INT => $this->getUtilityClass()->find($utilityClassName::CREATE_CATEGORY_INT)
         );
     }
 }
