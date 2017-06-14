@@ -48,7 +48,7 @@ class CategoryDeleteProcessor extends AbstractDeleteProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::DELETE_CATEGORY => $utilityClassName::DELETE_CATEGORY
+            $utilityClassName::DELETE_CATEGORY => $this->getUtilityClass()->find($utilityClassName::DELETE_CATEGORY)
         );
     }
 }

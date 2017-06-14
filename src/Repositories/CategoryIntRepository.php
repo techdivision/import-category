@@ -54,7 +54,8 @@ class CategoryIntRepository extends AbstractRepository
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->categoryIntStmt = $this->getConnection()->prepare($utilityClassName::CATEGORY_INT);
+        $this->categoryIntStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::CATEGORY_INT));
     }
 
     /**

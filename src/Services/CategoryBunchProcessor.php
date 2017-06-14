@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Category\Services;
 
+use TechDivision\Import\Connection\ConnectionInterface;
 use TechDivision\Import\Assembler\CategoryAssembler;
 use TechDivision\Import\Actions\UrlRewriteAction;
 use TechDivision\Import\Category\Actions\CategoryVarcharAction;
@@ -53,7 +54,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * A PDO connection initialized with the values from the Doctrine EntityManager.
      *
-     * @var \PDO
+     * @var \TechDivision\Import\Connection\ConnectionInterface
      */
     protected $connection;
 
@@ -179,7 +180,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
-     * @param \PDO                                                                        $connection                        The PDO connection to use
+     * @param \TechDivision\Import\Connection\ConnectionInterface                         $connection                        The connection to use
      * @param \TechDivision\Import\Category\Repositories\CategoryRepository               $categoryRepository                The category repository to use
      * @param \TechDivision\Import\Category\Repositories\CategoryDatetimeRepository       $categoryDatetimeRepository        The category datetime repository to use
      * @param \TechDivision\Import\Category\Repositories\CategoryDecimalRepository        $categoryDecimalRepository         The category decimal repository to use
@@ -199,7 +200,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
      * @param \TechDivision\Import\Assembler\CategoryAssembler                            $categoryAssembler                 The category assembler to use
      */
     public function __construct(
-        \PDO $connection,
+        ConnectionInterface $connection,
         CategoryRepository $categoryRepository,
         CategoryDatetimeRepository $categoryDatetimeRepository,
         CategoryDecimalRepository $categoryDecimalRepository,
@@ -241,11 +242,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the passed connection.
      *
-     * @param \PDO $connection The connection to set
+     * @param \TechDivision\Import\Connection\ConnectionInterface $connection The connection to set
      *
      * @return void
      */
-    public function setConnection(\PDO $connection)
+    public function setConnection(ConnectionInterface $connection)
     {
         $this->connection = $connection;
     }
@@ -253,7 +254,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the connection.
      *
-     * @return \PDO The connection instance
+     * @return \TechDivision\Import\Connection\ConnectionInterface The connection instance
      */
     public function getConnection()
     {

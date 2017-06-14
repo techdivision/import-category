@@ -48,7 +48,7 @@ class CategoryVarcharUpdateProcessor extends AbstractUpdateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::UPDATE_CATEGORY_VARCHAR => $utilityClassName::UPDATE_CATEGORY_VARCHAR
+            $utilityClassName::UPDATE_CATEGORY_VARCHAR => $this->getUtilityClass()->find($utilityClassName::UPDATE_CATEGORY_VARCHAR)
         );
     }
 }

@@ -54,7 +54,8 @@ class CategoryDecimalRepository extends AbstractRepository
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->categoryDecimalStmt = $this->getConnection()->prepare($utilityClassName::CATEGORY_DECIMAL);
+        $this->categoryDecimalStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::CATEGORY_DECIMAL));
     }
 
     /**

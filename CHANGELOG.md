@@ -1,3 +1,14 @@
+# Version 1.0.0-beta6
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Use Robo for Travis-CI build process 
+* Refactoring for new ConnectionInterface + SqlStatementsInterface
+
 # Version 1.0.0-beta5
 
 ## Bugfixes
