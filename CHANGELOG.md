@@ -1,3 +1,13 @@
+# Version 1.0.0-beta7
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Update Symfony DI ID for application
+
 # Version 1.0.0-beta6
 
 ## Bugfixes
