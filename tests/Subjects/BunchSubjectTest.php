@@ -49,11 +49,6 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
 
-        // create a mock subject configuration
-        $mockSubjectConfiguration = $this->getMockBuilder('TechDivision\Import\Configuration\SubjectConfigurationInterface')
-                                         ->setMethods(get_class_methods('TechDivision\Import\Configuration\SubjectConfigurationInterface'))
-                                         ->getMock();
-
         // create a mock registry processor
         $mockRegistryProcessor = $this->getMockBuilder('TechDivision\Import\Services\RegistryProcessorInterface')
                                       ->setMethods(get_class_methods('TechDivision\Import\Services\RegistryProcessorInterface'))
@@ -71,7 +66,6 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
 
         // create the subject to be tested
         $this->subject = new BunchSubject(
-            $mockSubjectConfiguration,
             $mockRegistryProcessor,
             $mockGenerator,
             array(),
@@ -96,8 +90,14 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
                       ->with($category = array('path' => '2/3/4'))
                       ->willReturn(null);
 
-        // inject the processor
+        // create a mock subject configuration
+        $mockSubjectConfiguration = $this->getMockBuilder('TechDivision\Import\Configuration\SubjectConfigurationInterface')
+                                           ->setMethods(get_class_methods('TechDivision\Import\Configuration\SubjectConfigurationInterface'))
+                                           ->getMock();
+
+        // inject the processor and configuration
         $this->subject->setCategoryProcessor($mockProcessor);
+        $this->subject->setConfiguration($mockSubjectConfiguration);
 
         // make sure that the category will be persisted
         $this->assertNull($this->subject->persistCategory($category));

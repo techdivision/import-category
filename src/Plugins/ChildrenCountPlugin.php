@@ -25,7 +25,6 @@ use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Plugins\AbstractPlugin;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Services\CategoryProcessorInterface;
-use TechDivision\Import\Configuration\PluginConfigurationInterface;
 
 /**
  * Plugin that updates the categories children count attribute after a successfull category import.
@@ -49,18 +48,14 @@ class ChildrenCountPlugin extends AbstractPlugin
     /**
      * Initializes the plugin with the application instance.
      *
-     * @param \TechDivision\Import\ApplicationInterface                         $application         The application instance
-     * @param \TechDivision\Import\Configuration\PluginConfigurationInterface   $pluginConfiguration The plugin configuration instance
-     * @param \TechDivision\Import\Category\Services\CategoryProcessorInterface $processor           The category processor instance
+     * @param \TechDivision\Import\ApplicationInterface                         $application The application instance
+     * @param \TechDivision\Import\Category\Services\CategoryProcessorInterface $processor   The category processor instance
      */
-    public function __construct(
-        ApplicationInterface $application,
-        PluginConfigurationInterface $pluginConfiguration,
-        CategoryProcessorInterface $processor
-    ) {
+    public function __construct(ApplicationInterface $application, CategoryProcessorInterface $processor)
+    {
 
         // call the parent constructor
-        parent::__construct($application, $pluginConfiguration);
+        parent::__construct($application);
 
         // set the passed processor instance
         $this->processor = $processor;

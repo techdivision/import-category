@@ -27,7 +27,6 @@ use TechDivision\Import\Subjects\AbstractEavSubject;
 use TechDivision\Import\Services\RegistryProcessorInterface;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Services\CategoryProcessorInterface;
-use TechDivision\Import\Configuration\SubjectConfigurationInterface;
 
 /**
  * The abstract product subject implementation that provides basic category
@@ -135,14 +134,12 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
     /**
      * Initialize the subject instance.
      *
-     * @param \TechDivision\Import\Configuration\SubjectConfigurationInterface  $configuration              The subject configuration instance
      * @param \TechDivision\Import\Services\RegistryProcessorInterface          $registryProcessor          The registry processor instance
      * @param \TechDivision\Import\Utils\Generators\GeneratorInterface          $coreConfigDataUidGenerator The UID generator for the core config data
      * @param array                                                             $systemLoggers              The array with the system logger instances
      * @param \TechDivision\Import\Category\Services\CategoryProcessorInterface $categoryProcessor          The category processor instance
      */
     public function __construct(
-        SubjectConfigurationInterface $configuration,
         RegistryProcessorInterface $registryProcessor,
         GeneratorInterface $coreConfigDataUidGenerator,
         array $systemLoggers,
@@ -150,7 +147,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
     ) {
 
         // pass the arguments to the parent constructor
-        parent::__construct($configuration, $registryProcessor, $coreConfigDataUidGenerator, $systemLoggers);
+        parent::__construct($registryProcessor, $coreConfigDataUidGenerator, $systemLoggers);
 
         // initialize the category processor
         $this->categoryProcessor = $categoryProcessor;
