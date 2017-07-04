@@ -20,6 +20,8 @@
 
 namespace TechDivision\Import\Category\Services;
 
+use TechDivision\Import\Services\EavAwareProcessorInterface;
+
 /**
  * Interface for a category bunch processor.
  *
@@ -29,7 +31,7 @@ namespace TechDivision\Import\Category\Services;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-interface CategoryBunchProcessorInterface extends CategoryProcessorInterface
+interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, EavAwareProcessorInterface
 {
 
     /**
@@ -159,17 +161,6 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface
      * @return array The URL rewrites
      */
     public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
-
-    /**
-     * Load's and return's the EAV attribute option value with the passed code, store ID and value.
-     *
-     * @param string  $attributeCode The code of the EAV attribute option to load
-     * @param integer $storeId       The store ID of the attribute option to load
-     * @param string  $value         The value of the attribute option to load
-     *
-     * @return array The EAV attribute option value
-     */
-    public function loadEavAttributeOptionValueByAttributeCodeAndStoreIdAndValue($attributeCode, $storeId, $value);
 
     /**
      * Return's the children count of the category with the passed ID.
@@ -312,6 +303,16 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface
      * @return string The ID of the persisted entity
      */
     public function persistUrlRewrite($row);
+
+    /**
+     * Delete's the URL rewrite with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function deleteUrlRewrite($row, $name = null);
 
     /**
      * Delete's the entity with the passed attributes.

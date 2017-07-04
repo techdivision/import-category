@@ -1,3 +1,13 @@
+# Version 1.0.0-beta9
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Refactor to optimize DI integration
+
 # Version 1.0.0-beta8
 
 ## Bugfixes

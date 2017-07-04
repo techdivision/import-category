@@ -191,19 +191,6 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
     }
 
     /**
-     * Return's the URL rewrites for the passed URL entity type and ID.
-     *
-     * @param string  $entityType The entity type to load the URL rewrites for
-     * @param integer $entityId   The entity ID to laod the rewrites for
-     *
-     * @return array The URL rewrites
-     */
-    protected function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId)
-    {
-        return $this->getSubject()->getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
-    }
-
-    /**
      * Return's the category with the passed ID.
      *
      * @param integer $categoryId The ID of the category to return
@@ -214,5 +201,18 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
     protected function getCategory($categoryId)
     {
         return $this->getSubject()->getCategory($categoryId);
+    }
+
+    /**
+     * Return's the URL rewrites for the passed URL entity type and ID.
+     *
+     * @param string  $entityType The entity type to load the URL rewrites for
+     * @param integer $entityId   The entity ID to laod the rewrites for
+     *
+     * @return array The URL rewrites
+     */
+    protected function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId)
+    {
+        return $this->getCategoryBunchProcessor()->getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
     }
 }

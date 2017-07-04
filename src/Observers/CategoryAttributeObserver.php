@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Category\Observers;
 
 use TechDivision\Import\Observers\AbstractAttributeObserver;
+use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
 
 /**
  * Observer that creates/updates the category's attributes.
@@ -35,6 +36,33 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
 {
 
     /**
+     * The processor to read/write the necessary category data.
+     *
+     * @var \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface
+     */
+    protected $categoryBunchProcessor;
+
+    /**
+     * Initialize the subject instance.
+     *
+     * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface $categoryBunchProcessor The category bunch processor instance
+     */
+    public function __construct(CategoryBunchProcessorInterface $categoryBunchProcessor)
+    {
+        $this->categoryBunchProcessor = $categoryBunchProcessor;
+    }
+
+    /**
+     * Return's the category bunch processor instance.
+     *
+     * @return \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface The category bunch processor instance
+     */
+    protected function getCategoryBunchProcessor()
+    {
+        return $this->categoryBunchProcessor;
+    }
+
+    /**
      * Persist's the passed varchar attribute.
      *
      * @param array $attribute The attribute to persist
@@ -43,7 +71,7 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
      */
     protected function persistVarcharAttribute($attribute)
     {
-        $this->getSubject()->persistCategoryVarcharAttribute($attribute);
+        $this->getCategoryBunchProcessor()->persistCategoryVarcharAttribute($attribute);
     }
 
     /**
@@ -55,7 +83,7 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
      */
     protected function persistIntAttribute($attribute)
     {
-        $this->getSubject()->persistCategoryIntAttribute($attribute);
+        $this->getCategoryBunchProcessor()->persistCategoryIntAttribute($attribute);
     }
 
     /**
@@ -67,7 +95,7 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
      */
     protected function persistDecimalAttribute($attribute)
     {
-        $this->getSubject()->persistCategoryDecimalAttribute($attribute);
+        $this->getCategoryBunchProcessor()->persistCategoryDecimalAttribute($attribute);
     }
 
     /**
@@ -79,7 +107,7 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
      */
     protected function persistDatetimeAttribute($attribute)
     {
-        $this->getSubject()->persistCategoryDatetimeAttribute($attribute);
+        $this->getCategoryBunchProcessor()->persistCategoryDatetimeAttribute($attribute);
     }
 
     /**
@@ -91,6 +119,6 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
      */
     protected function persistTextAttribute($attribute)
     {
-        $this->getSubject()->persistCategoryTextAttribute($attribute);
+        $this->getCategoryBunchProcessor()->persistCategoryTextAttribute($attribute);
     }
 }

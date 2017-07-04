@@ -132,24 +132,48 @@
             <argument type="service" id="import.assembler.category"/>
         </service>
 
-        <service id="import_category.callback.boolean" class="TechDivision\Import\Product\Callbacks\BooleanCallback"/>
-        <service id="import_category.callback.multiselect" class="TechDivision\Import\Product\Callbacks\MultiselectCallback"/>
-        <service id="import_category.callback.select" class="TechDivision\Import\Product\Callbacks\SelectCallback"/>
+        <service id="import_category.filter.convert.literal.url" class="TechDivision\Import\Utils\Filter\ConvertLiteralUrl"/>
+
         <service id="import_category.callback.display.mode" class="TechDivision\Import\Category\Callbacks\DisplayModeCallback"/>
         <service id="import_category.callback.page.layout" class="TechDivision\Import\Category\Callbacks\PageLayoutCallback"/>
+        <service id="import_category.callback.boolean" class="TechDivision\Import\Product\Callbacks\BooleanCallback"/>
+        <service id="import_category.callback.multiselect" class="TechDivision\Import\Product\Callbacks\MultiselectCallback">
+            <argument type="service" id="import_category.processor.category.bunch"/>
+        </service>
+        <service id="import_category.callback.select" class="TechDivision\Import\Product\Callbacks\SelectCallback">
+            <argument type="service" id="import_category.processor.category.bunch"/>
+        </service>
 
-        <service id="import_category.observer.category.attribute" class="TechDivision\Import\Category\Observers\CategoryAttributeObserver"/>
-        <service id="import_category.observer.category.attribute.update" class="TechDivision\Import\Category\Observers\CategoryAttributeUpdateObserver"/>
-        <service id="import_category.observer.category.image" class="TechDivision\Import\Category\Observers\CategoryImageObserver"/>
-        <service id="import_category.observer.category" class="TechDivision\Import\Category\Observers\CategoryObserver"/>
-        <service id="import_category.observer.category.path" class="TechDivision\Import\Category\Observers\CategoryPathObserver"/>
-        <service id="import_category.observer.category.update" class="TechDivision\Import\Category\Observers\CategoryUpdateObserver"/>
         <service id="import_category.observer.clean.up" class="TechDivision\Import\Category\Observers\CleanUpObserver"/>
-        <service id="import_category.observer.clear.category" class="TechDivision\Import\Category\Observers\ClearCategoryObserver"/>
         <service id="import_category.observer.file.upload" class="TechDivision\Import\Category\Observers\FileUploadObserver"/>
-        <service id="import_category.observer.url.key.and.path" class="TechDivision\Import\Category\Observers\UrlKeyAndPathObserver"/>
-        <service id="import_category.observer.url.rewrite" class="TechDivision\Import\Category\Observers\UrlRewriteObserver"/>
-        <service id="import_category.observer.url.rewrite.update" class="TechDivision\Import\Category\Observers\UrlRewriteUpdateObserver"/>
+        <service id="import_category.observer.category.image" class="TechDivision\Import\Category\Observers\CategoryImageObserver"/>
+        <service id="import_category.observer.url.key.and.path" class="TechDivision\Import\Category\Observers\UrlKeyAndPathObserver">
+            <argument type="service" id="import_category.filter.convert.literal.url"/>
+        </service>
+        <service id="import_category.observer.category.attribute" class="TechDivision\Import\Category\Observers\CategoryAttributeObserver">
+            <argument type="service" id="import_category.processor.category.bunch"/>
+        </service>
+        <service id="import_category.observer.category.attribute.update" class="TechDivision\Import\Category\Observers\CategoryAttributeUpdateObserver">
+            <argument type="service" id="import_category.processor.category.bunch"/>
+        </service>
+        <service id="import_category.observer.category" class="TechDivision\Import\Category\Observers\CategoryObserver">
+            <argument type="service" id="import_category.processor.category.bunch"/>
+        </service>
+        <service id="import_category.observer.category.path" class="TechDivision\Import\Category\Observers\CategoryPathObserver">
+            <argument type="service" id="import_category.processor.category.bunch"/>
+        </service>
+        <service id="import_category.observer.category.update" class="TechDivision\Import\Category\Observers\CategoryUpdateObserver">
+            <argument type="service" id="import_category.processor.category.bunch"/>
+        </service>
+        <service id="import_category.observer.clear.category" class="TechDivision\Import\Category\Observers\ClearCategoryObserver">
+            <argument type="service" id="import_category.processor.category.bunch"/>
+        </service>
+        <service id="import_category.observer.url.rewrite" class="TechDivision\Import\Category\Observers\UrlRewriteObserver">
+            <argument type="service" id="import_category.processor.category.bunch"/>
+        </service>
+        <service id="import_category.observer.url.rewrite.update" class="TechDivision\Import\Category\Observers\UrlRewriteUpdateObserver">
+            <argument type="service" id="import_category.processor.category.bunch"/>
+        </service>
  
         <service id="import_category.subject.bunch" class="TechDivision\Import\Category\Subjects\BunchSubject" shared="false">
             <argument type="service" id="import.processor.registry"/>

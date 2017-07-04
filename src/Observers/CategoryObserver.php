@@ -22,6 +22,7 @@ namespace TechDivision\Import\Category\Observers;
 
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
 
 /**
  * Observer that create's the category itself.
@@ -48,6 +49,33 @@ class CategoryObserver extends AbstractCategoryImportObserver
      * @var array
      */
     protected $categoryIds = array();
+
+    /**
+     * The processor to read/write the necessary category data.
+     *
+     * @var \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface
+     */
+    protected $categoryBunchProcessor;
+
+    /**
+     * Initialize the subject instance.
+     *
+     * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface $categoryBunchProcessor The category bunch processor instance
+     */
+    public function __construct(CategoryBunchProcessorInterface $categoryBunchProcessor)
+    {
+        $this->categoryBunchProcessor = $categoryBunchProcessor;
+    }
+
+    /**
+     * Return's the category bunch processor instance.
+     *
+     * @return \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface The category bunch processor instance
+     */
+    protected function getCategoryBunchProcessor()
+    {
+        return $this->categoryBunchProcessor;
+    }
 
     /**
      * Process the observer's business logic.
@@ -198,7 +226,7 @@ class CategoryObserver extends AbstractCategoryImportObserver
      */
     protected function persistCategory($category)
     {
-        return $this->getSubject()->persistCategory($category);
+        return $this->getCategoryBunchProcessor()->persistCategory($category);
     }
 
     /**

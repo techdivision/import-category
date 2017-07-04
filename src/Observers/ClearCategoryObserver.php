@@ -23,6 +23,7 @@ namespace TechDivision\Import\Category\Observers;
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Utils\SqlStatements;
+use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
 
 /**
  * Observer that removes the category with the path found in the CSV file.
@@ -42,6 +43,33 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
      * @var string
      */
     const ARTEFACT_TYPE = 'category-create';
+
+    /**
+     * The processor to read/write the necessary category data.
+     *
+     * @var \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface
+     */
+    protected $categoryBunchProcessor;
+
+    /**
+     * Initialize the subject instance.
+     *
+     * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface $categoryBunchProcessor The category bunch processor instance
+     */
+    public function __construct(CategoryBunchProcessorInterface $categoryBunchProcessor)
+    {
+        $this->categoryBunchProcessor = $categoryBunchProcessor;
+    }
+
+    /**
+     * Return's the category bunch processor instance.
+     *
+     * @return \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface The category bunch processor instance
+     */
+    protected function getCategoryBunchProcessor()
+    {
+        return $this->categoryBunchProcessor;
+    }
 
     /**
      * Process the observer's business logic.
@@ -130,7 +158,7 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
      */
     protected function deleteUrlRewrite($row, $name = null)
     {
-        $this->getSubject()->deleteUrlRewrite($row, $name);
+        $this->getCategoryBunchProcessor()->deleteUrlRewrite($row, $name);
     }
 
     /**
@@ -143,6 +171,6 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
      */
     protected function deleteCategory($row, $name = null)
     {
-        $this->getSubject()->deleteCategory($row, $name);
+        $this->getCategoryBunchProcessor()->deleteCategory($row, $name);
     }
 }

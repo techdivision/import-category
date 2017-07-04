@@ -74,32 +74,20 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test's the persistCategory() method successfull.
+     * Test's the getDefaultCallbackMappings() method successfull.
      *
      * @return void
      */
-    public function testPersistCategorySuccessufull()
+    public function testGetDefaultCallbackMappingsSuccessufull()
     {
 
-        // create a mock category processor
-        $mockProcessor = $this->getMockBuilder('TechDivision\Import\Category\Services\CategoryBunchProcessorInterface')
-                              ->setMethods(get_class_methods('TechDivision\Import\Category\Services\CategoryBunchProcessorInterface'))
-                              ->getMock();
-        $mockProcessor->expects($this->once())
-                      ->method('persistCategory')
-                      ->with($category = array('path' => '2/3/4'))
-                      ->willReturn(null);
+        // initialize an array with the default callback mappings
+        $defaultCallbackMappings = array(
+            'display_mode' => array('import_category.callback.display.mode'),
+            'page_layout'  => array('import_category.callback.page.layout'),
+        );
 
-        // create a mock subject configuration
-        $mockSubjectConfiguration = $this->getMockBuilder('TechDivision\Import\Configuration\SubjectConfigurationInterface')
-                                           ->setMethods(get_class_methods('TechDivision\Import\Configuration\SubjectConfigurationInterface'))
-                                           ->getMock();
-
-        // inject the processor and configuration
-        $this->subject->setCategoryProcessor($mockProcessor);
-        $this->subject->setConfiguration($mockSubjectConfiguration);
-
-        // make sure that the category will be persisted
-        $this->assertNull($this->subject->persistCategory($category));
+        // make sure that the default callback mappings have been initialized
+        $this->assertEquals($defaultCallbackMappings, $this->subject->getDefaultCallbackMappings());
     }
 }
