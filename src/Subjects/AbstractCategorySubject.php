@@ -26,7 +26,7 @@ use TechDivision\Import\Utils\Generators\GeneratorInterface;
 use TechDivision\Import\Subjects\AbstractEavSubject;
 use TechDivision\Import\Services\RegistryProcessorInterface;
 use TechDivision\Import\Category\Utils\MemberNames;
-use TechDivision\Import\Category\Services\CategoryProcessorInterface;
+use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
 
 /**
  * The abstract product subject implementation that provides basic category
@@ -44,9 +44,9 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
     /**
      * The processor to read/write the necessary category data.
      *
-     * @var \TechDivision\Import\Category\Services\CategoryProcessorInterface
+     * @var \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface
      */
-    protected $categoryProcessor;
+    protected $categoryBunchProcessor;
 
     /**
      * The available stores.
@@ -134,23 +134,23 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
     /**
      * Initialize the subject instance.
      *
-     * @param \TechDivision\Import\Services\RegistryProcessorInterface          $registryProcessor          The registry processor instance
-     * @param \TechDivision\Import\Utils\Generators\GeneratorInterface          $coreConfigDataUidGenerator The UID generator for the core config data
-     * @param array                                                             $systemLoggers              The array with the system logger instances
-     * @param \TechDivision\Import\Category\Services\CategoryProcessorInterface $categoryProcessor          The category processor instance
+     * @param \TechDivision\Import\Services\RegistryProcessorInterface               $registryProcessor          The registry processor instance
+     * @param \TechDivision\Import\Utils\Generators\GeneratorInterface               $coreConfigDataUidGenerator The UID generator for the core config data
+     * @param array                                                                  $systemLoggers              The array with the system logger instances
+     * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface $categoryBunchProcessor     The category processor instance
      */
     public function __construct(
         RegistryProcessorInterface $registryProcessor,
         GeneratorInterface $coreConfigDataUidGenerator,
         array $systemLoggers,
-        CategoryProcessorInterface $categoryProcessor
+        CategoryBunchProcessorInterface $categoryBunchProcessor
     ) {
 
         // pass the arguments to the parent constructor
         parent::__construct($registryProcessor, $coreConfigDataUidGenerator, $systemLoggers);
 
-        // initialize the category processor
-        $this->categoryProcessor = $categoryProcessor;
+        // initialize the category bunch processor
+        $this->categoryBunchProcessor = $categoryBunchProcessor;
     }
 
     /**
@@ -164,20 +164,6 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
     }
 
     /**
-     * Load's and return's the EAV attribute option value with the passed code, store ID and value.
-     *
-     * @param string  $attributeCode The code of the EAV attribute option to load
-     * @param integer $storeId       The store ID of the attribute option to load
-     * @param string  $value         The value of the attribute option to load
-     *
-     * @return array The EAV attribute option value
-     */
-    public function loadEavAttributeOptionValueByAttributeCodeAndStoreIdAndValue($attributeCode, $storeId, $value)
-    {
-        return $this->getCategoryProcessor()->loadEavAttributeOptionValueByAttributeCodeAndStoreIdAndValue($attributeCode, $storeId, $value);
-    }
-
-    /**
      * Return's the header mappings for the actual entity.
      *
      * @return array The header mappings
@@ -188,25 +174,13 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
     }
 
     /**
-     * Set's the category processor instance.
+     * Return's the category bunch processor instance.
      *
-     * @param \TechDivision\Import\Category\Services\CategoryProcessorInterface $categoryProcessor The category processor instance
-     *
-     * @return void
+     * @return \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface The category bunch processor instance
      */
-    public function setCategoryProcessor(CategoryProcessorInterface $categoryProcessor)
+    public function getCategoryBunchProcessor()
     {
-        $this->categoryProcessor = $categoryProcessor;
-    }
-
-    /**
-     * Return's the category processor instance.
-     *
-     * @return \TechDivision\Import\Category\Services\CategoryProcessorInterface The category processor instance
-     */
-    public function getCategoryProcessor()
-    {
-        return $this->categoryProcessor;
+        return $this->categoryBunchProcessor;
     }
 
     /**
@@ -329,7 +303,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
         $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
 
         // load the available categories
-        $this->categories = $this->getCategoryProcessor()->getCategoriesWithResolvedPath();
+        $this->categories = $this->getCategoryBunchProcessor()->getCategoriesWithResolvedPath();
 
         // prepare the callbacks
         parent::setUp($serial);

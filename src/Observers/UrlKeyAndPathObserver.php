@@ -20,9 +20,10 @@
 
 namespace TechDivision\Import\Category\Observers;
 
+use Zend\Filter\FilterInterface;
 use TechDivision\Import\Category\Utils\ColumnKeys;
-use TechDivision\Import\Utils\Filter\UrlKeyFilterTrait;
 use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Utils\Filter\UrlKeyFilterTrait;
 
 /**
  * Observer that extracts the URL key/path from the category path
@@ -43,6 +44,16 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
      * @var \TechDivision\Import\Utils\Filter\UrlKeyFilterTrait
      */
     use UrlKeyFilterTrait;
+
+    /**
+     * Initialize the observer with the passed product bunch processor instance.
+     *
+     * @param \Zend\Filter\FilterInterface $convertLiteralUrlFilter The URL filter instance
+     */
+    public function __construct(FilterInterface $convertLiteralUrlFilter)
+    {
+        $this->convertLiteralUrlFilter = $convertLiteralUrlFilter;
+    }
 
     /**
      * Process the observer's business logic.

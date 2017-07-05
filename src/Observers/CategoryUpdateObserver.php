@@ -85,6 +85,6 @@ class CategoryUpdateObserver extends CategoryObserver
      */
     protected function loadCategory($id)
     {
-        return $this->getSubject()->loadCategory($id);
+        return $this->getCategoryBunchProcessor()->loadCategory($id);
     }
 }

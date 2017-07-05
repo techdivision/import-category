@@ -76,7 +76,7 @@ class CategoryAttributeUpdateObserver extends CategoryAttributeObserver
      */
     protected function loadDatetimeAttribute($entityId, $attributeId, $storeId)
     {
-        return $this->getSubject()->loadCategoryDatetimeAttribute($entityId, $attributeId, $storeId);
+        return $this->getCategoryBunchProcessor()->loadCategoryDatetimeAttribute($entityId, $attributeId, $storeId);
     }
 
     /**
@@ -90,7 +90,7 @@ class CategoryAttributeUpdateObserver extends CategoryAttributeObserver
      */
     protected function loadDecimalAttribute($entityId, $attributeId, $storeId)
     {
-        return $this->getSubject()->loadCategoryDecimalAttribute($entityId, $attributeId, $storeId);
+        return $this->getCategoryBunchProcessor()->loadCategoryDecimalAttribute($entityId, $attributeId, $storeId);
     }
 
     /**
@@ -104,7 +104,7 @@ class CategoryAttributeUpdateObserver extends CategoryAttributeObserver
      */
     protected function loadIntAttribute($entityId, $attributeId, $storeId)
     {
-        return $this->getSubject()->loadCategoryIntAttribute($entityId, $attributeId, $storeId);
+        return $this->getCategoryBunchProcessor()->loadCategoryIntAttribute($entityId, $attributeId, $storeId);
     }
 
     /**
@@ -118,7 +118,7 @@ class CategoryAttributeUpdateObserver extends CategoryAttributeObserver
      */
     protected function loadTextAttribute($entityId, $attributeId, $storeId)
     {
-        return $this->getSubject()->loadCategoryTextAttribute($entityId, $attributeId, $storeId);
+        return $this->getCategoryBunchProcessor()->loadCategoryTextAttribute($entityId, $attributeId, $storeId);
     }
 
     /**
@@ -132,6 +132,6 @@ class CategoryAttributeUpdateObserver extends CategoryAttributeObserver
      */
     protected function loadVarcharAttribute($entityId, $attributeId, $storeId)
     {
-        return $this->getSubject()->loadCategoryVarcharAttribute($entityId, $attributeId, $storeId);
+        return $this->getCategoryBunchProcessor()->loadCategoryVarcharAttribute($entityId, $attributeId, $storeId);
     }
 }
