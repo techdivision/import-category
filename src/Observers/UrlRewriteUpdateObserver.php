@@ -131,7 +131,6 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
      * Prepare's the URL rewrites that has to be created/updated.
      *
      * @return void
-     * @see \TechDivision\Import\Product\Observers\UrlRewriteObserver::prepareUrlRewrites()
      */
     protected function prepareUrlRewrites()
     {

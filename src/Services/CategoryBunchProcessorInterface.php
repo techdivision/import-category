@@ -37,56 +37,56 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
     /**
      * Return's the action with the product CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductAction The action instance
+     * @return \TechDivision\Import\Category\Actions\CategoryAction The action instance
      */
     public function getCategoryAction();
 
     /**
      * Return's the action with the product varchar attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductVarcharAction The action instance
+     * @return \TechDivision\Import\Category\Actions\CategoryVarcharAction The action instance
      */
     public function getCategoryVarcharAction();
 
     /**
      * Return's the action with the product text attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductTextAction The action instance
+     * @return \TechDivision\Import\Category\Actions\CategoryTextAction The action instance
      */
     public function getCategoryTextAction();
 
     /**
      * Return's the action with the product int attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductIntAction The action instance
+     * @return \TechDivision\Import\Category\Actions\CategoryIntAction The action instance
      */
     public function getCategoryIntAction();
 
     /**
      * Return's the action with the product decimal attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductDecimalAction The action instance
+     * @return \TechDivision\Import\Category\Actions\CategoryDecimalAction The action instance
      */
     public function getCategoryDecimalAction();
 
     /**
      * Return's the action with the product datetime attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\ProductDatetimeAction The action instance
+     * @return \TechDivision\Import\Category\Actions\CategoryDatetimeAction The action instance
      */
     public function getCategoryDatetimeAction();
 
     /**
      * Return's the action with the URL rewrite CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Actions\UrlRewriteAction The action instance
+     * @return \TechDivision\Import\Actions\UrlRewriteAction The action instance
      */
     public function getUrlRewriteAction();
 
     /**
      * Return's the repository to load the products with.
      *
-     * @return \TechDivision\Import\Product\Repositories\ProductRepository The repository instance
+     * @return \TechDivision\Import\Category\Repositories\CategoryRepository The repository instance
      */
     public function getCategoryRepository();
 
@@ -100,7 +100,7 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
     /**
      * Return's the repository to access EAV attribute option values.
      *
-     * @return \TechDivision\Import\Product\Repositories\EavAttributeOptionValueRepository The repository instance
+     * @return \TechDivision\Import\Repositories\EavAttributeOptionValueRepository The repository instance
      */
     public function getEavAttributeOptionValueRepository();
 

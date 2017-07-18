@@ -22,9 +22,8 @@ namespace TechDivision\Import\Category\Subjects;
 
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
-use TechDivision\Import\Subjects\FileUploadTrait;
 use TechDivision\Import\Category\Utils\ConfigurationKeys;
-use TechDivision\Import\Category\Subjects\AbstractCategorySubject;
+use TechDivision\Import\Subjects\FileUploadTrait;
 
 /**
  * The subject implementation that handles the business logic to persist category images.
@@ -51,7 +50,6 @@ class MediaSubject extends AbstractCategorySubject
      * @param string $serial The serial of the actual import
      *
      * @return void
-     * @see \Importer\Csv\Actions\ProductImportAction::prepare()
      */
     public function setUp($serial)
     {
