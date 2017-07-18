@@ -20,13 +20,14 @@
 
 namespace TechDivision\Import\Category\Subjects;
 
-use TechDivision\Import\Utils\RegistryKeys;
-use TechDivision\Import\Utils\FrontendInputTypes;
-use TechDivision\Import\Utils\Generators\GeneratorInterface;
-use TechDivision\Import\Subjects\AbstractEavSubject;
-use TechDivision\Import\Services\RegistryProcessorInterface;
-use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
+use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Services\RegistryProcessorInterface;
+use TechDivision\Import\Subjects\AbstractEavSubject;
+use TechDivision\Import\Subjects\EntitySubjectInterface;
+use TechDivision\Import\Utils\FrontendInputTypes;
+use TechDivision\Import\Utils\RegistryKeys;
+use TechDivision\Import\Utils\Generators\GeneratorInterface;
 
 /**
  * The abstract product subject implementation that provides basic category
@@ -38,7 +39,7 @@ use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-abstract class AbstractCategorySubject extends AbstractEavSubject
+abstract class AbstractCategorySubject extends AbstractEavSubject implements EntitySubjectInterface
 {
 
     /**
@@ -290,7 +291,6 @@ abstract class AbstractCategorySubject extends AbstractEavSubject
      * @param string $serial The serial of the actual import
      *
      * @return void
-     * @see \Importer\Csv\Actions\ProductImportAction::prepare()
      */
     public function setUp($serial)
     {
