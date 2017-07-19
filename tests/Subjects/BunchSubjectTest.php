@@ -20,6 +20,8 @@
 
 namespace TechDivision\Import\Category\Subjects;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * Test class for the product action implementation.
  *
@@ -68,7 +70,7 @@ class BunchSubjectTest extends \PHPUnit_Framework_TestCase
         $this->subject = new BunchSubject(
             $mockRegistryProcessor,
             $mockGenerator,
-            array(),
+            new ArrayCollection(),
             $mockCategoryProcessor
         );
     }

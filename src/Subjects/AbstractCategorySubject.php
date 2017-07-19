@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Category\Subjects;
 
+use Doctrine\Common\Collections\Collection;
 use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Services\RegistryProcessorInterface;
@@ -137,13 +138,13 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
      *
      * @param \TechDivision\Import\Services\RegistryProcessorInterface               $registryProcessor          The registry processor instance
      * @param \TechDivision\Import\Utils\Generators\GeneratorInterface               $coreConfigDataUidGenerator The UID generator for the core config data
-     * @param array                                                                  $systemLoggers              The array with the system logger instances
+     * @param \Doctrine\Common\Collections\Collection;                               $systemLoggers              The array with the system logger instances
      * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface $categoryBunchProcessor     The category processor instance
      */
     public function __construct(
         RegistryProcessorInterface $registryProcessor,
         GeneratorInterface $coreConfigDataUidGenerator,
-        array $systemLoggers,
+        Collection $systemLoggers,
         CategoryBunchProcessorInterface $categoryBunchProcessor
     ) {
 
