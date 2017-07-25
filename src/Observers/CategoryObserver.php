@@ -94,39 +94,46 @@ class CategoryObserver extends AbstractCategoryImportObserver
         if ($categories = $this->explode($path, '/')) {
             // initialize the artefacts and reset the category IDs
             $artefacts = array();
-            $this->categoryIds = array();
+            $this->categoryIds = array(1);
 
-            // iterate over the category names and try to load the categegory therefore
-            for ($i = sizeof($categories); $i > 0; $i--) {
+            // iterate over the category names and try to load the category therefore
+            for ($i = 0; $i < sizeof($categories); $i++) {
                 try {
                     // prepare the expected category name
-                    $categoryPath = implode('/', array_slice($categories, 0, $i));
+                    $categoryPath = implode('/', array_slice($categories, 0, $i + 1));
+
                     // load the existing category and prepend the ID the array with the category IDs
                     $existingCategory = $this->getCategoryByPath($categoryPath);
-                    array_unshift($this->categoryIds, $existingCategory[MemberNames::ENTITY_ID]);
+                    array_push($this->categoryIds, $existingCategory[MemberNames::ENTITY_ID]);
 
                 } catch (\Exception $e) {
-                    $this->getSystemLogger()->debug(sprintf('Can\'t load category %s, create a new one', $categoryPath));
+                    // log a message that requested category is NOT available
+                    $this->getSystemLogger()->info(sprintf('Can\'t load category %s, create a new one', $categoryPath));
+
+                    // prepare the static entity values, insert the entity and set the entity ID
+                    $category = $this->initializeCategory($this->prepareAttributes());
+
+                    // update the persisted category with the entity ID
+                    $category[$this->getPkMemberName()] = $this->persistCategory($category);
+                    $category[MemberNames::URL_KEY] = $this->getValue(ColumnKeys::URL_KEY);
+
+                    // append the category to the list
+                    $this->addCategory($path, $category);
+
+                    // append the ID of the new category to array with the IDs
+                    array_push($this->categoryIds, $category[MemberNames::ENTITY_ID]);
                 }
             }
 
-            // prepare the static entity values, insert the entity and set the entity ID
-            $category = $this->initializeCategory($this->prepareAttributes());
-            $this->setLastEntityId($entityId = $this->persistCategory($category));
+            // load the last category (MUST be the one we've created)
+            $category = $this->getCategory(end($this->categoryIds));
 
-            //update the persisted category with the entity ID
-            $category[MemberNames::ENTITY_ID] = $entityId;
-            $category[MemberNames::URL_KEY] = $this->getValue(ColumnKeys::URL_KEY);
-
-            // append the category to the list
-            $this->addCategory($path, $category);
-
-            // append the ID of the new category to array with the IDs
-            array_push($this->categoryIds, $entityId);
+            // temporary persist primary keys
+            $this->updatePrimaryKeys($category);
 
             // prepare the artefact
             $artefact = array(
-                MemberNames::ENTITY_ID => $entityId,
+                $this->getPkMemberName() => $category[$this->getPkMemberName()],
                 MemberNames::PATH      => implode('/', $this->categoryIds)
             );
 
@@ -155,11 +162,10 @@ class CategoryObserver extends AbstractCategoryImportObserver
         $attributeSetId = $attributeSet[MemberNames::ATTRIBUTE_SET_ID];
         $this->setAttributeSet($attributeSet);
 
-        // prepend the ID of the Root Catalog to the category IDs
-        array_unshift($this->categoryIds, 1);
+        // initialize parent ID (the parent array entry)
+        $parentId = $this->categoryIds[sizeof($this->categoryIds) - 1];
 
-        // initialize parent ID, category level + path
-        $parentId = end($this->categoryIds);
+        // initialize the level
         $level = sizeof($this->categoryIds);
 
         // load the position, if available
@@ -193,6 +199,28 @@ class CategoryObserver extends AbstractCategoryImportObserver
     }
 
     /**
+     * Return the primary key member name.
+     *
+     * @return string The primary key member name
+     */
+    protected function getPkMemberName()
+    {
+        return MemberNames::ENTITY_ID;
+    }
+
+    /**
+     * Tmporary persist the entity ID
+     *
+     * @param array $category The category to update the IDs
+     *
+     * @return void
+     */
+    protected function updatePrimaryKeys(array $category)
+    {
+        $this->setLastEntityId($category[$this->getPkMemberName()]);
+    }
+
+    /**
      * Add's the passed category to the internal list.
      *
      * @param string $path     The path of the category to add
@@ -203,6 +231,19 @@ class CategoryObserver extends AbstractCategoryImportObserver
     protected function addCategory($path, $category)
     {
         $this->getSubject()->addCategory($path, $category);
+    }
+
+    /**
+     * Return's the category with the passed ID.
+     *
+     * @param integer $categoryId The ID of the category to return
+     *
+     * @return array The category data
+     * @throws \Exception Is thrown, if the category is not available
+     */
+    protected function getCategory($categoryId)
+    {
+        return $this->getSubject()->getCategory($categoryId);
     }
 
     /**

@@ -83,7 +83,7 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
             $categoryPaths = array($urlKey);
 
             // iterate over the category names and try to load the category therefore
-            for ($i = sizeof($categories); $i > 1; $i--) {
+            for ($i = sizeof($categories) - 1; $i > 1; $i--) {
                 try {
                     // prepare the expected category name
                     $categoryPath = implode('/', array_slice($categories, 0, $i));
