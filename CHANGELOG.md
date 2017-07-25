@@ -1,3 +1,13 @@
+# Version 1.0.0-beta13
+
+## Bugfixes
+
+* Fixed invalid path generation when updating more than two times
+
+## Features
+
+* None
+
 # Version 1.0.0-beta12
 
 ## Bugfixes

@@ -21,7 +21,6 @@
 namespace TechDivision\Import\Category\Observers;
 
 use TechDivision\Import\Category\Utils\ColumnKeys;
-use TechDivision\Import\Category\Utils\MemberNames;
 
 /**
  * Observer that add's/update's the category itself.
@@ -73,7 +72,7 @@ class CategoryUpdateObserver extends CategoryObserver
      */
     protected function getPrimaryKey($category)
     {
-        return $category[MemberNames::ENTITY_ID];
+        return $category[$this->getPkMemberName()];
     }
 
     /**
