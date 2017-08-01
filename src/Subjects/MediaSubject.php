@@ -20,10 +20,8 @@
 
 namespace TechDivision\Import\Category\Subjects;
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Local;
-use TechDivision\Import\Category\Utils\ConfigurationKeys;
 use TechDivision\Import\Subjects\FileUploadTrait;
+use TechDivision\Import\Category\Utils\ConfigurationKeys;
 
 /**
  * The subject implementation that handles the business logic to persist category images.
@@ -59,12 +57,6 @@ class MediaSubject extends AbstractCategorySubject
 
         // initialize the flag to decide copy images or not
         $this->setCopyImages($this->getConfiguration()->getParam(ConfigurationKeys::COPY_IMAGES));
-
-        // initialize the filesystems root directory
-        $this->setRootDir($this->getConfiguration()->getParam(ConfigurationKeys::ROOT_DIRECTORY, getcwd()));
-
-        // initialize the filesystem
-        $this->setFilesystem(new Filesystem(new Local($this->getRootDir())));
 
         // initialize media directory => can be absolute or relative
         if ($this->getConfiguration()->hasParam(ConfigurationKeys::MEDIA_DIRECTORY)) {
