@@ -1,3 +1,13 @@
+# Version 1.0.0-beta14
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Refactoring filesystem handling
+
 # Version 1.0.0-beta13
 
 ## Bugfixes
