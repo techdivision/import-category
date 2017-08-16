@@ -90,7 +90,7 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
         }
 
         // initialize the store view code
-        $this->prepareStoreViewCode();
+        $this->getSubject()->prepareStoreViewCode();
 
         // initialize and persist the URL rewrite
         if ($urlRewrite = $this->initializeUrlRewrite($this->prepareAttributes())) {
@@ -122,7 +122,7 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
         $storeId = $this->getRowStoreId();
 
         // initialize the values
-        $entityId = $this->getLastEntityId();
+        $entityId = $this->getSubject()->getLastEntityId();
         $requestPath = $this->prepareRequestPath();
         $targetPath = $this->prepareTargetPath();
 
@@ -161,7 +161,7 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
     {
 
         // load the category URL suffix to use
-        $urlSuffix = $this->getCoreConfigData(CoreConfigDataKeys::CATALOG_SEO_CATEGORY_URL_SUFFIX, 'html');
+        $urlSuffix = $this->getSubject()->getCoreConfigData(CoreConfigDataKeys::CATALOG_SEO_CATEGORY_URL_SUFFIX, 'html');
 
         // prepare and return the category URL
         return sprintf('%s.%s', $this->getValue(ColumnKeys::URL_PATH), $urlSuffix);
@@ -200,6 +200,6 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
      */
     protected function getPrimaryKey()
     {
-        return $this->getLastEntityId();
+        return $this->getSubject()->getLastEntityId();
     }
 }

@@ -22,6 +22,7 @@ namespace TechDivision\Import\Category\Observers;
 
 use TechDivision\Import\Observers\AbstractAttributeObserver;
 use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
+use TechDivision\Import\Category\Utils\ColumnKeys;
 
 /**
  * Observer that creates/updates the category's attributes.
@@ -60,6 +61,29 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
     protected function getCategoryBunchProcessor()
     {
         return $this->categoryBunchProcessor;
+    }
+
+    /**
+     * Return's the column name that contains the primary key.
+     *
+     * @return string the column name that contains the primary key
+     */
+    protected function getPrimaryKeyColumnName()
+    {
+        return ColumnKeys::PATH;
+    }
+
+    /**
+     * Queries whether or not the passed PK and store view code has already been processed.
+     *
+     * @param string $pk            The PK to check been processed
+     * @param string $storeViewCode The store view code to check been processed
+     *
+     * @return boolean TRUE if the PK and store view code has been processed, else FALSE
+     */
+    protected function storeViewHasBeenProcessed($pk, $storeViewCode)
+    {
+        return $this->getSubject()->storeViewHasBeenProcessed($pk, $storeViewCode);
     }
 
     /**
