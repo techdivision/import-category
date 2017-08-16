@@ -44,7 +44,7 @@ class CleanUpObserver extends AbstractCategoryImportObserver
 
         // add the path => entity ID/store view code mapping
         $this->addPathEntityIdMapping($path = $this->getValue(ColumnKeys::PATH));
-        $this->addPathStoreViewCodeMapping($path, $this->getValue(ColumnKeys::STORE_VIEW_CODE));
+        $this->addPathStoreViewCodeMapping($path, $this->getSubject()->getStoreViewCode());
 
         // temporary persist the path
         $this->setLastPath($path);
