@@ -251,7 +251,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
      */
     public function storeViewHasBeenProcessed($pk, $storeViewCode)
     {
-        return isset($this->pathEntityIdMapping[$pk]) && isset($this->pathStoreViewCodeMapping[$pk]) && in_array($storeViewCode, $this->pathStoreViewCodeMapping);
+        return isset($this->pathEntityIdMapping[$pk]) && isset($this->pathStoreViewCodeMapping[$pk]) && in_array($storeViewCode, $this->pathStoreViewCodeMapping[$pk]);
     }
 
     /**
@@ -296,7 +296,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
      */
     public function addPathStoreViewCodeMapping($path, $storeViewCode)
     {
-        $this->pathStoreViewCodeMapping[$path] = $storeViewCode;
+        $this->pathStoreViewCodeMapping[$path][] = $storeViewCode;
     }
 
     /**
