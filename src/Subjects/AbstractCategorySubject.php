@@ -242,6 +242,19 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
     }
 
     /**
+     * Queries whether or not the passed PK and store view code has already been processed.
+     *
+     * @param string $pk            The PK to check been processed
+     * @param string $storeViewCode The store view code to check been processed
+     *
+     * @return boolean TRUE if the PK and store view code has been processed, else FALSE
+     */
+    public function storeViewHasBeenProcessed($pk, $storeViewCode)
+    {
+        return isset($this->pathEntityIdMapping[$pk]) && isset($this->pathStoreViewCodeMapping[$pk]) && in_array($storeViewCode, $this->pathStoreViewCodeMapping);
+    }
+
+    /**
      * Add the passed path => entity ID mapping.
      *
      * @param string $path The path
