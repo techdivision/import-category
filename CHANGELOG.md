@@ -1,3 +1,13 @@
+# Version 1.0.0-beta17
+
+## Bugfixes
+
+* Fixed invalid URL rewrite creation
+
+## Features
+
+* None
+
 # Version 1.0.0-beta16
 
 ## Bugfixes
