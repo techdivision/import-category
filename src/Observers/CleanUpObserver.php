@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Category\Observers;
 
+use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Category\Utils\ColumnKeys;
 
 /**
@@ -44,7 +45,7 @@ class CleanUpObserver extends AbstractCategoryImportObserver
 
         // add the path => entity ID/store view code mapping
         $this->addPathEntityIdMapping($path = $this->getValue(ColumnKeys::PATH));
-        $this->addPathStoreViewCodeMapping($path, $this->getSubject()->getStoreViewCode());
+        $this->addPathStoreViewCodeMapping($path, $this->getSubject()->getStoreViewCode(StoreViewCodes::ADMIN));
 
         // temporary persist the path
         $this->setLastPath($path);
