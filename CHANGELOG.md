@@ -1,3 +1,13 @@
+# Version 1.0.0-beta18
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Create class DependencyInjectionKeys in symfony folder (for integration testing purposes)
+
 # Version 1.0.0-beta17
 
 ## Bugfixes
