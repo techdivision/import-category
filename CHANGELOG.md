@@ -1,3 +1,13 @@
+# Version 1.0.0-beta19
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Remove system-name from default configuration and set archive-artefacts to TRUE
+
 # Version 1.0.0-beta18
 
 ## Bugfixes
