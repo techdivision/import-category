@@ -1,3 +1,13 @@
+# Version 1.0.0-beta20
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Refactor attribute import functionality
+
 # Version 1.0.0-beta19
 
 ## Bugfixes
