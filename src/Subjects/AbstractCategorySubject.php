@@ -372,14 +372,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
         }
 
         // throw an exception, if not
-        throw new \Exception(
-            sprintf(
-                'Found invalid store view code %s in file %s on line %d',
-                $storeViewCode,
-                $this->getFilename(),
-                $this->getLineNumber()
-            )
-        );
+        throw new \Exception(sprintf('Found invalid store view code "%s"', $storeViewCode));
     }
 
     /**
@@ -399,14 +392,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
         }
 
         // throw an exception, if not
-        throw new \Exception(
-            sprintf(
-                'Found invalid website code %s in file %s on line %d',
-                $code,
-                $this->getFilename(),
-                $this->getLineNumber()
-            )
-        );
+        throw new \Exception(sprintf('Found invalid website code "%s"', $code));
     }
 
     /**
@@ -426,14 +412,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
         }
 
         // throw an exception, if not
-        throw new \Exception(
-            sprintf(
-                'Can\'t find category with path %s in file %s on line %d',
-                $path,
-                $this->getFilename(),
-                $this->getLineNumber()
-            )
-        );
+        throw new \Exception(sprintf('Can\'t find category with path "%s"', $path));
     }
 
     /**
@@ -468,13 +447,6 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
         }
 
         // throw an exception if the category is NOT available
-        throw new \Exception(
-            sprintf(
-                'Can\'t load category with ID %d in file %s on line %d',
-                $categoryId,
-                $this->getFilename(),
-                $this->getLineNumber()
-            )
-        );
+        throw new \Exception(sprintf('Can\'t load category with ID %d in file %s on line %d', $categoryId));
     }
 }
