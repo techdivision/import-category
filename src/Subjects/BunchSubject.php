@@ -21,9 +21,12 @@
 namespace TechDivision\Import\Category\Subjects;
 
 use TechDivision\Import\Subjects\ExportableTrait;
+use TechDivision\Import\Subjects\FileUploadTrait;
 use TechDivision\Import\Subjects\ExportableSubjectInterface;
+use TechDivision\Import\Subjects\FileUploadSubjectInterface;
 use TechDivision\Import\Category\Utils\PageLayoutKeys;
 use TechDivision\Import\Category\Utils\DisplayModeKeys;
+use TechDivision\Import\Category\Utils\ConfigurationKeys;
 
 /**
  * The subject implementation that handles the business logic to persist products.
@@ -34,7 +37,7 @@ use TechDivision\Import\Category\Utils\DisplayModeKeys;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-class BunchSubject extends AbstractCategorySubject implements ExportableSubjectInterface
+class BunchSubject extends AbstractCategorySubject implements ExportableSubjectInterface, FileUploadSubjectInterface
 {
 
     /**
@@ -43,6 +46,13 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
      * @var \TechDivision\Import\Subjects\ExportableTrait
      */
     use ExportableTrait;
+
+    /**
+     * The trait that provides file upload functionality.
+     *
+     * @var \TechDivision\Import\Subjects\FileUploadTrait
+     */
+    use FileUploadTrait;
 
     /**
      * The array with the available display mode keys.
@@ -76,6 +86,43 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
         'display_mode' => array('import_category.callback.display.mode'),
         'page_layout'  => array('import_category.callback.page.layout'),
     );
+
+    /**
+     * Intializes the previously loaded global data for exactly one bunch.
+     *
+     * @param string $serial The serial of the actual import
+     *
+     * @return void
+     */
+    public function setUp($serial)
+    {
+
+        // initialize the flag whether to copy images or not
+        if ($this->getConfiguration()->hasParam(ConfigurationKeys::COPY_IMAGES)) {
+            $this->setCopyImages($this->getConfiguration()->getParam(ConfigurationKeys::COPY_IMAGES));
+        }
+
+        // initialize media directory => can be absolute or relative
+        if ($this->getConfiguration()->hasParam(ConfigurationKeys::MEDIA_DIRECTORY)) {
+            $this->setMediaDir(
+                $this->resolvePath(
+                    $this->getConfiguration()->getParam(ConfigurationKeys::MEDIA_DIRECTORY)
+                )
+            );
+        }
+
+        // initialize images directory => can be absolute or relative
+        if ($this->getConfiguration()->hasParam(ConfigurationKeys::IMAGES_FILE_DIRECTORY)) {
+            $this->setImagesFileDir(
+                $this->resolvePath(
+                    $this->getConfiguration()->getParam(ConfigurationKeys::IMAGES_FILE_DIRECTORY)
+                )
+            );
+        }
+
+        // prepare the callbacks
+        parent::setUp($serial);
+    }
 
     /**
      * Return's the default callback mappings.

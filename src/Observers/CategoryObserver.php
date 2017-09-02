@@ -108,7 +108,7 @@ class CategoryObserver extends AbstractCategoryImportObserver
 
                 } catch (\Exception $e) {
                     // log a message that requested category is NOT available
-                    $this->getSystemLogger()->info(sprintf('Can\'t load category %s, create a new one', $categoryPath));
+                    $this->getSystemLogger()->debug(sprintf('Can\'t load category %s, create a new one', $categoryPath));
 
                     // prepare the static entity values, insert the entity and set the entity ID
                     $category = $this->initializeCategory($this->prepareAttributes());
