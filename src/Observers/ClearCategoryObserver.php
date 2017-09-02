@@ -92,13 +92,14 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
 
         // FIRST delete the data related with the category with the passed category path
         $this->deleteUrlRewrite(array(ColumnKeys::PATH => $category[MemberNames::PATH]), SqlStatements::DELETE_URL_REWRITE_BY_PATH);
+        $this->deleteUrlRewrite(array(MemberNames::CATEGORY_ID => $category[MemberNames::ENTITY_ID]), SqlStatements::DELETE_URL_REWRITE_BY_CATEGORY_ID);
 
         // delete the category with the passed path
         $this->deleteCategory(array(ColumnKeys::PATH => $category[MemberNames::PATH]));
 
         // initialize the artefacts
         $artefact = array();
-        foreach (array_keys($this->getHeaders()) as $columnName) {
+        foreach (array_keys($this->getSubject()->getHeaders()) as $columnName) {
             $artefact[$columnName] = $this->getValue($columnName);
         }
 

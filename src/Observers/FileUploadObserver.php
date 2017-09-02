@@ -14,26 +14,25 @@
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
- * @link      https://github.com/techdivision/import-product-media
+ * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
 
 namespace TechDivision\Import\Category\Observers;
 
 use TechDivision\Import\Category\Utils\ColumnKeys;
-use TechDivision\Import\Observers\AbstractFileUploadObserver;
 
 /**
- * Observer that uploads the file specified in a CSV file's column 'image_path' to a
- * configurable directoy.
+ * Observer that uploads the category image file specified in a CSV file to a
+ * configurable directory.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
- * @link      https://github.com/techdivision/import-product-media
+ * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-class FileUploadObserver extends AbstractFileUploadObserver
+class FileUploadObserver extends AbstractCategoryImportObserver
 {
 
     /**
@@ -44,41 +43,21 @@ class FileUploadObserver extends AbstractFileUploadObserver
     protected function process()
     {
 
-        // process the file upload
-        parent::process();
+        // query whether or not we've to upload the image files
+        if ($this->getSubject()->hasCopyImages()) {
+            // initialize the image path
+            if ($imagePath = $this->getValue(ColumnKeys::IMAGE_PATH)) {
+                // upload the file and set the new image path
+                $imagePath = $this->getSubject()->uploadFile($imagePath);
 
-        // temporarily persist the image name
-        $this->setParentImage($this->getValue($this->getSourceColumn()));
-    }
-    /**
-     * Return's the name of the source column with the image path.
-     *
-     * @return string The image path
-     */
-    protected function getSourceColumn()
-    {
-        return ColumnKeys::IMAGE;
-    }
+                // log a message that the image has been copied
+                $this->getSubject()->getSystemLogger()->debug(
+                    sprintf('Successfully copied image %s => %s', $imagePath, $imagePath)
+                );
 
-    /**
-     * Return's the target column with the path of the copied image.
-     *
-     * @return string The path to the copied image
-     */
-    protected function getTargetColumn()
-    {
-        return ColumnKeys::IMAGE_PATH_NEW;
-    }
-
-    /**
-     * Set's the name of the created image.
-     *
-     * @param string $parentImage The name of the created image
-     *
-     * @return void
-     */
-    protected function setParentImage($parentImage)
-    {
-        $this->getSubject()->setParentImage($parentImage);
+                // write the new image path to the target column
+                $this->setValue(ColumnKeys::IMAGE_PATH, $imagePath);
+            }
+        }
     }
 }
