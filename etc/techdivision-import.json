@@ -225,7 +225,7 @@
               "observers": [
                 {
                   "import": [
-                    "import_category.observer.url.rewrite"
+                    "import_category.observer.url.rewrite.update"
                   ]
                 }
               ]
