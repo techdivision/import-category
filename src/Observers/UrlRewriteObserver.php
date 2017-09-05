@@ -79,18 +79,26 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
     protected function process()
     {
 
-        // query whether or not, we've found a new path => means we've found a new category
-        if ($this->hasBeenProcessed($this->getValue(ColumnKeys::PATH))) {
-            return;
-        }
-
-        // try to load the URL key, return immediately if not possible
-        if (!$this->hasValue(ColumnKeys::URL_PATH)) {
-            return;
+        // try to load the entity ID for the product with the passed SKU
+        if ($category = $this->getSubject()->getCategoryByPath($path = $this->getValue(ColumnKeys::PATH))) {
+            $this->setLastEntityId($category[MemberNames::ENTITY_ID]);
+        } else {
+            // prepare a log message
+            $message = sprintf('Category with path "%s" can\'t be loaded to create URL rewrites', $path);
+            // query whether or not we're in debug mode
+            if ($this->getSubject()->isDebugMode()) {
+                $this->getSubject()->getSystemLogger()->warning($message);
+                return;
+            } else {
+                throw new \Exception($message);
+            }
         }
 
         // initialize the store view code
         $this->getSubject()->prepareStoreViewCode();
+
+        // prepare the URL rewrites
+        $this->prepareUrlRewrites();
 
         // initialize and persist the URL rewrite
         if ($urlRewrite = $this->initializeUrlRewrite($this->prepareAttributes())) {
@@ -108,6 +116,16 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
     protected function initializeUrlRewrite(array $attr)
     {
         return $attr;
+    }
+
+    /**
+     * Prepare's the URL rewrites that has to be created/updated.
+     *
+     * @return void
+     */
+    protected function prepareUrlRewrites()
+    {
+        // nothing to prepare here
     }
 
     /**
@@ -161,10 +179,22 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
     {
 
         // load the category URL suffix to use
-        $urlSuffix = $this->getSubject()->getCoreConfigData(CoreConfigDataKeys::CATALOG_SEO_CATEGORY_URL_SUFFIX, 'html');
+        $urlSuffix = $this->getSubject()->getCoreConfigData(CoreConfigDataKeys::CATALOG_SEO_CATEGORY_URL_SUFFIX, '.html');
 
         // prepare and return the category URL
-        return sprintf('%s.%s', $this->getValue(ColumnKeys::URL_PATH), $urlSuffix);
+        return sprintf('%s%s', $this->getValue(ColumnKeys::URL_PATH), $urlSuffix);
+    }
+
+    /**
+     * Set's the ID of the product that has been created recently.
+     *
+     * @param string $lastEntityId The entity ID
+     *
+     * @return void
+     */
+    protected function setLastEntityId($lastEntityId)
+    {
+        $this->getSubject()->setLastEntityId($lastEntityId);
     }
 
     /**

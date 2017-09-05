@@ -1,3 +1,13 @@
+# Version 1.0.0-beta22
+
+## Bugfixes
+
+* Fixed invalid URL rewrite creation in a multi-store environment
+
+## Features
+
+* None
+
 # Version 1.0.0-beta21
 
 ## Bugfixes

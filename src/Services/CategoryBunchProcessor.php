@@ -749,6 +749,20 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     }
 
     /**
+     * Return's the URL rewrites for the passed URL entity type and ID.
+     *
+     * @param string  $entityType The entity type to load the URL rewrites for
+     * @param integer $entityId   The entity ID to load the URL rewrites for
+     * @param integer $storeId    The store ID to load the URL rewrites for
+     *
+     * @return array The URL rewrites
+     */
+    public function getUrlRewritesByEntityTypeAndEntityIdAndStoreId($entityType, $entityId, $storeId)
+    {
+        return $this->getUrlRewriteRepository()->findAllByEntityTypeAndEntityIdAndStoreId($entityType, $entityId, $storeId);
+    }
+
+    /**
      * Load's and return's the EAV attribute option value with the passed code, store ID and value.
      *
      * @param string  $attributeCode The code of the EAV attribute option to load

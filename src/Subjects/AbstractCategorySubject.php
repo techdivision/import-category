@@ -51,13 +51,6 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
     protected $categoryBunchProcessor;
 
     /**
-     * The available stores.
-     *
-     * @var array
-     */
-    protected $stores = array();
-
-    /**
      * The available store websites.
      *
      * @var array
