@@ -173,4 +173,14 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
         // throw an exception, if not
         throw new \Exception(printf('Found invalid page layout %s', $pageLayout));
     }
+
+    /**
+     * Return's the available store view codes of the available stores.
+     *
+     * @return array The array with the available store view codes
+     */
+    public function getStoreViewCodes()
+    {
+        return array_keys($this->stores);
+    }
 }
