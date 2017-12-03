@@ -317,28 +317,6 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
     }
 
     /**
-     * Clean up the global data after importing the bunch.
-     *
-     * @param string $serial The serial of the actual import
-     *
-     * @return void
-     */
-    public function tearDown($serial)
-    {
-
-        // invoke the parent method
-        parent::tearDown($serial);
-
-        // update the status
-        $this->getRegistryProcessor()->mergeAttributesRecursive(
-            $serial,
-            array(
-                RegistryKeys::FILES => array($this->getFilename() => array(RegistryKeys::STATUS => 1))
-            )
-        );
-    }
-
-    /**
      * Return's the store ID of the actual row, or of the default store
      * if no store view code is set in the CSV file.
      *
