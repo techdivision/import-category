@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Category\Actions\Processors;
 
+use TechDivision\Import\Category\Utils\SqlStatementKeys;
 use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
 
 /**
@@ -43,12 +44,9 @@ class CategoryDecimalUpdateProcessor extends AbstractUpdateProcessor
     protected function getStatements()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::UPDATE_CATEGORY_DECIMAL => $this->getUtilityClass()->find($utilityClassName::UPDATE_CATEGORY_DECIMAL)
+            SqlStatementKeys::UPDATE_CATEGORY_DECIMAL => $this->loadStatement(SqlStatementKeys::UPDATE_CATEGORY_DECIMAL)
         );
     }
 }

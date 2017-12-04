@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Category\Repositories;
 
 use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Category\Utils\SqlStatementKeys;
 use TechDivision\Import\Repositories\AbstractRepository;
 
 /**
@@ -50,12 +51,9 @@ class CategoryDatetimeRepository extends AbstractRepository
     public function init()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // initialize the prepared statements
         $this->categoryDatetimeStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::CATEGORY_DATETIME));
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::CATEGORY_DATETIME));
     }
 
     /**

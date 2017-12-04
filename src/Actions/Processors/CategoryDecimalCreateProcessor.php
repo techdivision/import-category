@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Category\Actions\Processors;
 
+use TechDivision\Import\Category\Utils\SqlStatementKeys;
 use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
 
 /**
@@ -43,12 +44,9 @@ class CategoryDecimalCreateProcessor extends AbstractCreateProcessor
     protected function getStatements()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_CATEGORY_DECIMAL => $this->getUtilityClass()->find($utilityClassName::CREATE_CATEGORY_DECIMAL)
+            SqlStatementKeys::CREATE_CATEGORY_DECIMAL => $this->loadStatement(SqlStatementKeys::CREATE_CATEGORY_DECIMAL)
         );
     }
 }

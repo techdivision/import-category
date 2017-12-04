@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Category\Actions\Processors;
 
+use TechDivision\Import\Category\Utils\SqlStatementKeys;
 use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
 
 /**
@@ -43,12 +44,9 @@ class CategoryVarcharUpdateProcessor extends AbstractUpdateProcessor
     protected function getStatements()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::UPDATE_CATEGORY_VARCHAR => $this->getUtilityClass()->find($utilityClassName::UPDATE_CATEGORY_VARCHAR)
+            SqlStatementKeys::UPDATE_CATEGORY_VARCHAR => $this->loadStatement(SqlStatementKeys::UPDATE_CATEGORY_VARCHAR)
         );
     }
 }

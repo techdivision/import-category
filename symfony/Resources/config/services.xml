@@ -5,84 +5,85 @@
 
     <services>
 
-        <service id="import_category.utility.class.name" class="TechDivision\Import\Category\Utils\SqlStatements"/>
+        <service id="import_category.repository.sql.statement" class="TechDivision\Import\Category\Utils\SqlStatements"/>
 
+        <service id="import_category.repository.sql.statement" class="TechDivision\Import\Category\Repositories\SqlStatementRepository"/>
         <service id="import_category.repository.category.datetime" class="TechDivision\Import\Category\Repositories\CategoryDatetimeRepository">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.repository.category.decimal" class="TechDivision\Import\Category\Repositories\CategoryDecimalRepository">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.repository.category.int" class="TechDivision\Import\Category\Repositories\CategoryIntRepository">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.repository.category" class="TechDivision\Import\Category\Repositories\CategoryRepository">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.repository.category.text" class="TechDivision\Import\Category\Repositories\CategoryTextRepository">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.repository.category.varchar" class="TechDivision\Import\Category\Repositories\CategoryVarcharRepository">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
 
         <service id="import_category.action.processor.category.create" class="TechDivision\Import\Category\Actions\Processors\CategoryCreateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.action.processor.category.update" class="TechDivision\Import\Category\Actions\Processors\CategoryUpdateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.action.processor.category.delete" class="TechDivision\Import\Category\Actions\Processors\CategoryDeleteProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.action.processor.category.datetime.create" class="TechDivision\Import\Category\Actions\Processors\CategoryDatetimeCreateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.action.processor.category.datetime.update" class="TechDivision\Import\Category\Actions\Processors\CategoryDatetimeUpdateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.action.processor.category.decimal.create" class="TechDivision\Import\Category\Actions\Processors\CategoryDecimalCreateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.action.processor.category.decimal.update" class="TechDivision\Import\Category\Actions\Processors\CategoryDecimalUpdateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.action.processor.category.int.create" class="TechDivision\Import\Category\Actions\Processors\CategoryIntCreateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.action.processor.category.int.update" class="TechDivision\Import\Category\Actions\Processors\CategoryIntUpdateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.action.processor.category.text.create" class="TechDivision\Import\Category\Actions\Processors\CategoryTextCreateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.action.processor.category.text.update" class="TechDivision\Import\Category\Actions\Processors\CategoryTextUpdateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.action.processor.category.varchar.create" class="TechDivision\Import\Category\Actions\Processors\CategoryVarcharCreateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.action.processor.category.varchar.update" class="TechDivision\Import\Category\Actions\Processors\CategoryVarcharUpdateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_category.utility.class.name"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
 
         <service id="import_category.action.category" class="TechDivision\Import\Category\Actions\CategoryAction">

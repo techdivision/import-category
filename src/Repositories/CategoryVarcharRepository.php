@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Category\Repositories;
 
 use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Category\Utils\SqlStatementKeys;
 
 /**
  * Repository implementation to load category varchar attribute data.
@@ -52,12 +53,9 @@ class CategoryVarcharRepository extends \TechDivision\Import\Repositories\Catego
         // initialize the parend class
         parent::init();
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // initialize the prepared statements
         $this->categoryVarcharStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::CATEGORY_VARCHAR));
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::CATEGORY_VARCHAR));
     }
 
     /**
