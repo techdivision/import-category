@@ -23,7 +23,7 @@ namespace TechDivision\Import\Category\Repositories;
 use TechDivision\Import\Category\Utils\SqlStatementKeys;
 
 /**
- * Utility class with the SQL statements to use.
+ * Repository class with the SQL statements to use.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
