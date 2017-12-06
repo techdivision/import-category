@@ -121,9 +121,9 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
      * @var array
      */
     protected $defaultFrontendInputCallbackMappings = array(
-        FrontendInputTypes::SELECT      => 'import_category.callback.select',
-        FrontendInputTypes::MULTISELECT => 'import_category.callback.multiselect',
-        FrontendInputTypes::BOOLEAN     => 'import_category.callback.boolean'
+        FrontendInputTypes::SELECT      => array('import_category.callback.select'),
+        FrontendInputTypes::MULTISELECT => array('import_category.callback.multiselect'),
+        FrontendInputTypes::BOOLEAN     => array('import_category.callback.boolean')
     );
 
     /**
