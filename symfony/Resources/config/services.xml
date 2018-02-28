@@ -5,8 +5,6 @@
 
     <services>
 
-        <service id="import_category.repository.sql.statement" class="TechDivision\Import\Category\Utils\SqlStatements"/>
-
         <service id="import_category.repository.sql.statement" class="TechDivision\Import\Category\Repositories\SqlStatementRepository"/>
         <service id="import_category.repository.category.datetime" class="TechDivision\Import\Category\Repositories\CategoryDatetimeRepository">
             <argument type="service" id="connection"/>
@@ -112,6 +110,14 @@
             <argument type="service" id="import_category.action.processor.category.varchar.update"/>
         </service>
 
+        <service id="import_category.assembler.category.attribute" class="TechDivision\Import\Category\Assemblers\CategoryAttributeAssembler">
+            <argument type="service" id="import_category.repository.category.datetime"/>
+            <argument type="service" id="import_category.repository.category.decimal"/>
+            <argument type="service" id="import_category.repository.category.int"/>
+            <argument type="service" id="import_category.repository.category.text"/>
+            <argument type="service" id="import_category.repository.category.varchar"/>
+        </service>
+
         <service id="import_category.processor.category.bunch" class="TechDivision\Import\Category\Services\CategoryBunchProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.category"/>
@@ -131,6 +137,7 @@
             <argument type="service" id="import_category.action.category.varchar"/>
             <argument type="service" id="import.action.url.rewrite"/>
             <argument type="service" id="import.assembler.category"/>
+            <argument type="service" id="import_category.assembler.category.attribute"/>
         </service>
 
         <service id="import_category.filter.convert.literal.url" class="TechDivision\Import\Utils\Filter\ConvertLiteralUrl"/>

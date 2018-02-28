@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Category\Repositories;
 
-use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Category\Utils\ParamNames;
 use TechDivision\Import\Category\Utils\SqlStatementKeys;
 use TechDivision\Import\Repositories\AbstractRepository;
 
@@ -33,15 +33,15 @@ use TechDivision\Import\Repositories\AbstractRepository;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-class CategoryDatetimeRepository extends AbstractRepository
+class CategoryDatetimeRepository extends AbstractRepository implements CategoryDatetimeRepositoryInterface
 {
 
     /**
-     * The prepared statement to load the existing category datetime attribute.
+     * The prepared statement to load the existing category datetime attributes with the passed entity/store ID.
      *
      * @var \PDOStatement
      */
-    protected $categoryDatetimeStmt;
+    protected $categoryDatetimesStmt;
 
     /**
      * Initializes the repository's prepared statements.
@@ -52,31 +52,29 @@ class CategoryDatetimeRepository extends AbstractRepository
     {
 
         // initialize the prepared statements
-        $this->categoryDatetimeStmt =
-            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::CATEGORY_DATETIME));
+        $this->categoryDatetimesStmt =
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::CATEGORY_DATETIMES));
     }
 
     /**
-     * Load's and return's the datetime attribute with the passed entity/attribute/store ID.
+     * Load's and return's the datetime attributes for the passed primary key/store ID.
      *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
+     * @param integer $pk      The primary key of the attributes
+     * @param integer $storeId The store ID of the attributes
      *
-     * @return array|null The datetime attribute
+     * @return array The datetime attributes
      */
-    public function findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId)
+    public function findAllByPrimaryKeyAndStoreId($pk, $storeId)
     {
 
         // prepare the params
         $params = array(
-            MemberNames::STORE_ID      => $storeId,
-            MemberNames::ENTITY_ID     => $entityId,
-            MemberNames::ATTRIBUTE_ID  => $attributeId
+            ParamNames::PK        => $pk,
+            ParamNames::STORE_ID  => $storeId
         );
 
-        // load and return the category datetime attribute with the passed store/entity/attribute ID
-        $this->categoryDatetimeStmt->execute($params);
-        return $this->categoryDatetimeStmt->fetch(\PDO::FETCH_ASSOC);
+        // load and return the category datetime attributes with the passed primary key/store ID
+        $this->categoryDatetimesStmt->execute($params);
+        return $this->categoryDatetimesStmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

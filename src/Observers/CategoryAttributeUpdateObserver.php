@@ -35,30 +35,18 @@ class CategoryAttributeUpdateObserver extends CategoryAttributeObserver
 {
 
     /**
-     * Initialize the category product with the passed attributes and returns an instance.
+     * Initialize the category with the passed attributes and returns an instance.
      *
-     * @param array $attr The category product attributes
+     * @param array $attr The category attributes
      *
-     * @return array The initialized category product
+     * @return array The initialized category
      */
     protected function initializeAttribute(array $attr)
     {
 
-        // load the supported backend types
-        $backendTypes = $this->getBackendTypes();
-
-        // initialize the persist method for the found backend type
-        list (, $loadMethod) = $backendTypes[$this->backendType];
-
-        // load store/entity/attribute ID
-        $storeId = $attr[MemberNames::STORE_ID];
-        $entityId = $attr[MemberNames::ENTITY_ID];
-        $attributeId = $attr[MemberNames::ATTRIBUTE_ID];
-
-        // try to load the attribute with the passed entity/attribute/store ID
-        // and merge it with the attributes
-        if ($entity = $this->$loadMethod($entityId, $attributeId, $storeId)) {
-            return $this->mergeEntity($entity, $attr);
+        // try to load the attribute with the passed attribute ID and merge it with the attributes
+        if (isset($this->attributes[$attributeId = (integer) $attr[MemberNames::ATTRIBUTE_ID]])) {
+            return $this->mergeEntity($this->attributes[$attributeId], $attr);
         }
 
         // otherwise simply return the attributes
@@ -66,72 +54,15 @@ class CategoryAttributeUpdateObserver extends CategoryAttributeObserver
     }
 
     /**
-     * Load's and return's the datetime attribute with the passed entity/attribute/store ID.
+     * Intializes the existing attributes for the entity with the passed primary key.
      *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
+     * @param string  $pk      The primary key of the entity to load the attributes for
+     * @param integer $storeId The ID of the store view to load the attributes for
      *
-     * @return array|null The datetime attribute
+     * @return array The entity attributes
      */
-    protected function loadDatetimeAttribute($entityId, $attributeId, $storeId)
+    protected function getAttributesByPrimaryKeyAndStoreId($pk, $storeId)
     {
-        return $this->getCategoryBunchProcessor()->loadCategoryDatetimeAttribute($entityId, $attributeId, $storeId);
-    }
-
-    /**
-     * Load's and return's the decimal attribute with the passed entity/attribute/store ID.
-     *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
-     *
-     * @return array|null The decimal attribute
-     */
-    protected function loadDecimalAttribute($entityId, $attributeId, $storeId)
-    {
-        return $this->getCategoryBunchProcessor()->loadCategoryDecimalAttribute($entityId, $attributeId, $storeId);
-    }
-
-    /**
-     * Load's and return's the integer attribute with the passed entity/attribute/store ID.
-     *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
-     *
-     * @return array|null The integer attribute
-     */
-    protected function loadIntAttribute($entityId, $attributeId, $storeId)
-    {
-        return $this->getCategoryBunchProcessor()->loadCategoryIntAttribute($entityId, $attributeId, $storeId);
-    }
-
-    /**
-     * Load's and return's the text attribute with the passed entity/attribute/store ID.
-     *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
-     *
-     * @return array|null The text attribute
-     */
-    protected function loadTextAttribute($entityId, $attributeId, $storeId)
-    {
-        return $this->getCategoryBunchProcessor()->loadCategoryTextAttribute($entityId, $attributeId, $storeId);
-    }
-
-    /**
-     * Load's and return's the varchar attribute with the passed entity/attribute/store ID.
-     *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
-     *
-     * @return array|null The varchar attribute
-     */
-    protected function loadVarcharAttribute($entityId, $attributeId, $storeId)
-    {
-        return $this->getCategoryBunchProcessor()->loadCategoryVarcharAttribute($entityId, $attributeId, $storeId);
+        $this->attributes = $this->getCategoryBunchProcessor()->getCategoryAttributesByPrimaryKeyAndStoreId($pk, $storeId);
     }
 }

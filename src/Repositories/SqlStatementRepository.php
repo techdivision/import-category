@@ -44,35 +44,30 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
             'SELECT * FROM catalog_category_entity WHERE entity_id = :entity_id',
         SqlStatementKeys::CATEGORY_BY_PATH =>
             'SELECT * FROM catalog_category_entity WHERE path = :path',
-        SqlStatementKeys::CATEGORY_DATETIME =>
+        SqlStatementKeys::CATEGORY_DATETIMES =>
             'SELECT *
                FROM catalog_category_entity_datetime
-              WHERE entity_id = :entity_id
-                AND attribute_id = :attribute_id
+              WHERE entity_id = :pk
                 AND store_id = :store_id',
-        SqlStatementKeys::CATEGORY_DECIMAL =>
+        SqlStatementKeys::CATEGORY_DECIMALS =>
             'SELECT *
                FROM catalog_category_entity_decimal
-              WHERE entity_id = :entity_id
-                AND attribute_id = :attribute_id
+              WHERE entity_id = :pk
                 AND store_id = :store_id',
-        SqlStatementKeys::CATEGORY_INT =>
+        SqlStatementKeys::CATEGORY_INTS =>
             'SELECT *
                FROM catalog_category_entity_int
-              WHERE entity_id = :entity_id
-                AND attribute_id = :attribute_id
+              WHERE entity_id = :pk
                 AND store_id = :store_id',
-        SqlStatementKeys::CATEGORY_TEXT =>
+        SqlStatementKeys::CATEGORY_TEXTS =>
             'SELECT *
               FROM catalog_category_entity_text
-             WHERE entity_id = :entity_id
-               AND attribute_id = :attribute_id
+             WHERE entity_id = :pk
                AND store_id = :store_id',
-        SqlStatementKeys::CATEGORY_VARCHAR =>
+        SqlStatementKeys::CATEGORY_VARCHARS =>
             'SELECT *
                FROM catalog_category_entity_varchar
-              WHERE entity_id = :entity_id
-                AND attribute_id = :attribute_id
+              WHERE entity_id = :pk
                 AND store_id = :store_id',
         SqlStatementKeys::CREATE_CATEGORY =>
             'INSERT
