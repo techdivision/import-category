@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Category\Repositories;
 
-use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Category\Utils\ParamNames;
 use TechDivision\Import\Category\Utils\SqlStatementKeys;
 use TechDivision\Import\Repositories\AbstractRepository;
 
@@ -33,15 +33,15 @@ use TechDivision\Import\Repositories\AbstractRepository;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-class CategoryIntRepository extends AbstractRepository
+class CategoryIntRepository extends AbstractRepository implements CategoryIntRepositoryInterface
 {
 
     /**
-     * The prepared statement to load the existing category integer attribute.
+     * The prepared statement to load the existing category integer attributes with the passed entity/store ID.
      *
      * @var \PDOStatement
      */
-    protected $categoryIntStmt;
+    protected $categorysIntStmt;
 
     /**
      * Initializes the repository's prepared statements.
@@ -52,31 +52,29 @@ class CategoryIntRepository extends AbstractRepository
     {
 
         // initialize the prepared statements
-        $this->categoryIntStmt =
-            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::CATEGORY_INT));
+        $this->categoryIntsStmt =
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::CATEGORY_INTS));
     }
 
     /**
-     * Load's and return's the integer attribute with the passed entity/attribute/store ID.
+     * Load's and return's the integer attributes with the passed primary key/store ID.
      *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
+     * @param integer $pk      The primary key of the attributes
+     * @param integer $storeId The store ID of the attributes
      *
-     * @return array|null The integer attribute
+     * @return array The integer attributes
      */
-    public function findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId)
+    public function findAllByPrimaryKeyAndStoreId($pk, $storeId)
     {
 
         // prepare the params
         $params = array(
-            MemberNames::STORE_ID      => $storeId,
-            MemberNames::ENTITY_ID     => $entityId,
-            MemberNames::ATTRIBUTE_ID  => $attributeId
+            ParamNames::PK        => $pk,
+            ParamNames::STORE_ID  => $storeId
         );
 
-        // load and return the category integer attribute with the passed store/entity/attribute ID
-        $this->categoryIntStmt->execute($params);
-        return $this->categoryIntStmt->fetch(\PDO::FETCH_ASSOC);
+        // load and return the category integer attributes with the passed primary key/store ID
+        $this->categoryIntsStmt->execute($params);
+        return $this->categoryIntsStmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

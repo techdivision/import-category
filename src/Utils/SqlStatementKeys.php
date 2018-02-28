@@ -47,46 +47,46 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
     const CATEGORY_BY_PATH = 'category.by.path';
 
     /**
-     * The SQL statement to load the category datetime attribute with the passed entity/attribute/store ID.
+     * The SQL statement to load the category datetime attributes with the passed entity/store ID.
      *
      * @var string
      */
-    const CATEGORY_DATETIME = 'category_datetime';
+    const CATEGORY_DATETIMES = 'category_datetimes';
 
     /**
-     * The SQL statement to load the category decimal attribute with the passed entity/attribute/store ID.
+     * The SQL statement to load the category datetime attributes with the passed entity/store ID.
      *
      * @var string
      */
-    const CATEGORY_DECIMAL = 'category_decimal';
+    const CATEGORY_DECIMALS = 'category_decimals';
 
     /**
-     * The SQL statement to load the category integer attribute with the passed entity/attribute/store ID.
+     * The SQL statement to load the category datetime attributes with the passed entity/store ID.
      *
      * @var string
      */
-    const CATEGORY_INT = 'catebory_int';
+    const CATEGORY_INTS = 'catebory_ints';
 
     /**
-     * The SQL statement to load the category text attribute with the passed entity/attribute/store ID.
+     * The SQL statement to load the category datetime attributes with the passed entity/store ID.
      *
      * @var string
      */
-    const CATEGORY_TEXT = 'category_text';
+    const CATEGORY_TEXTS = 'category_texts';
 
     /**
-     * The SQL statement to load the category varchar attribute with the passed entity/attribute/store ID.
+     * The SQL statement to load the category datetime attributes with the passed entity/store ID.
      *
      * @var string
      */
-    const CATEGORY_VARCHAR = 'category_varchar';
+    const CATEGORY_VARCHARS = 'category_varchars';
 
     /**
      * The SQL statement to create new categories.
      *
      * @var string
      */
-    const CREATE_CATEGORY = 'insert.category';
+    const CREATE_CATEGORY = 'create.category';
 
     /**
      * The SQL statement to update an existing category.
@@ -100,7 +100,7 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
      *
      * @var string
      */
-    const CREATE_CATEGORY_DATETIME = 'insert.category_datetime';
+    const CREATE_CATEGORY_DATETIME = 'create.category_datetime';
 
     /**
      * The SQL statement to update an existing category datetime value.
@@ -114,7 +114,7 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
      *
      * @var string
      */
-    const CREATE_CATEGORY_DECIMAL = 'insert.category_decimal';
+    const CREATE_CATEGORY_DECIMAL = 'create.category_decimal';
 
     /**
      * The SQL statement to update an existing category decimal value.
@@ -128,7 +128,7 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
      *
      * @var string
      */
-    const CREATE_CATEGORY_INT = 'insert.category_int';
+    const CREATE_CATEGORY_INT = 'create.category_int';
 
     /**
      * The SQL statement to update an existing category integer value.
