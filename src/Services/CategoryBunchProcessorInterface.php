@@ -174,6 +174,16 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
     public function getUrlRewritesByEntityTypeAndEntityIdAndStoreId($entityType, $entityId, $storeId);
 
     /**
+     * Intializes the existing attributes for the entity with the passed primary key.
+     *
+     * @param string  $pk      The primary key of the entity to load the attributes for
+     * @param integer $storeId The ID of the store view to load the attributes for
+     *
+     * @return array The entity attributes
+     */
+    public function getCategoryAttributesByPrimaryKeyAndStoreId($pk, $storeId);
+
+    /**
      * Return's the children count of the category with the passed ID.
      *
      * @param integer $entityId The ID of the category to count the children for

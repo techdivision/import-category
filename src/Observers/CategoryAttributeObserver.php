@@ -65,6 +65,19 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
     }
 
     /**
+     * Intializes the existing attributes for the entity with the passed primary key.
+     *
+     * @param string  $pk      The primary key of the entity to load the attributes for
+     * @param integer $storeId The ID of the store view to load the attributes for
+     *
+     * @return array The entity attributes
+     */
+    protected function getAttributesByPrimaryKeyAndStoreId($pk, $storeId)
+    {
+        return array();
+    }
+
+    /**
      * Return's the PK to create the product => attribute relation.
      *
      * @return integer The PK to create the relation with

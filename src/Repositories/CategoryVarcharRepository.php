@@ -20,7 +20,8 @@
 
 namespace TechDivision\Import\Category\Repositories;
 
-use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Category\Utils\ParamNames;
+use TechDivision\Import\Category\Utils\SqlStatementKeys;
 
 /**
  * Repository implementation to load category varchar attribute data.
@@ -31,15 +32,15 @@ use TechDivision\Import\Category\Utils\MemberNames;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-class CategoryVarcharRepository extends \TechDivision\Import\Repositories\CategoryVarcharRepository
+class CategoryVarcharRepository extends \TechDivision\Import\Repositories\CategoryVarcharRepository implements CategoryVarcharRepositoryInterface
 {
 
     /**
-     * The prepared statement to load the existing category varchar attribute.
+     * The prepared statement to load the existing category varchar attributes with the passed entity/store ID.
      *
      * @var \PDOStatement
      */
-    protected $categoryVarcharStmt;
+    protected $categoryVarcharsStmt;
 
     /**
      * Initializes the repository's prepared statements.
@@ -52,35 +53,30 @@ class CategoryVarcharRepository extends \TechDivision\Import\Repositories\Catego
         // initialize the parend class
         parent::init();
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // initialize the prepared statements
-        $this->categoryVarcharStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::CATEGORY_VARCHAR));
+        $this->categoryVarcharsStmt =
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::CATEGORY_VARCHARS));
     }
 
     /**
-     * Load's and return's the varchar attribute with the passed entity/attribute/store ID.
+     * Load's and return's the varchar attributes with the passed primary key/store ID.
      *
-     * @param integer $entityId    The entity ID of the attribute
-     * @param integer $attributeId The attribute ID of the attribute
-     * @param integer $storeId     The store ID of the attribute
+     * @param integer $pk      The primary key of the attributes
+     * @param integer $storeId The store ID of the attributes
      *
-     * @return array|null The varchar attribute
+     * @return array The varchar attributes
      */
-    public function findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId)
+    public function findAllByPrimaryKeyAndStoreId($pk, $storeId)
     {
 
         // prepare the params
         $params = array(
-            MemberNames::STORE_ID      => $storeId,
-            MemberNames::ENTITY_ID     => $entityId,
-            MemberNames::ATTRIBUTE_ID  => $attributeId
+            ParamNames::PK        => $pk,
+            ParamNames::STORE_ID  => $storeId
         );
 
-        // load and return the category varchar attribute with the passed store/entity/attribute ID
-        $this->categoryVarcharStmt->execute($params);
-        return $this->categoryVarcharStmt->fetch(\PDO::FETCH_ASSOC);
+        // load and return the category varchar attributes with the passed primary key/store ID
+        $this->categoryVarcharsStmt->execute($params);
+        return $this->categoryVarcharsStmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

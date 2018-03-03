@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Category\Actions\Processors\CategoryTextUpdateProcessor
+ * TechDivision\Import\Category\Repositories\CategoryIntRepositoryInterface
  *
  * NOTICE OF LICENSE
  *
@@ -18,13 +18,12 @@
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Category\Actions\Processors;
+namespace TechDivision\Import\Category\Repositories;
 
-use TechDivision\Import\Category\Utils\SqlStatementKeys;
-use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
+use TechDivision\Import\Repositories\RepositoryInterface;
 
 /**
- * The category text attribute update processor implementation.
+ * Interface for repositories providing functionality to load category integer attribute data.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -32,21 +31,16 @@ use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-class CategoryTextUpdateProcessor extends AbstractUpdateProcessor
+interface CategoryIntRepositoryInterface extends RepositoryInterface
 {
 
     /**
-     * Return's the array with the SQL statements that has to be prepared.
+     * Load's and return's the integer attributes with the passed primary key/store ID.
      *
-     * @return array The SQL statements to be prepared
-     * @see \TechDivision\Import\Actions\Processors\AbstractBaseProcessor::getStatements()
+     * @param integer $pk      The primary key of the attributes
+     * @param integer $storeId The store ID of the attributes
+     *
+     * @return array The integer attributes
      */
-    protected function getStatements()
-    {
-
-        // return the array with the SQL statements that has to be prepared
-        return array(
-            SqlStatementKeys::UPDATE_CATEGORY_TEXT => $this->loadStatement(SqlStatementKeys::UPDATE_CATEGORY_TEXT)
-        );
-    }
+    public function findAllByPrimaryKeyAndStoreId($pk, $storeId);
 }

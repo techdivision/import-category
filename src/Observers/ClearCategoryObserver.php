@@ -22,7 +22,7 @@ namespace TechDivision\Import\Category\Observers;
 
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
-use TechDivision\Import\Category\Utils\SqlStatements;
+use TechDivision\Import\Category\Utils\SqlStatementKeys;
 use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
 
 /**
@@ -91,8 +91,8 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
         $category = $this->getCategoryByPath($path);
 
         // FIRST delete the data related with the category with the passed category path
-        $this->deleteUrlRewrite(array(ColumnKeys::PATH => $category[MemberNames::PATH]), SqlStatements::DELETE_URL_REWRITE_BY_PATH);
-        $this->deleteUrlRewrite(array(MemberNames::CATEGORY_ID => $category[MemberNames::ENTITY_ID]), SqlStatements::DELETE_URL_REWRITE_BY_CATEGORY_ID);
+        $this->deleteUrlRewrite(array(ColumnKeys::PATH => $category[MemberNames::PATH]), SqlStatementKeys::DELETE_URL_REWRITE_BY_PATH);
+        $this->deleteUrlRewrite(array(MemberNames::CATEGORY_ID => $category[MemberNames::ENTITY_ID]), SqlStatementKeys::DELETE_URL_REWRITE_BY_CATEGORY_ID);
 
         // delete the category with the passed path
         $this->deleteCategory(array(ColumnKeys::PATH => $category[MemberNames::PATH]));

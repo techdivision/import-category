@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Category\Actions\Processors\CategoryTextUpdateProcessor
+ * TechDivision\Import\Category\Utils\MemberNames
  *
  * NOTICE OF LICENSE
  *
@@ -18,13 +18,10 @@
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Category\Actions\Processors;
-
-use TechDivision\Import\Category\Utils\SqlStatementKeys;
-use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
+namespace TechDivision\Import\Category\Utils;
 
 /**
- * The category text attribute update processor implementation.
+ * Utility class containing parameter names for prepared statements.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -32,21 +29,13 @@ use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-class CategoryTextUpdateProcessor extends AbstractUpdateProcessor
+class ParamNames extends \TechDivision\Import\Category\Utils\MemberNames
 {
 
     /**
-     * Return's the array with the SQL statements that has to be prepared.
+     * Name for the parameter name 'pk'.
      *
-     * @return array The SQL statements to be prepared
-     * @see \TechDivision\Import\Actions\Processors\AbstractBaseProcessor::getStatements()
+     * @var string
      */
-    protected function getStatements()
-    {
-
-        // return the array with the SQL statements that has to be prepared
-        return array(
-            SqlStatementKeys::UPDATE_CATEGORY_TEXT => $this->loadStatement(SqlStatementKeys::UPDATE_CATEGORY_TEXT)
-        );
-    }
+    const PK = 'pk';
 }

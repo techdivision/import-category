@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Category\Repositories;
 
 use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Category\Utils\SqlStatementKeys;
 
 /**
  * Repository implementation to load category data.
@@ -66,16 +67,13 @@ class CategoryRepository extends \TechDivision\Import\Repositories\CategoryRepos
         // initialize the parend class
         parent::init();
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // initialize the prepared statements
         $this->categoryStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::CATEGORY));
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::CATEGORY));
         $this->categoryByPathStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::CATEGORY_BY_PATH));
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::CATEGORY_BY_PATH));
         $this->categoryCountChildrenStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::CATEGORY_COUNT_CHILDREN));
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::CATEGORY_COUNT_CHILDREN));
     }
 
     /**
