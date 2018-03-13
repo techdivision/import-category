@@ -1,3 +1,13 @@
+# Version 1.0.0-beta25
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Configure DI to passe event emitter to subjects constructor
+
 # Version 1.0.0-beta24
 
 ## Bugfixes
