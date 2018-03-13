@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Category\Subjects;
 
+use League\Event\EmitterInterface;
 use Doctrine\Common\Collections\Collection;
 use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
 use TechDivision\Import\Category\Utils\MemberNames;
@@ -132,17 +133,19 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
      * @param \TechDivision\Import\Services\RegistryProcessorInterface               $registryProcessor          The registry processor instance
      * @param \TechDivision\Import\Utils\Generators\GeneratorInterface               $coreConfigDataUidGenerator The UID generator for the core config data
      * @param \Doctrine\Common\Collections\Collection;                               $systemLoggers              The array with the system logger instances
+     * @param \League\Event\EmitterInterface                                         $emitter                    The event emitter instance
      * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface $categoryBunchProcessor     The category processor instance
      */
     public function __construct(
         RegistryProcessorInterface $registryProcessor,
         GeneratorInterface $coreConfigDataUidGenerator,
         Collection $systemLoggers,
+        EmitterInterface $emitter,
         CategoryBunchProcessorInterface $categoryBunchProcessor
     ) {
 
         // pass the arguments to the parent constructor
-        parent::__construct($registryProcessor, $coreConfigDataUidGenerator, $systemLoggers);
+        parent::__construct($registryProcessor, $coreConfigDataUidGenerator, $systemLoggers, $emitter);
 
         // initialize the category bunch processor
         $this->categoryBunchProcessor = $categoryBunchProcessor;
