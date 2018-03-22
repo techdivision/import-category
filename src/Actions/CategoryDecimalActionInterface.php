@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Category\Actions\CategoryDecimalAction
+ * TechDivision\Import\Category\Actions\CategoryDecimalActionInterface
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Category\Actions;
 
-use TechDivision\Import\Actions\AbstractAction;
+use TechDivision\Import\Actions\ActionInterface;
 
 /**
- * An action implementation that provides CRUD functionality for category decimal attributes.
+ * Interface for action implementations that provides CRUD functionality for category decimal attributes.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,6 +31,6 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/techdivision/import-catgory
  * @link      http://www.techdivision.com
  */
-class CategoryDecimalAction extends AbstractAction implements CategoryDecimalActionInterface
+interface CategoryDecimalActionInterface extends ActionInterface
 {
 }

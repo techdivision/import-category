@@ -20,25 +20,25 @@
 
 namespace TechDivision\Import\Category\Services;
 
-use TechDivision\Import\Actions\UrlRewriteAction;
-use TechDivision\Import\Assembler\CategoryAssembler;
-use TechDivision\Import\Category\Actions\CategoryAction;
-use TechDivision\Import\Category\Actions\CategoryDatetimeAction;
-use TechDivision\Import\Category\Actions\CategoryDecimalAction;
-use TechDivision\Import\Category\Actions\CategoryIntAction;
-use TechDivision\Import\Category\Actions\CategoryTextAction;
-use TechDivision\Import\Category\Actions\CategoryVarcharAction;
-use TechDivision\Import\Category\Repositories\CategoryDatetimeRepository;
-use TechDivision\Import\Category\Repositories\CategoryDecimalRepository;
-use TechDivision\Import\Category\Repositories\CategoryIntRepository;
-use TechDivision\Import\Category\Repositories\CategoryRepository;
-use TechDivision\Import\Category\Repositories\CategoryTextRepository;
-use TechDivision\Import\Category\Repositories\CategoryVarcharRepository;
-use TechDivision\Import\Category\Assemblers\CategoryAttributeAssemblerInterface;
 use TechDivision\Import\Connection\ConnectionInterface;
-use TechDivision\Import\Repositories\EavAttributeOptionValueRepository;
-use TechDivision\Import\Repositories\EavAttributeRepository;
-use TechDivision\Import\Repositories\UrlRewriteRepository;
+use TechDivision\Import\Actions\UrlRewriteActionInterface;
+use TechDivision\Import\Assembler\CategoryAssemblerInterface;
+use TechDivision\Import\Repositories\UrlRewriteRepositoryInterface;
+use TechDivision\Import\Repositories\EavAttributeRepositoryInterface;
+use TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface;
+use TechDivision\Import\Category\Repositories\CategoryRepositoryInterface;
+use TechDivision\Import\Category\Repositories\CategoryIntRepositoryInterface;
+use TechDivision\Import\Category\Repositories\CategoryTextRepositoryInterface;
+use TechDivision\Import\Category\Assemblers\CategoryAttributeAssemblerInterface;
+use TechDivision\Import\Category\Repositories\CategoryVarcharRepositoryInterface;
+use TechDivision\Import\Category\Repositories\CategoryDecimalRepositoryInterface;
+use TechDivision\Import\Category\Repositories\CategoryDatetimeRepositoryInterface;
+use TechDivision\Import\Category\Actions\CategoryActionInterface;
+use TechDivision\Import\Category\Actions\CategoryIntActionInterface;
+use TechDivision\Import\Category\Actions\CategoryTextActionInterface;
+use TechDivision\Import\Category\Actions\CategoryDecimalActionInterface;
+use TechDivision\Import\Category\Actions\CategoryVarcharActionInterface;
+use TechDivision\Import\Category\Actions\CategoryDatetimeActionInterface;
 
 /**
  * The category bunch processor implementation.
@@ -62,119 +62,119 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * The category assembler instance.
      *
-     * @var \TechDivision\Import\Assembler\CategoryAssembler
+     * @var \TechDivision\Import\Assembler\CategoryAssemblerInterface
      */
     protected $categoryAssembler;
 
     /**
      * The repository to access EAV attributes.
      *
-     * @var \TechDivision\Import\Repositories\EavAttributeRepository
+     * @var \TechDivision\Import\Repositories\EavAttributeRepositoryInterface
      */
     protected $eavAttributeRepository;
 
     /**
      * The repository to access EAV attribute option values.
      *
-     * @var \TechDivision\Import\Repositories\EavAttributeOptionValueRepository
+     * @var \TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface
      */
     protected $eavAttributeOptionValueRepository;
 
     /**
      * The action for category CRUD methods.
      *
-     * @var \TechDivision\Import\Category\Actions\CategoryAction
+     * @var \TechDivision\Import\Category\Actions\CategoryActionInterface
      */
     protected $categoryAction;
 
     /**
      * The action for category varchar attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Category\Actions\CategoryVarcharAction
+     * @var \TechDivision\Import\Category\Actions\CategoryVarcharActionInterface
      */
     protected $categoryVarcharAction;
 
     /**
      * The action for category text attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Category\Actions\CategoryTextAction
+     * @var \TechDivision\Import\Category\Actions\CategoryTextActionInterface
      */
     protected $categoryTextAction;
 
     /**
      * The action for category int attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Category\Actions\CategoryIntAction
+     * @var \TechDivision\Import\Category\Actions\CategoryIntActionInterface
      */
     protected $categoryIntAction;
 
     /**
      * The action for category decimal attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Category\Actions\CategoryDecimalAction
+     * @var \TechDivision\Import\Category\Actions\CategoryDecimalActionInterface
      */
     protected $categoryDecimalAction;
 
     /**
      * The action for category datetime attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Category\Actions\CategoryDatetimeAction
+     * @var \TechDivision\Import\Category\Actions\CategoryDatetimeActionInterface
      */
     protected $categoryDatetimeAction;
 
     /**
      * The action for URL rewrite CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\UrlRewriteAction
+     * @var \TechDivision\Import\Actions\UrlRewriteActionInterface
      */
     protected $urlRewriteAction;
 
     /**
      * The repository to load the categories with.
      *
-     * @var \TechDivision\Import\Category\Repositories\CategoryRepository
+     * @var \TechDivision\Import\Category\Repositories\CategoryRepositoryInterface
      */
     protected $categoryRepository;
 
     /**
      * The repository to load the category datetime attribute with.
      *
-     * @var \TechDivision\Import\Category\Repositories\CategoryDatetimeRepository
+     * @var \TechDivision\Import\Category\Repositories\CategoryDatetimeRepositoryInterface
      */
     protected $categoryDatetimeRepository;
 
     /**
      * The repository to load the category decimal attribute with.
      *
-     * @var \TechDivision\Import\Category\Repositories\CategoryDecimalRepository
+     * @var \TechDivision\Import\Category\Repositories\CategoryDecimalRepositoryInterface
      */
     protected $categoryDecimalRepository;
 
     /**
      * The repository to load the category integer attribute with.
      *
-     * @var \TechDivision\Import\Category\Repositories\CategoryIntRepository
+     * @var \TechDivision\Import\Category\Repositories\CategoryIntRepositoryInterface
      */
     protected $categoryIntRepository;
 
     /**
      * The repository to load the product text attribute with.
      *
-     * @var \TechDivision\Import\Category\Repositories\CategoryTextRepository
+     * @var \TechDivision\Import\Category\Repositories\CategoryTextRepositoryInterface
      */
     protected $categoryTextRepository;
 
     /**
      * The repository to load the category varchar attribute with.
      *
-     * @var \TechDivision\Import\Category\Repositories\CategoryVarcharRepository
+     * @var \TechDivision\Import\Category\Repositories\CategoryVarcharRepositoryInterface
      */
     protected $categoryVarcharRepository;
 
     /**
      * The repository to load the URL rewrites with.
      *
-     * @var \TechDivision\Import\Repositories\UrlRewriteRepository
+     * @var \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface
      */
     protected $urlRewriteRepository;
 
@@ -188,45 +188,45 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
-     * @param \TechDivision\Import\Connection\ConnectionInterface                          $connection                        The connection to use
-     * @param \TechDivision\Import\Category\Repositories\CategoryRepository                $categoryRepository                The category repository to use
-     * @param \TechDivision\Import\Category\Repositories\CategoryDatetimeRepository        $categoryDatetimeRepository        The category datetime repository to use
-     * @param \TechDivision\Import\Category\Repositories\CategoryDecimalRepository         $categoryDecimalRepository         The category decimal repository to use
-     * @param \TechDivision\Import\Category\Repositories\CategoryIntRepository             $categoryIntRepository             The category integer repository to use
-     * @param \TechDivision\Import\Category\Repositories\CategoryTextRepository            $categoryTextRepository            The category text repository to use
-     * @param \TechDivision\Import\Category\Repositories\CategoryVarcharRepository         $categoryVarcharRepository         The category varchar repository to use
-     * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepository          $eavAttributeOptionValueRepository The EAV attribute option value repository to use
-     * @param \TechDivision\Import\Repositories\EavAttributeRepository                     $eavAttributeRepository            The EAV attribute repository to use
-     * @param \TechDivision\Import\Repositories\UrlRewriteRepository                       $urlRewriteRepository              The URL rewrite repository to use
-     * @param \TechDivision\Import\Category\Actions\CategoryDatetimeAction                 $categoryDatetimeAction            The category datetime action to use
-     * @param \TechDivision\Import\Category\Actions\CategoryDecimalAction                  $categoryDecimalAction             The category decimal action to use
-     * @param \TechDivision\Import\Category\Actions\CategoryIntAction                      $categoryIntAction                 The category integer action to use
-     * @param \TechDivision\Import\Category\Actions\CategoryAction                         $categoryAction                    The category action to use
-     * @param \TechDivision\Import\Category\Actions\CategoryTextAction                     $categoryTextAction                The category text action to use
-     * @param \TechDivision\Import\Category\Actions\CategoryVarcharAction                  $categoryVarcharAction             The category varchar action to use
-     * @param \TechDivision\Import\Actions\UrlRewriteAction                                $urlRewriteAction                  The URL rewrite action to use
-     * @param \TechDivision\Import\Assembler\CategoryAssembler                             $categoryAssembler                 The category assembler to use
-     * @param \TechDivision\Import\Category\Assemblers\CategoryAttributeAssemblerInterface $categoryAttributeAssembler        The assembler to load the category attributes with
+     * @param \TechDivision\Import\Connection\ConnectionInterface                            $connection                        The connection to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryRepositoryInterface         $categoryRepository                The category repository to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryDatetimeRepositoryInterface $categoryDatetimeRepository        The category datetime repository to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryDecimalRepositoryInterface  $categoryDecimalRepository         The category decimal repository to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryIntRepositoryInterface      $categoryIntRepository             The category integer repository to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryTextRepositoryInterface     $categoryTextRepository            The category text repository to use
+     * @param \TechDivision\Import\Category\Repositories\CategoryVarcharRepositoryInterface  $categoryVarcharRepository         The category varchar repository to use
+     * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface   $eavAttributeOptionValueRepository The EAV attribute option value repository to use
+     * @param \TechDivision\Import\Repositories\EavAttributeRepositoryInterface              $eavAttributeRepository            The EAV attribute repository to use
+     * @param \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface                $urlRewriteRepository              The URL rewrite repository to use
+     * @param \TechDivision\Import\Category\Actions\CategoryDatetimeActionInterface          $categoryDatetimeAction            The category datetime action to use
+     * @param \TechDivision\Import\Category\Actions\CategoryDecimalActionInterface           $categoryDecimalAction             The category decimal action to use
+     * @param \TechDivision\Import\Category\Actions\CategoryIntActionInterface               $categoryIntAction                 The category integer action to use
+     * @param \TechDivision\Import\Category\Actions\CategoryActionInterface                  $categoryAction                    The category action to use
+     * @param \TechDivision\Import\Category\Actions\CategoryTextActionInterface              $categoryTextAction                The category text action to use
+     * @param \TechDivision\Import\Category\Actions\CategoryVarcharActionInterface           $categoryVarcharAction             The category varchar action to use
+     * @param \TechDivision\Import\Actions\UrlRewriteActionInterface                         $urlRewriteAction                  The URL rewrite action to use
+     * @param \TechDivision\Import\Assembler\CategoryAssemblerInterface                      $categoryAssembler                 The category assembler to use
+     * @param \TechDivision\Import\Category\Assemblers\CategoryAttributeAssemblerInterface   $categoryAttributeAssembler        The assembler to load the category attributes with
      */
     public function __construct(
         ConnectionInterface $connection,
-        CategoryRepository $categoryRepository,
-        CategoryDatetimeRepository $categoryDatetimeRepository,
-        CategoryDecimalRepository $categoryDecimalRepository,
-        CategoryIntRepository $categoryIntRepository,
-        CategoryTextRepository $categoryTextRepository,
-        CategoryVarcharRepository $categoryVarcharRepository,
-        EavAttributeOptionValueRepository $eavAttributeOptionValueRepository,
-        EavAttributeRepository $eavAttributeRepository,
-        UrlRewriteRepository $urlRewriteRepository,
-        CategoryDatetimeAction $categoryDatetimeAction,
-        CategoryDecimalAction $categoryDecimalAction,
-        CategoryIntAction $categoryIntAction,
-        CategoryAction $categoryAction,
-        CategoryTextAction $categoryTextAction,
-        CategoryVarcharAction $categoryVarcharAction,
-        UrlRewriteAction $urlRewriteAction,
-        CategoryAssembler $categoryAssembler,
+        CategoryRepositoryInterface $categoryRepository,
+        CategoryDatetimeRepositoryInterface $categoryDatetimeRepository,
+        CategoryDecimalRepositoryInterface $categoryDecimalRepository,
+        CategoryIntRepositoryInterface $categoryIntRepository,
+        CategoryTextRepositoryInterface $categoryTextRepository,
+        CategoryVarcharRepositoryInterface $categoryVarcharRepository,
+        EavAttributeOptionValueRepositoryInterface $eavAttributeOptionValueRepository,
+        EavAttributeRepositoryInterface $eavAttributeRepository,
+        UrlRewriteRepositoryInterface $urlRewriteRepository,
+        CategoryDatetimeActionInterface $categoryDatetimeAction,
+        CategoryDecimalActionInterface $categoryDecimalAction,
+        CategoryIntActionInterface $categoryIntAction,
+        CategoryActionInterface $categoryAction,
+        CategoryTextActionInterface $categoryTextAction,
+        CategoryVarcharActionInterface $categoryVarcharAction,
+        UrlRewriteActionInterface $urlRewriteAction,
+        CategoryAssemblerInterface $categoryAssembler,
         CategoryAttributeAssemblerInterface $categoryAttributeAssembler
     ) {
         $this->setConnection($connection);
@@ -319,11 +319,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the repository to access EAV attribute option values.
      *
-     * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepository $eavAttributeOptionValueRepository The repository to access EAV attribute option values
+     * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface $eavAttributeOptionValueRepository The repository to access EAV attribute option values
      *
      * @return void
      */
-    public function setEavAttributeOptionValueRepository($eavAttributeOptionValueRepository)
+    public function setEavAttributeOptionValueRepository(EavAttributeOptionValueRepositoryInterface $eavAttributeOptionValueRepository)
     {
         $this->eavAttributeOptionValueRepository = $eavAttributeOptionValueRepository;
     }
@@ -331,7 +331,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the repository to access EAV attribute option values.
      *
-     * @return \TechDivision\Import\Repositories\EavAttributeOptionValueRepository The repository instance
+     * @return \TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface The repository instance
      */
     public function getEavAttributeOptionValueRepository()
     {
@@ -341,11 +341,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the repository to access EAV attributes.
      *
-     * @param \TechDivision\Import\Repositories\EavAttributeRepository $eavAttributeRepository The repository to access EAV attributes
+     * @param \TechDivision\Import\Repositories\EavAttributeRepositoryInterface $eavAttributeRepository The repository to access EAV attributes
      *
      * @return void
      */
-    public function setEavAttributeRepository($eavAttributeRepository)
+    public function setEavAttributeRepository(EavAttributeRepositoryInterface $eavAttributeRepository)
     {
         $this->eavAttributeRepository = $eavAttributeRepository;
     }
@@ -353,7 +353,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the repository to access EAV attributes.
      *
-     * @return \TechDivision\Import\Repositories\EavAttributeRepository The repository instance
+     * @return \TechDivision\Import\Repositories\EavAttributeRepositoryInterface The repository instance
      */
     public function getEavAttributeRepository()
     {
@@ -363,11 +363,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category CRUD methods.
      *
-     * @param \TechDivision\Import\Category\Actions\CategoryAction $categoryAction The action with the category CRUD methods
+     * @param \TechDivision\Import\Category\Actions\CategoryActionInterface $categoryAction The action with the category CRUD methods
      *
      * @return void
      */
-    public function setCategoryAction($categoryAction)
+    public function setCategoryAction(CategoryActionInterface $categoryAction)
     {
         $this->categoryAction = $categoryAction;
     }
@@ -375,7 +375,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryAction The action instance
+     * @return \TechDivision\Import\Category\Actions\CategoryActionInterface The action instance
      */
     public function getCategoryAction()
     {
@@ -385,11 +385,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category varchar attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Category\Actions\CategoryVarcharAction $categoryVarcharAction The action with the category varchar attriute CRUD methods
+     * @param \TechDivision\Import\Category\Actions\CategoryVarcharActionInterface $categoryVarcharAction The action with the category varchar attriute CRUD methods
      *
      * @return void
      */
-    public function setCategoryVarcharAction($categoryVarcharAction)
+    public function setCategoryVarcharAction(CategoryVarcharActionInterface $categoryVarcharAction)
     {
         $this->categoryVarcharAction = $categoryVarcharAction;
     }
@@ -397,7 +397,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category varchar attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryVarcharAction The action instance
+     * @return \TechDivision\Import\Category\Actions\CategoryVarcharActionInterface The action instance
      */
     public function getCategoryVarcharAction()
     {
@@ -407,11 +407,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category text attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Category\Actions\CategoryTextAction $categoryTextAction The action with the category text attriute CRUD methods
+     * @param \TechDivision\Import\Category\Actions\CategoryTextActionInterface $categoryTextAction The action with the category text attriute CRUD methods
      *
      * @return void
      */
-    public function setCategoryTextAction($categoryTextAction)
+    public function setCategoryTextAction(CategoryTextActionInterface $categoryTextAction)
     {
         $this->categoryTextAction = $categoryTextAction;
     }
@@ -419,7 +419,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category text attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryTextAction The action instance
+     * @return \TechDivision\Import\Category\Actions\CategoryTextActionInterface The action instance
      */
     public function getCategoryTextAction()
     {
@@ -429,11 +429,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category int attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Category\Actions\CategoryIntAction $categoryIntAction The action with the category int attriute CRUD methods
+     * @param \TechDivision\Import\Category\Actions\CategoryIntActionInterface $categoryIntAction The action with the category int attriute CRUD methods
      *
      * @return void
      */
-    public function setCategoryIntAction($categoryIntAction)
+    public function setCategoryIntAction(CategoryIntActionInterface $categoryIntAction)
     {
         $this->categoryIntAction = $categoryIntAction;
     }
@@ -441,7 +441,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category int attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryIntAction The action instance
+     * @return \TechDivision\Import\Category\Actions\CategoryIntActionInterface The action instance
      */
     public function getCategoryIntAction()
     {
@@ -451,11 +451,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category decimal attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Category\Actions\CategoryDecimalAction $categoryDecimalAction The action with the category decimal attriute CRUD methods
+     * @param \TechDivision\Import\Category\Actions\CategoryDecimalActionInterface $categoryDecimalAction The action with the category decimal attriute CRUD methods
      *
      * @return void
      */
-    public function setCategoryDecimalAction($categoryDecimalAction)
+    public function setCategoryDecimalAction(CategoryDecimalActionInterface $categoryDecimalAction)
     {
         $this->categoryDecimalAction = $categoryDecimalAction;
     }
@@ -463,7 +463,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category decimal attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryDecimalAction The action instance
+     * @return \TechDivision\Import\Category\Actions\CategoryDecimalActionInterface The action instance
      */
     public function getCategoryDecimalAction()
     {
@@ -473,11 +473,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category datetime attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Category\Actions\CategoryDatetimeAction $categoryDatetimeAction The action with the category datetime attriute CRUD methods
+     * @param \TechDivision\Import\Category\Actions\CategoryDatetimeActionInterface $categoryDatetimeAction The action with the category datetime attriute CRUD methods
      *
      * @return void
      */
-    public function setCategoryDatetimeAction($categoryDatetimeAction)
+    public function setCategoryDatetimeAction(CategoryDatetimeActionInterface $categoryDatetimeAction)
     {
         $this->categoryDatetimeAction = $categoryDatetimeAction;
     }
@@ -485,7 +485,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category datetime attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryDatetimeAction The action instance
+     * @return \TechDivision\Import\Category\Actions\CategoryDatetimeActionInterface The action instance
      */
     public function getCategoryDatetimeAction()
     {
@@ -495,11 +495,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the URL rewrite CRUD methods.
      *
-     * @param \TechDivision\Import\Actions\UrlRewriteAction $urlRewriteAction The action with the URL rewrite CRUD methods
+     * @param \TechDivision\Import\Actions\UrlRewriteActionInterface $urlRewriteAction The action with the URL rewrite CRUD methods
      *
      * @return void
      */
-    public function setUrlRewriteAction($urlRewriteAction)
+    public function setUrlRewriteAction(UrlRewriteActionInterface $urlRewriteAction)
     {
         $this->urlRewriteAction = $urlRewriteAction;
     }
@@ -507,7 +507,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the URL rewrite CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\UrlRewriteAction The action instance
+     * @return \TechDivision\Import\Actions\UrlRewriteActionInterface The action instance
      */
     public function getUrlRewriteAction()
     {
@@ -517,11 +517,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the category assembler.
      *
-     * @param \TechDivision\Import\Assembler\CategoryAssembler $categoryAssembler The category assembler
+     * @param \TechDivision\Import\Assembler\CategoryAssemblerInterface $categoryAssembler The category assembler
      *
      * @return void
      */
-    public function setCategoryAssembler($categoryAssembler)
+    public function setCategoryAssembler(CategoryAssemblerInterface $categoryAssembler)
     {
         $this->categoryAssembler = $categoryAssembler;
     }
@@ -529,7 +529,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the category assembler.
      *
-     * @return \TechDivision\Import\Assembler\CategoryAssembler The category assembler instance
+     * @return \TechDivision\Import\Assembler\CategoryAssemblerInterface The category assembler instance
      */
     public function getCategoryAssembler()
     {
@@ -539,11 +539,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the repository to load the categories with.
      *
-     * @param \TechDivision\Import\Category\Repositories\CategoryRepository $categoryRepository The repository instance
+     * @param \TechDivision\Import\Category\Repositories\CategoryRepositoryInterface $categoryRepository The repository instance
      *
      * @return void
      */
-    public function setCategoryRepository($categoryRepository)
+    public function setCategoryRepository(CategoryRepositoryInterface $categoryRepository)
     {
         $this->categoryRepository = $categoryRepository;
     }
@@ -551,7 +551,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the repository to load the categories with.
      *
-     * @return \TechDivision\Import\Category\Repositories\CategoryRepository The repository instance
+     * @return \TechDivision\Import\Category\Repositories\CategoryRepositoryInterface The repository instance
      */
     public function getCategoryRepository()
     {
@@ -561,11 +561,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the repository to load the category datetime attribute with.
      *
-     * @param \TechDivision\Import\Category\Repositories\CategoryDatetimeRepository $categoryDatetimeRepository The repository instance
+     * @param \TechDivision\Import\Category\Repositories\CategoryDatetimeRepositoryInterface $categoryDatetimeRepository The repository instance
      *
      * @return void
      */
-    public function setCategoryDatetimeRepository($categoryDatetimeRepository)
+    public function setCategoryDatetimeRepository(CategoryDatetimeRepositoryInterface $categoryDatetimeRepository)
     {
         $this->categoryDatetimeRepository = $categoryDatetimeRepository;
     }
@@ -573,7 +573,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the repository to load the category datetime attribute with.
      *
-     * @return \TechDivision\Import\Category\Repositories\CategoryDatetimeRepository The repository instance
+     * @return \TechDivision\Import\Category\Repositories\CategoryDatetimeRepositoryInterface The repository instance
      */
     public function getCategoryDatetimeRepository()
     {
@@ -583,11 +583,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the repository to load the category decimal attribute with.
      *
-     * @param \TechDivision\Import\Category\Repositories\CategoryDecimalRepository $categoryDecimalRepository The repository instance
+     * @param \TechDivision\Import\Category\Repositories\CategoryDecimalRepositoryInterface $categoryDecimalRepository The repository instance
      *
      * @return void
      */
-    public function setCategoryDecimalRepository($categoryDecimalRepository)
+    public function setCategoryDecimalRepository(CategoryDecimalRepositoryInterface $categoryDecimalRepository)
     {
         $this->categoryDecimalRepository = $categoryDecimalRepository;
     }
@@ -595,7 +595,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the repository to load the category decimal attribute with.
      *
-     * @return \TechDivision\Import\Category\Repositories\CategoryDecimalRepository The repository instance
+     * @return \TechDivision\Import\Category\Repositories\CategoryDecimalRepositoryInterface The repository instance
      */
     public function getCategoryDecimalRepository()
     {
@@ -605,11 +605,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the repository to load the category integer attribute with.
      *
-     * @param \TechDivision\Import\Category\Repositories\CategoryIntRepository $categoryIntRepository The repository instance
+     * @param \TechDivision\Import\Category\Repositories\CategoryIntRepositoryInterface $categoryIntRepository The repository instance
      *
      * @return void
      */
-    public function setCategoryIntRepository($categoryIntRepository)
+    public function setCategoryIntRepository(CategoryIntRepositoryInterface $categoryIntRepository)
     {
         $this->categoryIntRepository = $categoryIntRepository;
     }
@@ -617,7 +617,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the repository to load the category integer attribute with.
      *
-     * @return \TechDivision\Import\Category\Repositories\CategoryIntRepository The repository instance
+     * @return \TechDivision\Import\Category\Repositories\CategoryIntRepositoryInterface The repository instance
      */
     public function getCategoryIntRepository()
     {
@@ -627,11 +627,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the repository to load the category text attribute with.
      *
-     * @param \TechDivision\Import\Category\Repositories\CategoryTextRepository $categoryTextRepository The repository instance
+     * @param \TechDivision\Import\Category\Repositories\CategoryTextRepositoryInterface $categoryTextRepository The repository instance
      *
      * @return void
      */
-    public function setCategoryTextRepository($categoryTextRepository)
+    public function setCategoryTextRepository(CategoryTextRepositoryInterface $categoryTextRepository)
     {
         $this->categoryTextRepository = $categoryTextRepository;
     }
@@ -639,7 +639,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the repository to load the category text attribute with.
      *
-     * @return \TechDivision\Import\Category\Repositories\CategoryTextRepository The repository instance
+     * @return \TechDivision\Import\Category\Repositories\CategoryTextRepositoryInterface The repository instance
      */
     public function getCategoryTextRepository()
     {
@@ -649,11 +649,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the repository to load the category varchar attribute with.
      *
-     * @param \TechDivision\Import\Category\Repositories\CategoryVarcharRepository $categoryVarcharRepository The repository instance
+     * @param \TechDivision\Import\Category\Repositories\CategoryVarcharRepositoryInterface $categoryVarcharRepository The repository instance
      *
      * @return void
      */
-    public function setCategoryVarcharRepository($categoryVarcharRepository)
+    public function setCategoryVarcharRepository(CategoryVarcharRepositoryInterface $categoryVarcharRepository)
     {
         $this->categoryVarcharRepository = $categoryVarcharRepository;
     }
@@ -661,7 +661,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the repository to load the category varchar attribute with.
      *
-     * @return \TechDivision\Import\Category\Repositories\CategoryVarcharRepository The repository instance
+     * @return \TechDivision\Import\Category\Repositories\CategoryVarcharRepositoryInterface The repository instance
      */
     public function getCategoryVarcharRepository()
     {
@@ -671,11 +671,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the repository to load the URL rewrites with.
      *
-     * @param \TechDivision\Import\Repositories\UrlRewriteRepository $urlRewriteRepository The repository instance
+     * @param \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface $urlRewriteRepository The repository instance
      *
      * @return void
      */
-    public function setUrlRewriteRepository($urlRewriteRepository)
+    public function setUrlRewriteRepository(UrlRewriteRepositoryInterface $urlRewriteRepository)
     {
         $this->urlRewriteRepository = $urlRewriteRepository;
     }
@@ -683,7 +683,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the repository to load the URL rewrites with.
      *
-     * @return \TechDivision\Import\Repositories\UrlRewriteRepository The repository instance
+     * @return \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface The repository instance
      */
     public function getUrlRewriteRepository()
     {
