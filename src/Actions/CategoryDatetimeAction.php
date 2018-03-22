@@ -31,6 +31,6 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-class CategoryDatetimeAction extends AbstractAction
+class CategoryDatetimeAction extends AbstractAction implements CategoryDatetimeActionInterface
 {
 }

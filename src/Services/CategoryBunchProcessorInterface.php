@@ -35,81 +35,130 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
 {
 
     /**
-     * Return's the action with the product CRUD methods.
+     * Return's the repository to access EAV attribute option values.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryAction The action instance
+     * @return \TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface The repository instance
+     */
+    public function getEavAttributeOptionValueRepository();
+
+    /**
+     * Return's the repository to access EAV attributes.
+     *
+     * @return \TechDivision\Import\Repositories\EavAttributeRepositoryInterface The repository instance
+     */
+    public function getEavAttributeRepository();
+
+    /**
+     * Return's the action with the category CRUD methods.
+     *
+     * @return \TechDivision\Import\Category\Actions\CategoryActionInterface The action instance
      */
     public function getCategoryAction();
 
     /**
-     * Return's the action with the product varchar attribute CRUD methods.
+     * Return's the action with the category varchar attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryVarcharAction The action instance
+     * @return \TechDivision\Import\Category\Actions\CategoryVarcharActionInterface The action instance
      */
     public function getCategoryVarcharAction();
 
     /**
-     * Return's the action with the product text attribute CRUD methods.
+     * Return's the action with the category text attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryTextAction The action instance
+     * @return \TechDivision\Import\Category\Actions\CategoryTextActionInterface The action instance
      */
     public function getCategoryTextAction();
 
     /**
-     * Return's the action with the product int attribute CRUD methods.
+     * Return's the action with the category int attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryIntAction The action instance
+     * @return \TechDivision\Import\Category\Actions\CategoryIntActionInterface The action instance
      */
     public function getCategoryIntAction();
 
     /**
-     * Return's the action with the product decimal attribute CRUD methods.
+     * Return's the action with the category decimal attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryDecimalAction The action instance
+     * @return \TechDivision\Import\Category\Actions\CategoryDecimalActionInterface The action instance
      */
     public function getCategoryDecimalAction();
 
     /**
-     * Return's the action with the product datetime attribute CRUD methods.
+     * Return's the action with the category datetime attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryDatetimeAction The action instance
+     * @return \TechDivision\Import\Category\Actions\CategoryDatetimeActionInterface The action instance
      */
     public function getCategoryDatetimeAction();
 
     /**
      * Return's the action with the URL rewrite CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\UrlRewriteAction The action instance
+     * @return \TechDivision\Import\Actions\UrlRewriteActionInterface The action instance
      */
     public function getUrlRewriteAction();
 
     /**
-     * Return's the repository to load the products with.
+     * Return's the category assembler.
      *
-     * @return \TechDivision\Import\Category\Repositories\CategoryRepository The repository instance
+     * @return \TechDivision\Import\Assembler\CategoryAssemblerInterface The category assembler instance
+     */
+    public function getCategoryAssembler();
+
+    /**
+     * Return's the repository to load the categories with.
+     *
+     * @return \TechDivision\Import\Category\Repositories\CategoryRepositoryInterface The repository instance
      */
     public function getCategoryRepository();
 
     /**
-     * Return's the repository to access EAV attributes.
+     * Return's the repository to load the category datetime attribute with.
      *
-     * @return \TechDivision\Import\Repositories\EavAttributeRepository The repository instance
+     * @return \TechDivision\Import\Category\Repositories\CategoryDatetimeRepositoryInterface The repository instance
      */
-    public function getEavAttributeRepository();
+    public function getCategoryDatetimeRepository();
 
     /**
-     * Return's the repository to access EAV attribute option values.
+     * Return's the repository to load the category decimal attribute with.
      *
-     * @return \TechDivision\Import\Repositories\EavAttributeOptionValueRepository The repository instance
+     * @return \TechDivision\Import\Category\Repositories\CategoryDecimalRepositoryInterface The repository instance
      */
-    public function getEavAttributeOptionValueRepository();
+    public function getCategoryDecimalRepository();
+
+    /**
+     * Return's the repository to load the category integer attribute with.
+     *
+     * @return \TechDivision\Import\Category\Repositories\CategoryIntRepositoryInterface The repository instance
+     */
+    public function getCategoryIntRepository();
+
+    /**
+     * Return's the repository to load the category text attribute with.
+     *
+     * @return \TechDivision\Import\Category\Repositories\CategoryTextRepositoryInterface The repository instance
+     */
+    public function getCategoryTextRepository();
+
+    /**
+     * Return's the repository to load the category varchar attribute with.
+     *
+     * @return \TechDivision\Import\Category\Repositories\CategoryVarcharRepositoryInterface The repository instance
+     */
+    public function getCategoryVarcharRepository();
 
     /**
      * Return's the repository to load the URL rewrites with.
      *
-     * @return \TechDivision\Import\Repositories\UrlRewriteRepository The repository instance
+     * @return \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface The repository instance
      */
     public function getUrlRewriteRepository();
+
+    /**
+     * Return's the assembler to load the category attributes with.
+     *
+     * @return \TechDivision\Import\Category\Assemblers\CategoryAttributeAssemblerInterface The assembler instance
+     */
+    public function getCategoryAttributeAssembler();
 
     /**
      * Return's an array with the available EAV attributes for the passed is user defined flag.
@@ -184,13 +233,24 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
     public function getCategoryAttributesByPrimaryKeyAndStoreId($pk, $storeId);
 
     /**
-     * Return's the children count of the category with the passed ID.
+     * Load's and return's the EAV attribute option value with the passed code, store ID and value.
      *
-     * @param integer $entityId The ID of the category to count the children for
+     * @param string  $attributeCode The code of the EAV attribute option to load
+     * @param integer $storeId       The store ID of the attribute option to load
+     * @param string  $value         The value of the attribute option to load
      *
-     * @return integer The children count of the category with the passed ID
+     * @return array The EAV attribute option value
      */
-    public function loadCategoryChildrenChildrenCount($entityId);
+    public function loadEavAttributeOptionValueByAttributeCodeAndStoreIdAndValue($attributeCode, $storeId, $value);
+
+    /**
+     * Return's the children count of the category with the passed path.
+     *
+     * @param string $path The path of the category to count the children for
+     *
+     * @return integer The children count of the category with the passed path
+     */
+    public function loadCategoryChildrenChildrenCount($path);
 
     /**
      * Return's the category with the passed ID.
@@ -297,7 +357,7 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
     public function persistCategoryDecimalAttribute($attribute, $name = null);
 
     /**
-     * Persist's the passed category datetime attribute.
+     * Persist's the passed product datetime attribute.
      *
      * @param array       $attribute The attribute to persist
      * @param string|null $name      The name of the prepared statement that has to be executed
@@ -319,11 +379,12 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
     /**
      * Persist's the URL rewrite with the passed data.
      *
-     * @param array $row The URL rewrite to persist
+     * @param array       $row  The URL rewrite to persist
+     * @param string|null $name The name of the prepared statement that has to be executed
      *
      * @return string The ID of the persisted entity
      */
-    public function persistUrlRewrite($row);
+    public function persistUrlRewrite($row, $name = null);
 
     /**
      * Delete's the URL rewrite with the passed attributes.

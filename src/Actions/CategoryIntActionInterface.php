@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Category\Actions\CategoryDecimalAction
+ * TechDivision\Import\Category\Actions\CategoryIntActionInterface
  *
  * NOTICE OF LICENSE
  *
@@ -20,17 +20,17 @@
 
 namespace TechDivision\Import\Category\Actions;
 
-use TechDivision\Import\Actions\AbstractAction;
+use TechDivision\Import\Actions\ActionInterface;
 
 /**
- * An action implementation that provides CRUD functionality for category decimal attributes.
+ * Interface for action implementations that provides CRUD functionality for category integer attributes.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
- * @link      https://github.com/techdivision/import-catgory
+ * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-class CategoryDecimalAction extends AbstractAction implements CategoryDecimalActionInterface
+interface CategoryIntActionInterface extends ActionInterface
 {
 }

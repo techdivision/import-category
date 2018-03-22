@@ -1,3 +1,14 @@
+# Version 1.0.0-beta26
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add missing interfaces for actions and repositories
+* Replace class type hints for CategoryBunchProcessor with interfaces
+
 # Version 1.0.0-beta25
 
 ## Bugfixes
