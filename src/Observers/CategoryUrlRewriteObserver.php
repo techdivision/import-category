@@ -101,7 +101,6 @@ class CategoryUrlRewriteObserver extends AbstractCategoryImportObserver
                         $this->artefacts[$i][ColumnKeys::ORIGINAL_DATA][ColumnKeys::ORIGINAL_LINE_NUMBER] = $this->getSubject()->getLineNumber();
                     }
                 }
-
             } else {
                 // if no arefacts are available, append new data
                 $artefact = $this->newArtefact(

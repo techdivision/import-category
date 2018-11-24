@@ -95,7 +95,6 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
                     } else {
                         $this->getSystemLogger()->debug(sprintf('Can\'t find URL key for category %s', $categoryPath));
                     }
-
                 } catch (\Exception $e) {
                     $this->getSystemLogger()->debug(sprintf('Can\'t load parent category %s', $categoryPath));
                 }

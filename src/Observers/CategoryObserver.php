@@ -105,7 +105,6 @@ class CategoryObserver extends AbstractCategoryImportObserver
                     // load the existing category and prepend the ID the array with the category IDs
                     $existingCategory = $this->getCategoryByPath($categoryPath);
                     array_push($this->categoryIds, $existingCategory[MemberNames::ENTITY_ID]);
-
                 } catch (\Exception $e) {
                     // log a message that requested category is NOT available
                     $this->getSystemLogger()->debug(sprintf('Can\'t load category %s, create a new one', $categoryPath));

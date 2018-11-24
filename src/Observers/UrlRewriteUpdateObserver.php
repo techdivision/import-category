@@ -123,7 +123,6 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
 
                     // create the URL rewrite
                     $this->persistUrlRewrite($existingUrlRewrite);
-
                 } else {
                     // query whether or not the URL rewrite has to be removed
                     if ($this->getSubject()->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_URL_REWRITES) &&
