@@ -39,6 +39,7 @@ use TechDivision\Import\Category\Actions\CategoryTextActionInterface;
 use TechDivision\Import\Category\Actions\CategoryDecimalActionInterface;
 use TechDivision\Import\Category\Actions\CategoryVarcharActionInterface;
 use TechDivision\Import\Category\Actions\CategoryDatetimeActionInterface;
+use TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface;
 
 /**
  * The category bunch processor implementation.
@@ -198,6 +199,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
      * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface   $eavAttributeOptionValueRepository The EAV attribute option value repository to use
      * @param \TechDivision\Import\Repositories\EavAttributeRepositoryInterface              $eavAttributeRepository            The EAV attribute repository to use
      * @param \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface                $urlRewriteRepository              The URL rewrite repository to use
+     * @param \TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface             $eavEntityTypeRepository           The EAV entity type repository to use
      * @param \TechDivision\Import\Category\Actions\CategoryDatetimeActionInterface          $categoryDatetimeAction            The category datetime action to use
      * @param \TechDivision\Import\Category\Actions\CategoryDecimalActionInterface           $categoryDecimalAction             The category decimal action to use
      * @param \TechDivision\Import\Category\Actions\CategoryIntActionInterface               $categoryIntAction                 The category integer action to use
@@ -219,6 +221,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
         EavAttributeOptionValueRepositoryInterface $eavAttributeOptionValueRepository,
         EavAttributeRepositoryInterface $eavAttributeRepository,
         UrlRewriteRepositoryInterface $urlRewriteRepository,
+        EavEntityTypeRepositoryInterface $eavEntityTypeRepository,
         CategoryDatetimeActionInterface $categoryDatetimeAction,
         CategoryDecimalActionInterface $categoryDecimalAction,
         CategoryIntActionInterface $categoryIntAction,
@@ -239,6 +242,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
         $this->setEavAttributeOptionValueRepository($eavAttributeOptionValueRepository);
         $this->setEavAttributeRepository($eavAttributeRepository);
         $this->setUrlRewriteRepository($urlRewriteRepository);
+        $this->setEavEntityTypeRepository($eavEntityTypeRepository);
         $this->setCategoryDatetimeAction($categoryDatetimeAction);
         $this->setCategoryDecimalAction($categoryDecimalAction);
         $this->setCategoryIntAction($categoryIntAction);
@@ -356,6 +360,28 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
      * @return \TechDivision\Import\Repositories\EavAttributeRepositoryInterface The repository instance
      */
     public function getEavAttributeRepository()
+    {
+        return $this->eavAttributeRepository;
+    }
+
+    /**
+     * Set's the repository to access EAV entity types.
+     *
+     * @param \TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface $eavEntityTypeRepository The repository to access EAV entity types
+     *
+     * @return void
+     */
+    public function setEavEntityTypeRepository(EavEntityTypeRepositoryInterface $eavEntityTypeRepository)
+    {
+        $this->eavEntityTypeRepository = $eavEntityTypeRepository;
+    }
+
+    /**
+     * Return's the repository to access EAV entity types.
+     *
+     * @return \TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface The repository instance
+     */
+    public function getEavEntityTypeRepository()
     {
         return $this->eavAttributeRepository;
     }
@@ -816,6 +842,8 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
      * @param string  $value         The value of the attribute option to load
      *
      * @return array The EAV attribute option value
+     * @deprecated Since 5.0.0
+     * @see \TechDivision\Import\Services\EavAwareProcessorInterface::loadAttributeOptionValueByEntityTypeIdAndAttributeCodeAndStoreIdAndValue()
      */
     public function loadEavAttributeOptionValueByAttributeCodeAndStoreIdAndValue($attributeCode, $storeId, $value)
     {
@@ -914,6 +942,33 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     public function loadCategoryVarcharAttribute($entityId, $attributeId, $storeId)
     {
         return $this->getCategoryVarcharRepository()->findOneByEntityIdAndAttributeIdAndStoreId($entityId, $attributeId, $storeId);
+    }
+
+    /**
+     * Load's and return's the EAV attribute option value with the passed entity type ID, code, store ID and value.
+     *
+     * @param string  $entityTypeId  The entity type ID of the EAV attribute to load the option value for
+     * @param string  $attributeCode The code of the EAV attribute option to load
+     * @param integer $storeId       The store ID of the attribute option to load
+     * @param string  $value         The value of the attribute option to load
+     *
+     * @return array The EAV attribute option value
+     */
+    public function loadAttributeOptionValueByEntityTypeIdAndAttributeCodeAndStoreIdAndValue($entityTypeId, $attributeCode, $storeId, $value)
+    {
+        return $this->getEavAttributeOptionValueRepository()->findOneByEntityTypeIdAndAttributeCodeAndStoreIdAndValue($entityTypeId, $attributeCode, $storeId, $value);
+    }
+
+    /**
+     * Return's an EAV entity type with the passed entity type code.
+     *
+     * @param string $entityTypeCode The code of the entity type to return
+     *
+     * @return array The entity type with the passed entity type code
+     */
+    public function loadEavEntityTypeByEntityTypeCode($entityTypeCode)
+    {
+        return $this->getEntityTypeRepository()->findOneByEntityTypeCode($entityTypeCode);
     }
 
     /**

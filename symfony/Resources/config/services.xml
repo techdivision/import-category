@@ -129,6 +129,7 @@
             <argument type="service" id="import.repository.eav.attribute.option.value"/>
             <argument type="service" id="import.repository.eav.attribute"/>
             <argument type="service" id="import.repository.url.rewrite"/>
+            <argument type="service" id="import.repository.eav.entity.type"/>
             <argument type="service" id="import_category.action.category.datetime"/>
             <argument type="service" id="import_category.action.category.decimal"/>
             <argument type="service" id="import_category.action.category.int"/>

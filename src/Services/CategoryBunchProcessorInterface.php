@@ -240,6 +240,8 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
      * @param string  $value         The value of the attribute option to load
      *
      * @return array The EAV attribute option value
+     * @deprecated Since 5.0.0
+     * @see \TechDivision\Import\Services\EavAwareProcessorInterface::loadAttributeOptionValueByEntityTypeIdAndAttributeCodeAndStoreIdAndValue()
      */
     public function loadEavAttributeOptionValueByAttributeCodeAndStoreIdAndValue($attributeCode, $storeId, $value);
 
@@ -315,6 +317,18 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
      * @return array|null The varchar attribute
      */
     public function loadCategoryVarcharAttribute($entityId, $attributeId, $storeId);
+
+    /**
+     * Load's and return's the EAV attribute option value with the passed entity type ID, code, store ID and value.
+     *
+     * @param string  $entityTypeId  The entity type ID of the EAV attribute to load the option value for
+     * @param string  $attributeCode The code of the EAV attribute option to load
+     * @param integer $storeId       The store ID of the attribute option to load
+     * @param string  $value         The value of the attribute option to load
+     *
+     * @return array The EAV attribute option value
+     */
+    public function loadAttributeOptionValueByEntityTypeIdAndAttributeCodeAndStoreIdAndValue($entityTypeId, $attributeCode, $storeId, $value);
 
     /**
      * Persist's the passed category data and return's the ID.
