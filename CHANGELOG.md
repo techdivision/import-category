@@ -1,3 +1,13 @@
+# Version 5.0.1
+
+## Bugfixes
+
+* Update Service Descriptor 
+
+## Features
+
+* None
+
 # Version 5.0.0
 
 ## Bugfixes
