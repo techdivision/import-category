@@ -147,9 +147,11 @@
         <service id="import_category.callback.page.layout" class="TechDivision\Import\Category\Callbacks\PageLayoutCallback"/>
         <service id="import_category.callback.boolean" class="TechDivision\Import\Product\Callbacks\BooleanCallback"/>
         <service id="import_category.callback.multiselect" class="TechDivision\Import\Product\Callbacks\MultiselectCallback">
+            <argument type="service" id="configuration"/>
             <argument type="service" id="import_category.processor.category.bunch"/>
         </service>
         <service id="import_category.callback.select" class="TechDivision\Import\Product\Callbacks\SelectCallback">
+            <argument type="service" id="configuration"/>
             <argument type="service" id="import_category.processor.category.bunch"/>
         </service>
 
