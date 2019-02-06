@@ -183,4 +183,25 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
     {
         return array_keys($this->stores);
     }
+
+    /**
+     * Returns the store view codes relevant to the category represented by the current row.
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function getRootCategoryStoreViewCodes()
+    {
+        $path = $this->getValue(ColumnKeys::PATH);
+        $rootCategoryPath = explode('/', $path)[0];
+        $rootCategory = $this->getCategoryByPath($rootCategoryPath);
+
+        $storeCodes = [];
+        foreach ($this->rootCategories as $storeCode => $category)
+        {
+            if ($category['entity_id'] == $rootCategory['entity_id'])
+                $storeCodes[] = $storeCode;
+        }
+        return $storeCodes;
+    }
 }

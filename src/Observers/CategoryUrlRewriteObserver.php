@@ -127,12 +127,13 @@ class CategoryUrlRewriteObserver extends AbstractCategoryImportObserver
 
     /**
      * Return's the available store view codes of the available stores.
+     * Makes sure only the relevant store view codes for the current category are returned.
      *
      * @return array The array with the available store view codes
      */
     protected function getStoreViewCodes()
     {
-        return $this->getSubject()->getStoreViewCodes();
+        return $this->getSubject()->getRootCategoryStoreViewCodes();
     }
 
     /**
