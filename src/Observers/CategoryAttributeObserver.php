@@ -20,10 +20,11 @@
 
 namespace TechDivision\Import\Category\Observers;
 
+use TechDivision\Import\Subjects\SubjectInterface;
 use TechDivision\Import\Observers\AbstractAttributeObserver;
-use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
 
 /**
  * Observer that creates/updates the category's attributes.
@@ -45,6 +46,13 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
     protected $categoryBunchProcessor;
 
     /**
+     * The updated/deleted category attributes.
+     *
+     * @var array
+     */
+    protected $attributeValues = array();
+
+    /**
      * Initialize the subject instance.
      *
      * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface $categoryBunchProcessor The category bunch processor instance
@@ -52,6 +60,43 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
     public function __construct(CategoryBunchProcessorInterface $categoryBunchProcessor)
     {
         $this->categoryBunchProcessor = $categoryBunchProcessor;
+    }
+
+    /**
+     * Will be invoked by the action on the events the listener has been registered for.
+     *
+     * @param \TechDivision\Import\Subjects\SubjectInterface $subject The subject instance
+     *
+     * @return array The modified row
+     * @see \TechDivision\Import\Observers\ObserverInterface::handle()
+     */
+    public function handle(SubjectInterface $subject)
+    {
+
+        // reset the array with the attributes on every row
+        $this->attributeValues = array();
+
+        // process the observer's functionality
+        $result = parent::handle($subject);
+
+        // update the temporarily persisted category values
+        $this->updateCategory($this->getValue(ColumnKeys::PATH), $this->attributeValues);
+
+        // return the result
+        return $result;
+    }
+
+    /**
+     * Update's the category with the passed path with.
+     *
+     * @param string $path     The path of the category to update
+     * @param array  $category The values to update
+     *
+     * @return void
+     */
+    protected function updateCategory($path, $category)
+    {
+        $this->getSubject()->updateCategory($path, $category);
     }
 
     /**
@@ -129,6 +174,11 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
      */
     protected function persistVarcharAttribute($attribute)
     {
+
+        // update the array with the category values
+        $this->attributeValues[$this->attributeCode] = $attribute[MemberNames::VALUE];
+
+        // persist the category attribute in the database
         $this->getCategoryBunchProcessor()->persistCategoryVarcharAttribute($attribute);
     }
 
@@ -141,6 +191,11 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
      */
     protected function persistIntAttribute($attribute)
     {
+
+        // update the array with the category values
+        $this->attributeValues[$this->attributeCode] = $attribute[MemberNames::VALUE];
+
+        // persist the category attribute in the database
         $this->getCategoryBunchProcessor()->persistCategoryIntAttribute($attribute);
     }
 
@@ -153,6 +208,11 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
      */
     protected function persistDecimalAttribute($attribute)
     {
+
+        // update the array with the category values
+        $this->attributeValues[$this->attributeCode] = $attribute[MemberNames::VALUE];
+
+        // persist the category attribute in the database
         $this->getCategoryBunchProcessor()->persistCategoryDecimalAttribute($attribute);
     }
 
@@ -165,6 +225,11 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
      */
     protected function persistDatetimeAttribute($attribute)
     {
+
+        // update the array with the category values
+        $this->attributeValues[$this->attributeCode] = $attribute[MemberNames::VALUE];
+
+        // persist the category attribute in the database
         $this->getCategoryBunchProcessor()->persistCategoryDatetimeAttribute($attribute);
     }
 
@@ -177,6 +242,11 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
      */
     protected function persistTextAttribute($attribute)
     {
+
+        // update the array with the category values
+        $this->attributeValues[$this->attributeCode] = $attribute[MemberNames::VALUE];
+
+        // persist the category attribute in the database
         $this->getCategoryBunchProcessor()->persistCategoryTextAttribute($attribute);
     }
 
@@ -190,6 +260,11 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
      */
     protected function deleteDatetimeAttribute(array $row, $name = null)
     {
+
+        // remove the value from the array with the category values
+        $this->attributeValues[$this->attributeCode] = null;
+
+        // delete the category attribute in the database
         $this->getCategoryBunchProcessor()->deleteCategoryDatetimeAttribute($row, $name);
     }
 
@@ -203,6 +278,11 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
      */
     protected function deleteDecimalAttribute(array $row, $name = null)
     {
+
+        // remove the value from the array with the category values
+        $this->attributeValues[$this->attributeCode] = null;
+
+        // delete the category attribute in the database
         $this->getCategoryBunchProcessor()->deleteCategoryDecimalAttribute($row, $name);
     }
 
@@ -216,6 +296,11 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
      */
     protected function deleteIntAttribute(array $row, $name = null)
     {
+
+        // remove the value from the array with the category values
+        $this->attributeValues[$this->attributeCode] = null;
+
+        // delete the category attribute in the database
         $this->getCategoryBunchProcessor()->deleteCategoryIntAttribute($row, $name);
     }
 
@@ -229,6 +314,11 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
      */
     protected function deleteTextAttribute(array $row, $name = null)
     {
+
+        // remove the value from the array with the category values
+        $this->attributeValues[$this->attributeCode] = null;
+
+        // delete the category attribute in the database
         $this->getCategoryBunchProcessor()->deleteCategoryTextAttribute($row, $name);
     }
 
@@ -242,6 +332,11 @@ class CategoryAttributeObserver extends AbstractAttributeObserver
      */
     protected function deleteVarcharAttribute(array $row, $name = null)
     {
+
+        // remove the value from the array with the category values
+        $this->attributeValues[$this->attributeCode] = null;
+
+        // delete the category attribute in the database
         return $this->getCategoryBunchProcessor()->deleteCategoryVarcharAttribute($row, $name);
     }
 }

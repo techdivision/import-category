@@ -1,3 +1,14 @@
+# Version 6.0.0
+
+## Bugfixes
+
+* Fixed #51
+* Fixed #52
+
+## Features
+
+* None
+
 # Version 5.0.1
 
 ## Bugfixes

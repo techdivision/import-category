@@ -403,6 +403,19 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
     }
 
     /**
+     * Updates the category with the passed path.
+     *
+     * @param string $path     The path of the category to update
+     * @param array  $category The category data to update
+     *
+     * @return void
+     */
+    public function updateCategory($path, $category)
+    {
+        $this->categories[$path] = array_merge($this->categories[$path], $category);
+    }
+
+    /**
      * Return's the category with the passed ID.
      *
      * @param integer $categoryId The ID of the category to return

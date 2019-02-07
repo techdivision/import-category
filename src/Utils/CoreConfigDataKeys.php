@@ -38,4 +38,11 @@ class CoreConfigDataKeys extends \TechDivision\Import\Utils\CoreConfigDataKeys
      * @var string
      */
     const CATALOG_SEO_CATEGORY_URL_SUFFIX = 'catalog/seo/category_url_suffix';
+
+    /**
+     * Name for the column 'catalog/seo/save_rewrites_history'.
+     *
+     * @var string
+     */
+    const CATALOG_SEO_SAVE_REWRITES_HISTORY = 'catalog/seo/save_rewrites_history';
 }
