@@ -27,6 +27,7 @@ use TechDivision\Import\Subjects\FileUploadSubjectInterface;
 use TechDivision\Import\Category\Utils\PageLayoutKeys;
 use TechDivision\Import\Category\Utils\DisplayModeKeys;
 use TechDivision\Import\Category\Utils\ConfigurationKeys;
+use TechDivision\Import\Category\Utils\MemberNames;
 
 /**
  * The subject implementation that handles the business logic to persist products.
@@ -187,21 +188,35 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
     /**
      * Returns the store view codes relevant to the category represented by the current row.
      *
-     * @return array
-     * @throws \Exception
+     * @param string $path The path to return the root category's store view codes for
+     *
+     * @return array The store view codes for the given root category
+     * @throws \Exception Is thrown, if the root category of the passed path is NOT available
      */
-    public function getRootCategoryStoreViewCodes()
+    public function getRootCategoryStoreViewCodes($path)
     {
-        $path = $this->getValue(ColumnKeys::PATH);
-        $rootCategoryPath = explode('/', $path)[0];
-        $rootCategory = $this->getCategoryByPath($rootCategoryPath);
 
-        $storeCodes = [];
-        foreach ($this->rootCategories as $storeCode => $category)
-        {
-            if ($category['entity_id'] == $rootCategory['entity_id'])
-                $storeCodes[] = $storeCode;
+        // explode the path of the root category
+        list ($rootCategoryPath, ) = explode('/', $path);
+
+        // query whether or not a root category with the given path exists
+        if ($rootCategory = $this->getCategoryByPath($rootCategoryPath)) {
+            // initialize the array with the store view codes
+            $storeCodes = array();
+
+            // try to assemble the store view codes by iterating over the available root categories
+            foreach ($this->rootCategories as $storeCode => $category) {
+                // query whether or not the entity ID of the root category matches
+                if ($category[MemberNames::ENTITY_ID] == $rootCategory[MemberNames::ENTITY_ID]) {
+                    $storeCodes[] = $storeCode;
+                }
+            }
+
+            // return the array with the store view codes
+            return $storeCodes;
         }
-        return $storeCodes;
+
+        // throw an exception, if the root category is NOT available
+        throw new \Exception(printf('Can\'t load root category "%s" for path "%s"', $rootCategoryPath, $path));
     }
 }
