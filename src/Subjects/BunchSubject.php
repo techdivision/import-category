@@ -202,18 +202,18 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
         // query whether or not a root category with the given path exists
         if ($rootCategory = $this->getCategoryByPath($rootCategoryPath)) {
             // initialize the array with the store view codes
-            $storeCodes = array();
+            $storeViewCodes = array();
 
             // try to assemble the store view codes by iterating over the available root categories
-            foreach ($this->rootCategories as $storeCode => $category) {
+            foreach ($this->rootCategories as $storeViewCode => $category) {
                 // query whether or not the entity ID of the root category matches
-                if ($category[MemberNames::ENTITY_ID] == $rootCategory[MemberNames::ENTITY_ID]) {
-                    $storeCodes[] = $storeCode;
+                if ((integer) $category[MemberNames::ENTITY_ID] === (integer) $rootCategory[MemberNames::ENTITY_ID]) {
+                    $storeViewCodes[] = $storeViewCode;
                 }
             }
 
             // return the array with the store view codes
-            return $storeCodes;
+            return $storeViewCodes;
         }
 
         // throw an exception, if the root category is NOT available
