@@ -2,6 +2,7 @@
 
 ## Bugfixes
 
+* Fixed #50
 * Fixed #51
 * Fixed #52
 

@@ -72,8 +72,8 @@ class CategoryUrlRewriteObserver extends AbstractCategoryImportObserver
 
         // query whether or not we've a store view code
         if ($storeViewCode === StoreViewCodes::ADMIN) {
-            // if not, load the available store view codes
-            $storeViewCodes = $this->getStoreViewCodes();
+            // if not, load the available store view codes for the root category of the given path
+            $storeViewCodes = $this->getRootCategoryStoreViewCodes($this->getValue(ColumnKeys::PATH));
         } else {
             array_push($storeViewCodes, $storeViewCode);
         }
@@ -126,13 +126,16 @@ class CategoryUrlRewriteObserver extends AbstractCategoryImportObserver
     }
 
     /**
-     * Return's the available store view codes of the available stores.
+     * Returns the store view codes relevant to the category represented by the current row.
      *
-     * @return array The array with the available store view codes
+     * @param string $path The path to return the root category's store view codes for
+     *
+     * @return array The store view codes for the given root category
+     * @throws \Exception Is thrown, if the root category of the passed path is NOT available
      */
-    protected function getStoreViewCodes()
+    protected function getRootCategoryStoreViewCodes($path)
     {
-        return $this->getSubject()->getStoreViewCodes();
+        return $this->getSubject()->getRootCategoryStoreViewCodes($path);
     }
 
     /**
