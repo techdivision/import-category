@@ -12,7 +12,7 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -26,7 +26,7 @@ use TechDivision\Import\Category\Utils\SqlStatementKeys;
  * Repository class with the SQL statements to use.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -69,6 +69,46 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                FROM catalog_category_entity_varchar
               WHERE entity_id = :pk
                 AND store_id = :store_id',
+        SqlStatementKeys::CATEGORY_DATETIMES_BY_PK_AND_STORE_ID =>
+            'SELECT t0.*,
+                    t1.attribute_code
+               FROM catalog_category_entity_datetime t0
+         INNER JOIN eav_attribute t1
+                 ON t1.attribute_id = t0.attribute_id
+              WHERE t0.entity_id = :pk
+                AND t0.store_id = :store_id',
+        SqlStatementKeys::CATEGORY_DECIMALS_BY_PK_AND_STORE_ID =>
+            'SELECT t0.*,
+                    t1.attribute_code
+               FROM catalog_category_entity_decimal t0
+         INNER JOIN eav_attribute t1
+                 ON t1.attribute_id = t0.attribute_id
+              WHERE t0.entity_id = :pk
+                AND t0.store_id = :store_id',
+        SqlStatementKeys::CATEGORY_INTS_BY_PK_AND_STORE_ID =>
+            'SELECT t0.*,
+                    t1.attribute_code
+               FROM catalog_category_entity_int t0
+         INNER JOIN eav_attribute t1
+                 ON t1.attribute_id = t0.attribute_id
+              WHERE t0.entity_id = :pk
+                AND t0.store_id = :store_id',
+        SqlStatementKeys::CATEGORY_TEXTS_BY_PK_AND_STORE_ID =>
+            'SELECT t0.*,
+                    t1.attribute_code
+              FROM catalog_category_entity_text t0
+         INNER JOIN eav_attribute t1
+                 ON t1.attribute_id = t0.attribute_id
+              WHERE t0.entity_id = :pk
+                AND t0.store_id = :store_id',
+        SqlStatementKeys::CATEGORY_VARCHARS_BY_PK_AND_STORE_ID =>
+            'SELECT t0.*,
+                    t1.attribute_code
+               FROM catalog_category_entity_varchar t0
+         INNER JOIN eav_attribute t1
+                 ON t1.attribute_id = t0.attribute_id
+              WHERE t0.entity_id = :pk
+                AND t0.store_id = :store_id',
         SqlStatementKeys::CREATE_CATEGORY =>
             'INSERT
                INTO catalog_category_entity

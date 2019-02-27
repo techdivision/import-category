@@ -12,7 +12,7 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -33,7 +33,7 @@ use TechDivision\Import\Category\Utils\MemberNames;
  * The subject implementation that handles the business logic to persist products.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -207,7 +207,7 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
             // try to assemble the store view codes by iterating over the available root categories
             foreach ($this->rootCategories as $storeViewCode => $category) {
                 // query whether or not the entity ID of the root category matches
-                if ((integer) $category[MemberNames::ENTITY_ID] === (integer) $rootCategory[MemberNames::ENTITY_ID]) {
+                if ((integer) $category[$this->getPrimaryKeyMemberName()] === (integer) $rootCategory[$this->getPrimaryKeyMemberName()]) {
                     $storeViewCodes[] = $storeViewCode;
                 }
             }
@@ -218,5 +218,15 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
 
         // throw an exception, if the root category is NOT available
         throw new \Exception(printf('Can\'t load root category "%s" for path "%s"', $rootCategoryPath, $path));
+    }
+
+    /**
+     * Return's the PK column name to create the product => attribute relation.
+     *
+     * @return string The PK column name
+     */
+    protected function getPrimaryKeyMemberName()
+    {
+        return MemberNames::ENTITY_ID;
     }
 }

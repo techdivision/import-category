@@ -110,12 +110,18 @@
             <argument type="service" id="import_category.action.processor.category.varchar.update"/>
         </service>
 
-        <service id="import_category.assembler.category.attribute" class="TechDivision\Import\Category\Assemblers\CategoryAttributeAssembler">
+        <service id="import_category.assembler.category.attribute" class="TechDivision\Import\Category\Assembler\CategoryAttributeAssembler">
             <argument type="service" id="import_category.repository.category.datetime"/>
             <argument type="service" id="import_category.repository.category.decimal"/>
             <argument type="service" id="import_category.repository.category.int"/>
             <argument type="service" id="import_category.repository.category.text"/>
             <argument type="service" id="import_category.repository.category.varchar"/>
+        </service>
+
+        <service id="import_category.assembler.category" class="TechDivision\Import\Category\Assembler\CategoryAssembler">
+            <argument type="service" id="import_category.repository.category"/>
+            <argument type="service" id="import_category.repository.category.varchar"/>
+            <argument type="service" id="import_category.assembler.category.attribute"/>
         </service>
 
         <service id="import_category.processor.category.bunch" class="TechDivision\Import\Category\Services\CategoryBunchProcessor">
@@ -137,7 +143,7 @@
             <argument type="service" id="import_category.action.category.text"/>
             <argument type="service" id="import_category.action.category.varchar"/>
             <argument type="service" id="import.action.url.rewrite"/>
-            <argument type="service" id="import.assembler.category"/>
+            <argument type="service" id="import_category.assembler.category"/>
             <argument type="service" id="import_category.assembler.category.attribute"/>
         </service>
 
@@ -159,8 +165,10 @@
         <service id="import_category.observer.file.upload" class="TechDivision\Import\Category\Observers\FileUploadObserver"/>
         <service id="import_category.observer.category.image" class="TechDivision\Import\Category\Observers\CategoryImageObserver"/>
         <service id="import_category.observer.url.key.and.path" class="TechDivision\Import\Category\Observers\UrlKeyAndPathObserver">
+            <argument type="service" id="import_category.processor.category.bunch"/>
             <argument type="service" id="import_category.filter.convert.literal.url"/>
         </service>
+        <service id="import_category.observer.category.copy" class="TechDivision\Import\Category\Observers\CopyCategoryObserver"/>
         <service id="import_category.observer.category.attribute" class="TechDivision\Import\Category\Observers\CategoryAttributeObserver">
             <argument type="service" id="import_category.processor.category.bunch"/>
         </service>

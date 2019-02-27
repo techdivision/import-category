@@ -12,7 +12,7 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -28,7 +28,7 @@ use TechDivision\Import\Category\Utils\MemberNames;
  * Observer that extracts the category's image from a CSV file to be added to image specific CSV file.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -130,6 +130,7 @@ class ClearImageObserver extends AbstractCategoryImportObserver
      * @param string $path The path of the category to return
      *
      * @return array The category
+     * @deprecated Since 7.0.0
      */
     protected function getCategoryByPath($path)
     {

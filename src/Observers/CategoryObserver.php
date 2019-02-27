@@ -12,7 +12,7 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -28,7 +28,7 @@ use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
  * Observer that create's the category itself.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -68,7 +68,7 @@ class CategoryObserver extends AbstractCategoryImportObserver
     }
 
     /**
-     * Return's the category bunch processor instance.
+     * Returns the category bunch processor instance.
      *
      * @return \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface The category bunch processor instance
      */
@@ -85,13 +85,8 @@ class CategoryObserver extends AbstractCategoryImportObserver
     protected function process()
     {
 
-        // query whether or not, we've found a new path => means we've found a new category
-        if ($this->hasBeenProcessed($path = $this->getValue(ColumnKeys::PATH))) {
-            return;
-        }
-
         // explode the path into the category names
-        if ($categories = $this->explode($path, '/')) {
+        if ($categories = $this->explode($this->getValue(ColumnKeys::PATH), '/')) {
             // initialize the artefacts and reset the category IDs
             $artefacts = array();
             $this->categoryIds = array(1);
@@ -101,10 +96,10 @@ class CategoryObserver extends AbstractCategoryImportObserver
                 try {
                     // prepare the expected category name
                     $categoryPath = implode('/', array_slice($categories, 0, $i + 1));
-
-                    // load the existing category and prepend the ID the array with the category IDs
-                    $existingCategory = $this->getCategoryByPath($categoryPath);
-                    array_push($this->categoryIds, $existingCategory[MemberNames::ENTITY_ID]);
+                    // load the existing category
+                    $category = $this->loadCategory($this->mapPath($categoryPath));
+                    // prepend the ID the array with the category IDs
+                    array_push($this->categoryIds, (integer) $category[MemberNames::ENTITY_ID]);
                 } catch (\Exception $e) {
                     // log a message that requested category is NOT available
                     $this->getSystemLogger()->debug(sprintf('Can\'t load category %s, create a new one', $categoryPath));
@@ -116,16 +111,10 @@ class CategoryObserver extends AbstractCategoryImportObserver
                     $category[$this->getPkMemberName()] = $this->persistCategory($category);
                     $category[MemberNames::URL_KEY] = $this->getValue(ColumnKeys::URL_KEY);
 
-                    // append the category to the list
-                    $this->addCategory($path, $category);
-
                     // append the ID of the new category to array with the IDs
                     array_push($this->categoryIds, $category[MemberNames::ENTITY_ID]);
                 }
             }
-
-            // load the last category (MUST be the one we've created)
-            $category = $this->getCategory(end($this->categoryIds));
 
             // temporary persist primary keys
             $this->updatePrimaryKeys($category);
@@ -133,7 +122,7 @@ class CategoryObserver extends AbstractCategoryImportObserver
             // prepare the artefact
             $artefact = array(
                 $this->getPkMemberName() => $category[$this->getPkMemberName()],
-                MemberNames::PATH      => implode('/', $this->categoryIds)
+                MemberNames::PATH        => implode('/', $this->categoryIds)
             );
 
             // put the artefact on the stack
@@ -220,12 +209,25 @@ class CategoryObserver extends AbstractCategoryImportObserver
     }
 
     /**
+     * Return's the category with the passed ID.
+     *
+     * @param string $id The ID of the category to return
+     *
+     * @return array The category
+     */
+    protected function loadCategory($id)
+    {
+        return $this->getCategoryBunchProcessor()->loadCategory($id);
+    }
+
+    /**
      * Add's the passed category to the internal list.
      *
      * @param string $path     The path of the category to add
      * @param array  $category The category to add
      *
      * @return void
+     * @deprecated Since 7.0.0
      */
     protected function addCategory($path, $category)
     {
@@ -239,6 +241,7 @@ class CategoryObserver extends AbstractCategoryImportObserver
      *
      * @return array The category data
      * @throws \Exception Is thrown, if the category is not available
+     * @deprecated Since 7.0.0
      */
     protected function getCategory($categoryId)
     {
@@ -251,6 +254,7 @@ class CategoryObserver extends AbstractCategoryImportObserver
      * @param string $path The path of the category to return
      *
      * @return array The category
+     * @deprecated Since 7.0.0
      */
     protected function getCategoryByPath($path)
     {

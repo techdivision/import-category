@@ -12,7 +12,7 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -22,14 +22,14 @@ namespace TechDivision\Import\Category\Services;
 
 use TechDivision\Import\Connection\ConnectionInterface;
 use TechDivision\Import\Actions\UrlRewriteActionInterface;
-use TechDivision\Import\Assembler\CategoryAssemblerInterface;
 use TechDivision\Import\Repositories\UrlRewriteRepositoryInterface;
 use TechDivision\Import\Repositories\EavAttributeRepositoryInterface;
 use TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface;
+use TechDivision\Import\Category\Assembler\CategoryAssemblerInterface;
 use TechDivision\Import\Category\Repositories\CategoryRepositoryInterface;
 use TechDivision\Import\Category\Repositories\CategoryIntRepositoryInterface;
 use TechDivision\Import\Category\Repositories\CategoryTextRepositoryInterface;
-use TechDivision\Import\Category\Assemblers\CategoryAttributeAssemblerInterface;
+use TechDivision\Import\Category\Assembler\CategoryAttributeAssemblerInterface;
 use TechDivision\Import\Category\Repositories\CategoryVarcharRepositoryInterface;
 use TechDivision\Import\Category\Repositories\CategoryDecimalRepositoryInterface;
 use TechDivision\Import\Category\Repositories\CategoryDatetimeRepositoryInterface;
@@ -45,7 +45,7 @@ use TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface;
  * The category bunch processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -63,7 +63,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * The category assembler instance.
      *
-     * @var \TechDivision\Import\Assembler\CategoryAssemblerInterface
+     * @var \TechDivision\Import\Category\Assembler\CategoryAssemblerInterface
      */
     protected $categoryAssembler;
 
@@ -182,7 +182,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * The assembler to load the category attributes with.
      *
-     * @var \TechDivision\Import\Category\Assemblers\CategoryAttributeAssemblerInterface
+     * @var \TechDivision\Import\Category\Assembler\CategoryAttributeAssemblerInterface
      */
     protected $categoryAttributeAssembler;
 
@@ -207,8 +207,8 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
      * @param \TechDivision\Import\Category\Actions\CategoryTextActionInterface              $categoryTextAction                The category text action to use
      * @param \TechDivision\Import\Category\Actions\CategoryVarcharActionInterface           $categoryVarcharAction             The category varchar action to use
      * @param \TechDivision\Import\Actions\UrlRewriteActionInterface                         $urlRewriteAction                  The URL rewrite action to use
-     * @param \TechDivision\Import\Assembler\CategoryAssemblerInterface                      $categoryAssembler                 The category assembler to use
-     * @param \TechDivision\Import\Category\Assemblers\CategoryAttributeAssemblerInterface   $categoryAttributeAssembler        The assembler to load the category attributes with
+     * @param \TechDivision\Import\Category\Assembler\CategoryAssemblerInterface             $categoryAssembler                 The category assembler to use
+     * @param \TechDivision\Import\Category\Assembler\CategoryAttributeAssemblerInterface    $categoryAttributeAssembler        The assembler to load the category attributes with
      */
     public function __construct(
         ConnectionInterface $connection,
@@ -543,7 +543,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the category assembler.
      *
-     * @param \TechDivision\Import\Assembler\CategoryAssemblerInterface $categoryAssembler The category assembler
+     * @param \TechDivision\Import\Category\Assembler\CategoryAssemblerInterface $categoryAssembler The category assembler
      *
      * @return void
      */
@@ -555,7 +555,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the category assembler.
      *
-     * @return \TechDivision\Import\Assembler\CategoryAssemblerInterface The category assembler instance
+     * @return \TechDivision\Import\Category\Assembler\CategoryAssemblerInterface The category assembler instance
      */
     public function getCategoryAssembler()
     {
@@ -719,7 +719,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the assembler to load the category attributes with.
      *
-     * @param \TechDivision\Import\Category\Assemblers\CategoryAttributeAssemblerInterface $categoryAttributeAssembler The assembler instance
+     * @param \TechDivision\Import\Category\Assembler\CategoryAttributeAssemblerInterface $categoryAttributeAssembler The assembler instance
      *
      * @return void
      */
@@ -731,7 +731,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the assembler to load the category attributes with.
      *
-     * @return \TechDivision\Import\Category\Assemblers\CategoryAttributeAssemblerInterface The assembler instance
+     * @return \TechDivision\Import\Category\Assembler\CategoryAttributeAssemblerInterface The assembler instance
      */
     public function getCategoryAttributeAssembler()
     {
@@ -748,6 +748,19 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     public function getEavAttributesByIsUserDefined($isUserDefined = 1)
     {
         return $this->getEavAttributeRepository()->findAllByIsUserDefined($isUserDefined);
+    }
+
+    /**
+     * Returns the category with the passed primary key and the attribute values for the passed store ID.
+     *
+     * @param string  $pk      The primary key of the category to return
+     * @param integer $storeId The store ID of the category values
+     *
+     * @return array|null The category data
+     */
+    public function getCategoryByPkAndStoreId($pk, $storeId)
+    {
+        return $this->getCategoryAssembler()->getCategoryByPkAndStoreId($pk, $storeId);
     }
 
     /**

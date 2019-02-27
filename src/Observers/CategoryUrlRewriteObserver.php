@@ -12,7 +12,7 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -27,7 +27,7 @@ use TechDivision\Import\Category\Utils\ColumnKeys;
  * Observer that extracts the URL rewrite data to a specific CSV file.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -78,12 +78,13 @@ class CategoryUrlRewriteObserver extends AbstractCategoryImportObserver
             array_push($storeViewCodes, $storeViewCode);
         }
 
-        // iterate over the available image fields
+        // iterate over the available store view codes
         foreach ($storeViewCodes as $storeViewCode) {
             // do not export URL rewrites for the admin store
             if ($storeViewCode === StoreViewCodes::ADMIN) {
                 continue;
             }
+
             // iterate over the store view codes and query if artefacts are already available
             if ($this->hasArtefactsByTypeAndEntityId(CategoryUrlRewriteObserver::ARTEFACT_TYPE, $lastEntityId = $this->getSubject()->getLastEntityId())) {
                 // if yes, load the artefacs

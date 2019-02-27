@@ -12,7 +12,7 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -29,20 +29,13 @@ use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
  * Observer that removes the category with the path found in the CSV file.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
 class ClearCategoryObserver extends AbstractCategoryImportObserver
 {
-
-    /**
-     * The artefact type.
-     *
-     * @var string
-     */
-    const ARTEFACT_TYPE = 'category-create';
 
     /**
      * The processor to read/write the necessary category data.
@@ -80,35 +73,50 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
     {
 
         // query whether or not, we've found a new path => means we've found a new category
-        if ($this->isLastPath($path = $this->getValue(ColumnKeys::PATH))) {
+        if ($this->hasBeenProcessed($path = $this->getValue(ColumnKeys::PATH))) {
             return;
         }
 
-        // initialize the array for the artefacts
-        $artefacts = array();
-
         // load the category by it's path
-        $category = $this->getCategoryByPath($path);
+        $category = $this->loadCategory($this->mapPath($path));
 
         // FIRST delete the data related with the category with the passed category path
         $this->deleteUrlRewrite(array(ColumnKeys::PATH => $category[MemberNames::PATH]), SqlStatementKeys::DELETE_URL_REWRITE_BY_PATH);
-        $this->deleteUrlRewrite(array(MemberNames::CATEGORY_ID => $category[MemberNames::ENTITY_ID]), SqlStatementKeys::DELETE_URL_REWRITE_BY_CATEGORY_ID);
+        $this->deleteUrlRewrite(array(MemberNames::CATEGORY_ID => $category[$this->getPkMemberName()]), SqlStatementKeys::DELETE_URL_REWRITE_BY_CATEGORY_ID);
 
         // delete the category with the passed path
         $this->deleteCategory(array(ColumnKeys::PATH => $category[MemberNames::PATH]));
 
-        // initialize the artefacts
-        $artefact = array();
-        foreach (array_keys($this->getSubject()->getHeaders()) as $columnName) {
-            $artefact[$columnName] = $this->getValue($columnName);
-        }
-
-        // add the artefacts to the subject
-        array_push($artefacts, $artefact);
-        $this->addArtefacts($artefacts);
+        // remove the path => entity ID mapping from the subject
+        $this->removePathEntityIdMapping($path);
 
         // store the ID of the last deleted category
-        $this->setLastEntityId($category[MemberNames::ENTITY_ID]);
+        $this->setLastEntityId($category[$this->getPkMemberName()]);
+    }
+
+    /**
+     * Return the primary key member name.
+     *
+     * @return string The primary key member name
+     */
+    protected function getPkMemberName()
+    {
+        return MemberNames::ENTITY_ID;
+    }
+
+    /**
+     * Queries whether or not the path has already been processed.
+     *
+     * ATTENTION: This INVERTS the parent method, as the category
+     *            has been processed as it is still available.
+     *
+     * @param string $path The path to check
+     *
+     * @return boolean TRUE if the path has been processed, else FALSE
+     */
+    protected function hasBeenProcessed($path)
+    {
+        return !parent::hasBeenProcessed($path);
     }
 
     /**
@@ -134,7 +142,19 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
      */
     protected function addArtefacts(array $artefacts)
     {
-        $this->getSubject()->addArtefacts(ClearCategoryObserver::ARTEFACT_TYPE, $artefacts);
+        $this->getSubject()->addArtefacts(ClearCategoryObserver::ARTEFACT_TYPE, $artefacts, false);
+    }
+
+    /**
+     * Return's the category with the passed ID.
+     *
+     * @param string $id The ID of the category to return
+     *
+     * @return array The category
+     */
+    protected function loadCategory($id)
+    {
+        return $this->getCategoryBunchProcessor()->loadCategory($id);
     }
 
     /**
@@ -143,6 +163,7 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
      * @param string $path The path of the category to return
      *
      * @return array The category
+     * @deprecated Since 7.0.0
      */
     protected function getCategoryByPath($path)
     {

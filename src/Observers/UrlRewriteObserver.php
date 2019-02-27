@@ -12,7 +12,7 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -29,7 +29,7 @@ use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
  * Observer that creates/updates the category's URL rewrites.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -79,8 +79,11 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
     protected function process()
     {
 
+        // load the path of the category we want to create the URL rewrites for
+        $path = $this->getValue(ColumnKeys::PATH);
+
         // try to load the entity ID for the product with the passed SKU
-        if ($category = $this->getSubject()->getCategoryByPath($path = $this->getValue(ColumnKeys::PATH))) {
+        if ($category = $this->loadCategory($this->mapPath($path))) {
             $this->setLastEntityId($category[MemberNames::ENTITY_ID]);
         } else {
             // prepare a log message
@@ -183,6 +186,18 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
 
         // prepare and return the category URL
         return sprintf('%s%s', $this->getValue(ColumnKeys::URL_PATH), $urlSuffix);
+    }
+
+    /**
+     * Return's the category with the passed ID.
+     *
+     * @param string $id The ID of the category to return
+     *
+     * @return array The category
+     */
+    protected function loadCategory($id)
+    {
+        return $this->getCategoryBunchProcessor()->loadCategory($id);
     }
 
     /**

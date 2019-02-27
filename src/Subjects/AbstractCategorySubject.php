@@ -12,7 +12,7 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -22,13 +22,13 @@ namespace TechDivision\Import\Category\Subjects;
 
 use League\Event\EmitterInterface;
 use Doctrine\Common\Collections\Collection;
+use TechDivision\Import\Category\Utils\RegistryKeys;
 use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Services\RegistryProcessorInterface;
 use TechDivision\Import\Subjects\AbstractEavSubject;
 use TechDivision\Import\Subjects\EntitySubjectInterface;
 use TechDivision\Import\Utils\FrontendInputTypes;
-use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Utils\Generators\GeneratorInterface;
 
 /**
@@ -36,7 +36,7 @@ use TechDivision\Import\Utils\Generators\GeneratorInterface;
  * handling business logic.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -69,6 +69,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
      * The available categories.
      *
      * @var array
+     * @deprecated Since 7.0.0
      */
     protected $categories = array();
 
@@ -251,6 +252,18 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
     }
 
     /**
+     * Removes the mapping, e. g. when a category has been deleted.
+     *
+     * @param string $path The path to delete the mapping for
+     *
+     * @return void
+     */
+    public function removePathEntityIdMapping($path)
+    {
+        unset($this->pathEntityIdMapping[$path]);
+    }
+
+    /**
      * Add the passed path => entity ID mapping.
      *
      * @param string $path The path
@@ -315,6 +328,11 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
         // load the available categories
         $this->categories = $this->getCategoryBunchProcessor()->getCategoriesWithResolvedPath();
 
+        // load the available category path => entity ID mappings
+        foreach ($this->categories as $resolvedPath => $category) {
+            $this->pathEntityIdMapping[$resolvedPath] = $category[MemberNames::ENTITY_ID];
+        }
+
         // prepare the callbacks
         parent::setUp($serial);
     }
@@ -369,6 +387,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
         throw new \Exception(sprintf('Found invalid website code "%s"', $code));
     }
 
+
     /**
      * Return's the category with the passed path.
      *
@@ -376,6 +395,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
      *
      * @return array The category
      * @throws \Exception Is thrown, if the requested category is not available
+     * @deprecated Since 7.0.0
      */
     public function getCategoryByPath($path)
     {
@@ -396,6 +416,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
      * @param array  $category The category to add
      *
      * @return void
+     * @deprecated Since 7.0.0
      */
     public function addCategory($path, $category)
     {
@@ -409,6 +430,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
      * @param array  $category The category data to update
      *
      * @return void
+     * @deprecated Since 7.0.0
      */
     public function updateCategory($path, $category)
     {
@@ -422,6 +444,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
      *
      * @return array The category data
      * @throws \Exception Is thrown, if the category is not available
+     * @deprecated Since 7.0.0
      */
     public function getCategory($categoryId)
     {

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Category\Assemblers\CategoryAttributeAssembler
+ * TechDivision\Import\Category\Assembler\CategoryAttributeAssembler
  *
  * NOTICE OF LICENSE
  *
@@ -12,13 +12,13 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2018 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Category\Assemblers;
+namespace TechDivision\Import\Category\Assembler;
 
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Repositories\CategoryIntRepositoryInterface;
@@ -31,7 +31,7 @@ use TechDivision\Import\Category\Repositories\CategoryDatetimeRepositoryInterfac
  * Assembler implementation that provides functionality to assemble category attribute data.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2018 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -134,6 +134,49 @@ class CategoryAttributeAssembler implements CategoryAttributeAssemblerInterface
         // load the varchar attributes
         foreach ($this->categoryVarcharRepository->findAllByPrimaryKeyAndStoreId($pk, $storeId) as $attribute) {
             $attributes[$attribute[MemberNames::ATTRIBUTE_ID]] = $attribute;
+        }
+
+        // return the array with the attributes
+        return $attributes;
+    }
+
+    /**
+     * Intializes the existing attributes for the entity with the passed primary key, extended with their attribute code.
+     *
+     * @param string  $pk      The primary key of the entity to load the attributes for
+     * @param integer $storeId The ID of the store view to load the attributes for
+     *
+     * @return array The entity attributes
+     */
+    public function getCategoryAttributesByPrimaryKeyAndStoreIdExtendedWithAttributeCode($pk, $storeId)
+    {
+
+        // initialize the array for the attributes
+        $attributes = array();
+
+        // load the datetime attributes
+        foreach ($this->categoryDatetimeRepository->findAllByPrimaryKeyAndStoreIdExtendedWithAttributeCode($pk, $storeId) as $attribute) {
+            $attributes[$attribute[MemberNames::ATTRIBUTE_CODE]] = $attribute;
+        }
+
+        // load the decimal attributes
+        foreach ($this->categoryDecimalRepository->findAllByPrimaryKeyAndStoreIdExtendedWithAttributeCode($pk, $storeId) as $attribute) {
+            $attributes[$attribute[MemberNames::ATTRIBUTE_CODE]] = $attribute;
+        }
+
+        // load the integer attributes
+        foreach ($this->categoryIntRepository->findAllByPrimaryKeyAndStoreIdExtendedWithAttributeCode($pk, $storeId) as $attribute) {
+            $attributes[$attribute[MemberNames::ATTRIBUTE_CODE]] = $attribute;
+        }
+
+        // load the text attributes
+        foreach ($this->categoryTextRepository->findAllByPrimaryKeyAndStoreIdExtendedWithAttributeCode($pk, $storeId) as $attribute) {
+            $attributes[$attribute[MemberNames::ATTRIBUTE_CODE]] = $attribute;
+        }
+
+        // load the varchar attributes
+        foreach ($this->categoryVarcharRepository->findAllByPrimaryKeyAndStoreIdExtendedWithAttributeCode($pk, $storeId) as $attribute) {
+            $attributes[$attribute[MemberNames::ATTRIBUTE_CODE]] = $attribute;
         }
 
         // return the array with the attributes

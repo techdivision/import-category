@@ -12,7 +12,7 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -29,7 +29,7 @@ use TechDivision\Import\Category\Utils\ConfigurationKeys;
  * Observer that creates/updates the category's URL rewrites.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -101,11 +101,8 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
                     continue;
                 }
 
-                // if yes, load the category of the original one
-                $category = $this->getCategory($existingUrlRewrite[MemberNames::ENTITY_ID]);
-
-                // load target path/metadata for the actual category
-                $targetPath = $this->prepareRequestPath($category);
+                // load target path
+                $targetPath = $this->prepareRequestPath();
 
                 // override data with the 301 configuration
                 $attr = array(
@@ -221,6 +218,7 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
      *
      * @return array The category data
      * @throws \Exception Is thrown, if the category is not available
+     * @deprecated Since 7.0.0
      */
     protected function getCategory($categoryId)
     {

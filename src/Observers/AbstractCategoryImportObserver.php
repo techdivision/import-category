@@ -12,7 +12,7 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -27,7 +27,7 @@ use TechDivision\Import\Subjects\SubjectInterface;
  * Abstract category observer that handles the process to import category bunches.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -89,6 +89,32 @@ abstract class AbstractCategoryImportObserver extends AbstractObserver implement
     }
 
     /**
+     * Return's the entity ID for the passed path.
+     *
+     * @param string $path The path to return the entity ID for
+     *
+     * @return integer The mapped entity ID
+     * @throws \Exception Is thrown, if the path can not be mapped
+     */
+    protected function mapPath($path)
+    {
+        return $this->mapPathEntityId($path);
+    }
+
+    /**
+     * Return's the entity ID for the passed path.
+     *
+     * @param string $path The path to return the entity ID for
+     *
+     * @return integer The mapped entity ID
+     * @throws \Exception Is thrown, if the path can not be mapped
+     */
+    protected function mapPathEntityId($path)
+    {
+        return $this->getSubject()->mapPathEntityId($path);
+    }
+
+    /**
      * Add the passed path => entity ID mapping.
      *
      * @param string $path The path
@@ -98,6 +124,18 @@ abstract class AbstractCategoryImportObserver extends AbstractObserver implement
     protected function addPathEntityIdMapping($path)
     {
         $this->getSubject()->addPathEntityIdMapping($path);
+    }
+
+    /**
+     * Removes the mapping, e. g. when a category has been deleted.
+     *
+     * @param string $path The path to delete the mapping for
+     *
+     * @return void
+     */
+    protected function removePathEntityIdMapping($path)
+    {
+        $this->getSubject()->removePathEntityIdMapping($path);
     }
 
     /**

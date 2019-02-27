@@ -12,7 +12,7 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -26,7 +26,7 @@ use TechDivision\Import\Services\EavAwareProcessorInterface;
  * Interface for a category bunch processor.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -100,7 +100,7 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
     /**
      * Return's the category assembler.
      *
-     * @return \TechDivision\Import\Assembler\CategoryAssemblerInterface The category assembler instance
+     * @return \TechDivision\Import\Category\Assembler\CategoryAssemblerInterface The category assembler instance
      */
     public function getCategoryAssembler();
 
@@ -156,7 +156,7 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
     /**
      * Return's the assembler to load the category attributes with.
      *
-     * @return \TechDivision\Import\Category\Assemblers\CategoryAttributeAssemblerInterface The assembler instance
+     * @return \TechDivision\Import\Category\Assembler\CategoryAttributeAssemblerInterface The assembler instance
      */
     public function getCategoryAttributeAssembler();
 
@@ -168,6 +168,16 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
      * @return array The array with the EAV attributes matching the passed flag
      */
     public function getEavAttributesByIsUserDefined($isUserDefined = 1);
+
+    /**
+     * Returns the category with the passed primary key and the attribute values for the passed store ID.
+     *
+     * @param string  $pk      The primary key of the category to return
+     * @param integer $storeId The store ID of the category values
+     *
+     * @return array|null The category data
+     */
+    public function getCategoryByPkAndStoreId($pk, $storeId);
 
     /**
      * Returns an array with the available categories and their

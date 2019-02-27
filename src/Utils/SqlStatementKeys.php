@@ -12,7 +12,7 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -24,7 +24,7 @@ namespace TechDivision\Import\Category\Utils;
  * Utility class with the SQL statements to use.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -80,6 +80,41 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
      * @var string
      */
     const CATEGORY_VARCHARS = 'category_varchars';
+
+    /**
+     * The SQL statement to load the category datetime attributes, extended with the attribute code, for the passed entity/store ID.
+     *
+     * @var string
+     */
+    const CATEGORY_DATETIMES_BY_PK_AND_STORE_ID = 'category_datetimes.by.pk.and.store_id';
+
+    /**
+     * The SQL statement to load the category datetime attributes, extended with the attribute code, for the passed entity/store ID.
+     *
+     * @var string
+     */
+    const CATEGORY_DECIMALS_BY_PK_AND_STORE_ID = 'category_decimals.by.pk.and.store_id';
+
+    /**
+     * The SQL statement to load the category datetime attributes, extended with the attribute code, for the passed entity/store ID.
+     *
+     * @var string
+     */
+    const CATEGORY_INTS_BY_PK_AND_STORE_ID = 'catebory_ints.by.pk.and.store_id';
+
+    /**
+     * The SQL statement to load the category datetime attributes, extended with the attribute code, for the passed entity/store ID.
+     *
+     * @var string
+     */
+    const CATEGORY_TEXTS_BY_PK_AND_STORE_ID = 'category_texts.by.pk.and.store_id';
+
+    /**
+     * The SQL statement to load the category datetime attributes, extended with the attribute code, for the passed entity/store ID.
+     *
+     * @var string
+     */
+    const CATEGORY_VARCHARS_BY_PK_AND_STORE_ID = 'category_varchars.by.pk.and.store_id';
 
     /**
      * The SQL statement to create new categories.

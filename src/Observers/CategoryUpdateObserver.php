@@ -12,7 +12,7 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -20,13 +20,14 @@
 
 namespace TechDivision\Import\Category\Observers;
 
+use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Category\Utils\ColumnKeys;
 
 /**
  * Observer that add's/update's the category itself.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2019 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
@@ -46,12 +47,16 @@ class CategoryUpdateObserver extends CategoryObserver
 
         // load the path of the category that has to be initialized
         $path = $this->getValue(ColumnKeys::PATH);
+        // prepare the store view code
+        $this->prepareStoreViewCode();
+        // load ID of the actual store view
+        $storeId = $this->getRowStoreId(StoreViewCodes::ADMIN);
 
         try {
             // try to load the category and the entity with the passed path
-            $category = $this->getCategoryByPath($path);
+            $category = $this->getCategoryByPkAndStoreId($this->mapPath($path), $storeId);
+            // load the category entity itself
             $entity = $this->loadCategory($this->getPrimaryKey($category));
-
             // merge it with the attributes, if we can find it
             return $this->mergeEntity($entity, $attr);
         } catch (\Exception $e) {
@@ -75,14 +80,15 @@ class CategoryUpdateObserver extends CategoryObserver
     }
 
     /**
-     * Return's the category with the passed ID.
+     * Returns the category with the passed primary key and the attribute values for the passed store ID.
      *
-     * @param string $id The ID of the category to return
+     * @param string  $pk      The primary key of the category to return
+     * @param integer $storeId The store ID of the category values
      *
-     * @return array The category
+     * @return array|null The category data
      */
-    protected function loadCategory($id)
+    protected function getCategoryByPkAndStoreId($pk, $storeId)
     {
-        return $this->getCategoryBunchProcessor()->loadCategory($id);
+        return $this->getCategoryBunchProcessor()->getCategoryByPkAndStoreId($pk, $storeId);
     }
 }
