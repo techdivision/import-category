@@ -193,7 +193,6 @@
             {
               "id": "import_category.subject.bunch",
               "identifier": "files",
-              "prefix": "category-import",
               "file-resolver": {
                 "prefix": "category-import"
               },
