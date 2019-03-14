@@ -23,6 +23,7 @@ namespace TechDivision\Import\Category\Services;
 use TechDivision\Import\Connection\ConnectionInterface;
 use TechDivision\Import\Actions\UrlRewriteActionInterface;
 use TechDivision\Import\Repositories\UrlRewriteRepositoryInterface;
+use TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface;
 use TechDivision\Import\Repositories\EavAttributeRepositoryInterface;
 use TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface;
 use TechDivision\Import\Category\Assembler\CategoryAssemblerInterface;
@@ -39,7 +40,6 @@ use TechDivision\Import\Category\Actions\CategoryTextActionInterface;
 use TechDivision\Import\Category\Actions\CategoryDecimalActionInterface;
 use TechDivision\Import\Category\Actions\CategoryVarcharActionInterface;
 use TechDivision\Import\Category\Actions\CategoryDatetimeActionInterface;
-use TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface;
 
 /**
  * The category bunch processor implementation.
@@ -73,6 +73,13 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
      * @var \TechDivision\Import\Repositories\EavAttributeRepositoryInterface
      */
     protected $eavAttributeRepository;
+
+    /**
+     * The repository to access EAV attributes.
+     *
+     * @var \TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface
+     */
+    protected $eavEntityTypeRepository;
 
     /**
      * The repository to access EAV attribute option values.
@@ -383,7 +390,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
      */
     public function getEavEntityTypeRepository()
     {
-        return $this->eavAttributeRepository;
+        return $this->eavEntityTypeRepository;
     }
 
     /**
@@ -981,7 +988,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
      */
     public function loadEavEntityTypeByEntityTypeCode($entityTypeCode)
     {
-        return $this->getEntityTypeRepository()->findOneByEntityTypeCode($entityTypeCode);
+        return $this->getEavEntityTypeRepository()->findOneByEntityTypeCode($entityTypeCode);
     }
 
     /**
