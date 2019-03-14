@@ -1,3 +1,13 @@
+# Version 7.0.1
+
+## Bugfixes
+
+* Add missing CategoryBunchProcessor::$eavEntityTypeRepository member variable declaration
+
+## Features
+
+* None
+
 # Version 7.0.0
 
 ## Bugfixes
