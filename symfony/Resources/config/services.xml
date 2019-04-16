@@ -84,28 +84,28 @@
             <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
 
-        <service id="import_category.action.category" class="TechDivision\Import\Category\Actions\CategoryAction">
+        <service id="import_category.action.category" class="TechDivision\Import\Actions\GenericIdentifierAction">
             <argument type="service" id="import_category.action.processor.category.create"/>
             <argument type="service" id="import_category.action.processor.category.update"/>
             <argument type="service" id="import_category.action.processor.category.delete"/>
         </service>
-        <service id="import_category.action.category.datetime" class="TechDivision\Import\Category\Actions\CategoryDatetimeAction">
+        <service id="import_category.action.category.datetime" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_category.action.processor.category.datetime.create"/>
             <argument type="service" id="import_category.action.processor.category.datetime.update"/>
         </service>
-        <service id="import_category.action.category.decimal" class="TechDivision\Import\Category\Actions\CategoryDecimalAction">
+        <service id="import_category.action.category.decimal" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_category.action.processor.category.decimal.create"/>
             <argument type="service" id="import_category.action.processor.category.decimal.update"/>
         </service>
-        <service id="import_category.action.category.int" class="TechDivision\Import\Category\Actions\CategoryIntAction">
+        <service id="import_category.action.category.int" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_category.action.processor.category.int.create"/>
             <argument type="service" id="import_category.action.processor.category.int.update"/>
         </service>
-        <service id="import_category.action.category.text" class="TechDivision\Import\Category\Actions\CategoryTextAction">
+        <service id="import_category.action.category.text" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_category.action.processor.category.text.create"/>
             <argument type="service" id="import_category.action.processor.category.text.update"/>
         </service>
-        <service id="import_category.action.category.varchar" class="TechDivision\Import\Category\Actions\CategoryVarcharAction">
+        <service id="import_category.action.category.varchar" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_category.action.processor.category.varchar.create"/>
             <argument type="service" id="import_category.action.processor.category.varchar.update"/>
         </service>
@@ -195,6 +195,78 @@
         </service>
         <service id="import_category.observer.category.url.rewrite" class="TechDivision\Import\Category\Observers\CategoryUrlRewriteObserver">
             <argument type="service" id="import_category.processor.category.bunch"/>
+        </service>
+
+        <!--
+         | The DI configuration for the composite observers of the category replace operation.
+         |-->
+        <service id="import_category.observer.composite.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_category.observer.category.copy" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_category.observer.clear.category" type="service"/>
+            </call>
+        </service>
+
+        <!--
+         | The DI configuration for the composite observers of the category create replace operation.
+         |-->
+        <service id="import_category.observer.composite.create.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_category.observer.url.key.and.path" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import.observer.attribute.set" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import.observer.additional.attribute" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_category.observer.file.upload" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_category.observer.category" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_category.observer.category.attribute" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_category.observer.category.url.rewrite" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_category.observer.clean.up" type="service"/>
+            </call>
+        </service>
+
+        <!--
+         | The DI configuration for the composite observers of the category add-update operation.
+         |-->
+        <service id="import_category.observer.composite.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_category.observer.url.key.and.path" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import.observer.attribute.set" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import.observer.additional.attribute" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_category.observer.file.upload" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_category.observer.category.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_category.observer.category.attribute.update" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_category.observer.category.url.rewrite" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_category.observer.clean.up" type="service"/>
+            </call>
         </service>
  
         <service id="import_category.subject.bunch" class="TechDivision\Import\Category\Subjects\BunchSubject" shared="false">

@@ -95,8 +95,7 @@
               "observers": [
                 {
                   "import": [
-                    "import_category.observer.category.copy",
-                    "import_category.observer.clear.category"
+                    "import_category.observer.composite.replace"
                   ]
                 }
               ]
@@ -114,23 +113,8 @@
               ],
               "observers": [
                 {
-                  "pre-import": [
-                    "import_category.observer.url.key.and.path",
-                    "import.observer.attribute.set",
-                    "import.observer.additional.attribute",
-                    "import_category.observer.file.upload"
-                  ]
-                },
-                {
                   "import": [
-                    "import_category.observer.category",
-                    "import_category.observer.category.attribute",
-                    "import_category.observer.category.url.rewrite"
-                  ]
-                },
-                {
-                  "post-import": [
-                    "import_category.observer.clean.up"
+                    "import_category.observer.composite.create.replace"
                   ]
                 }
               ]
@@ -203,23 +187,8 @@
               ],
               "observers": [
                 {
-                  "pre-import": [
-                    "import_category.observer.url.key.and.path",
-                    "import.observer.attribute.set",
-                    "import.observer.additional.attribute",
-                    "import_category.observer.file.upload"
-                  ]
-                },
-                {
                   "import": [
-                    "import_category.observer.category.update",
-                    "import_category.observer.category.attribute.update",
-                    "import_category.observer.category.url.rewrite"
-                  ]
-                },
-                {
-                  "post-import": [
-                    "import_category.observer.clean.up"
+                    "import_category.observer.composite.add_update"
                   ]
                 }
               ]

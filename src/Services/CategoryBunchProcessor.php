@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Category\Services;
 
+use TechDivision\Import\Actions\ActionInterface;
 use TechDivision\Import\Connection\ConnectionInterface;
 use TechDivision\Import\Actions\UrlRewriteActionInterface;
 use TechDivision\Import\Repositories\UrlRewriteRepositoryInterface;
@@ -34,12 +35,6 @@ use TechDivision\Import\Category\Assembler\CategoryAttributeAssemblerInterface;
 use TechDivision\Import\Category\Repositories\CategoryVarcharRepositoryInterface;
 use TechDivision\Import\Category\Repositories\CategoryDecimalRepositoryInterface;
 use TechDivision\Import\Category\Repositories\CategoryDatetimeRepositoryInterface;
-use TechDivision\Import\Category\Actions\CategoryActionInterface;
-use TechDivision\Import\Category\Actions\CategoryIntActionInterface;
-use TechDivision\Import\Category\Actions\CategoryTextActionInterface;
-use TechDivision\Import\Category\Actions\CategoryDecimalActionInterface;
-use TechDivision\Import\Category\Actions\CategoryVarcharActionInterface;
-use TechDivision\Import\Category\Actions\CategoryDatetimeActionInterface;
 
 /**
  * The category bunch processor implementation.
@@ -91,49 +86,49 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * The action for category CRUD methods.
      *
-     * @var \TechDivision\Import\Category\Actions\CategoryActionInterface
+     * @var \TechDivision\Import\Actions\ActionInterface
      */
     protected $categoryAction;
 
     /**
      * The action for category varchar attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Category\Actions\CategoryVarcharActionInterface
+     * @var \TechDivision\Import\Actions\ActionInterface
      */
     protected $categoryVarcharAction;
 
     /**
      * The action for category text attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Category\Actions\CategoryTextActionInterface
+     * @var \TechDivision\Import\Actions\ActionInterface
      */
     protected $categoryTextAction;
 
     /**
      * The action for category int attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Category\Actions\CategoryIntActionInterface
+     * @var \TechDivision\Import\Actions\ActionInterface
      */
     protected $categoryIntAction;
 
     /**
      * The action for category decimal attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Category\Actions\CategoryDecimalActionInterface
+     * @var \TechDivision\Import\Actions\ActionInterface
      */
     protected $categoryDecimalAction;
 
     /**
      * The action for category datetime attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Category\Actions\CategoryDatetimeActionInterface
+     * @var \TechDivision\Import\Actions\ActionInterface
      */
     protected $categoryDatetimeAction;
 
     /**
      * The action for URL rewrite CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\UrlRewriteActionInterface
+     * @var \TechDivision\Import\Actions\ActionInterface
      */
     protected $urlRewriteAction;
 
@@ -207,13 +202,13 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
      * @param \TechDivision\Import\Repositories\EavAttributeRepositoryInterface              $eavAttributeRepository            The EAV attribute repository to use
      * @param \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface                $urlRewriteRepository              The URL rewrite repository to use
      * @param \TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface             $eavEntityTypeRepository           The EAV entity type repository to use
-     * @param \TechDivision\Import\Category\Actions\CategoryDatetimeActionInterface          $categoryDatetimeAction            The category datetime action to use
-     * @param \TechDivision\Import\Category\Actions\CategoryDecimalActionInterface           $categoryDecimalAction             The category decimal action to use
-     * @param \TechDivision\Import\Category\Actions\CategoryIntActionInterface               $categoryIntAction                 The category integer action to use
-     * @param \TechDivision\Import\Category\Actions\CategoryActionInterface                  $categoryAction                    The category action to use
-     * @param \TechDivision\Import\Category\Actions\CategoryTextActionInterface              $categoryTextAction                The category text action to use
-     * @param \TechDivision\Import\Category\Actions\CategoryVarcharActionInterface           $categoryVarcharAction             The category varchar action to use
-     * @param \TechDivision\Import\Actions\UrlRewriteActionInterface                         $urlRewriteAction                  The URL rewrite action to use
+     * @param \TechDivision\Import\Actions\ActionInterface                                   $categoryDatetimeAction            The category datetime action to use
+     * @param \TechDivision\Import\Actions\ActionInterface                                   $categoryDecimalAction             The category decimal action to use
+     * @param \TechDivision\Import\Actions\ActionInterface                                   $categoryIntAction                 The category integer action to use
+     * @param \TechDivision\Import\Actions\ActionInterface                                   $categoryAction                    The category action to use
+     * @param \TechDivision\Import\Actions\ActionInterface                                   $categoryTextAction                The category text action to use
+     * @param \TechDivision\Import\Actions\ActionInterface                                   $categoryVarcharAction             The category varchar action to use
+     * @param \TechDivision\Import\Actions\ActionInterface                                   $urlRewriteAction                  The URL rewrite action to use
      * @param \TechDivision\Import\Category\Assembler\CategoryAssemblerInterface             $categoryAssembler                 The category assembler to use
      * @param \TechDivision\Import\Category\Assembler\CategoryAttributeAssemblerInterface    $categoryAttributeAssembler        The assembler to load the category attributes with
      */
@@ -229,13 +224,13 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
         EavAttributeRepositoryInterface $eavAttributeRepository,
         UrlRewriteRepositoryInterface $urlRewriteRepository,
         EavEntityTypeRepositoryInterface $eavEntityTypeRepository,
-        CategoryDatetimeActionInterface $categoryDatetimeAction,
-        CategoryDecimalActionInterface $categoryDecimalAction,
-        CategoryIntActionInterface $categoryIntAction,
-        CategoryActionInterface $categoryAction,
-        CategoryTextActionInterface $categoryTextAction,
-        CategoryVarcharActionInterface $categoryVarcharAction,
-        UrlRewriteActionInterface $urlRewriteAction,
+        ActionInterface $categoryDatetimeAction,
+        ActionInterface $categoryDecimalAction,
+        ActionInterface $categoryIntAction,
+        ActionInterface $categoryAction,
+        ActionInterface $categoryTextAction,
+        ActionInterface $categoryVarcharAction,
+        ActionInterface $urlRewriteAction,
         CategoryAssemblerInterface $categoryAssembler,
         CategoryAttributeAssemblerInterface $categoryAttributeAssembler
     ) {
@@ -396,11 +391,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category CRUD methods.
      *
-     * @param \TechDivision\Import\Category\Actions\CategoryActionInterface $categoryAction The action with the category CRUD methods
+     * @param \TechDivision\Import\Actions\ActionInterface $categoryAction The action with the category CRUD methods
      *
      * @return void
      */
-    public function setCategoryAction(CategoryActionInterface $categoryAction)
+    public function setCategoryAction(ActionInterface $categoryAction)
     {
         $this->categoryAction = $categoryAction;
     }
@@ -408,7 +403,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getCategoryAction()
     {
@@ -418,11 +413,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category varchar attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Category\Actions\CategoryVarcharActionInterface $categoryVarcharAction The action with the category varchar attriute CRUD methods
+     * @param \TechDivision\Import\Actions\ActionInterface $categoryVarcharAction The action with the category varchar attriute CRUD methods
      *
      * @return void
      */
-    public function setCategoryVarcharAction(CategoryVarcharActionInterface $categoryVarcharAction)
+    public function setCategoryVarcharAction(ActionInterface $categoryVarcharAction)
     {
         $this->categoryVarcharAction = $categoryVarcharAction;
     }
@@ -430,7 +425,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category varchar attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryVarcharActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getCategoryVarcharAction()
     {
@@ -440,11 +435,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category text attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Category\Actions\CategoryTextActionInterface $categoryTextAction The action with the category text attriute CRUD methods
+     * @param \TechDivision\Import\Actions\ActionInterface $categoryTextAction The action with the category text attriute CRUD methods
      *
      * @return void
      */
-    public function setCategoryTextAction(CategoryTextActionInterface $categoryTextAction)
+    public function setCategoryTextAction(ActionInterface $categoryTextAction)
     {
         $this->categoryTextAction = $categoryTextAction;
     }
@@ -452,7 +447,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category text attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryTextActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getCategoryTextAction()
     {
@@ -462,11 +457,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category int attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Category\Actions\CategoryIntActionInterface $categoryIntAction The action with the category int attriute CRUD methods
+     * @param \TechDivision\Import\Actions\ActionInterface $categoryIntAction The action with the category int attriute CRUD methods
      *
      * @return void
      */
-    public function setCategoryIntAction(CategoryIntActionInterface $categoryIntAction)
+    public function setCategoryIntAction(ActionInterface $categoryIntAction)
     {
         $this->categoryIntAction = $categoryIntAction;
     }
@@ -474,7 +469,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category int attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryIntActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getCategoryIntAction()
     {
@@ -484,11 +479,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category decimal attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Category\Actions\CategoryDecimalActionInterface $categoryDecimalAction The action with the category decimal attriute CRUD methods
+     * @param \TechDivision\Import\Actions\ActionInterface $categoryDecimalAction The action with the category decimal attriute CRUD methods
      *
      * @return void
      */
-    public function setCategoryDecimalAction(CategoryDecimalActionInterface $categoryDecimalAction)
+    public function setCategoryDecimalAction(ActionInterface $categoryDecimalAction)
     {
         $this->categoryDecimalAction = $categoryDecimalAction;
     }
@@ -496,7 +491,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category decimal attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryDecimalActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getCategoryDecimalAction()
     {
@@ -506,11 +501,11 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category datetime attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Category\Actions\CategoryDatetimeActionInterface $categoryDatetimeAction The action with the category datetime attriute CRUD methods
+     * @param \TechDivision\Import\Actions\ActionInterface $categoryDatetimeAction The action with the category datetime attriute CRUD methods
      *
      * @return void
      */
-    public function setCategoryDatetimeAction(CategoryDatetimeActionInterface $categoryDatetimeAction)
+    public function setCategoryDatetimeAction(ActionInterface $categoryDatetimeAction)
     {
         $this->categoryDatetimeAction = $categoryDatetimeAction;
     }
@@ -518,7 +513,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category datetime attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryDatetimeActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getCategoryDatetimeAction()
     {
@@ -528,7 +523,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the URL rewrite CRUD methods.
      *
-     * @param \TechDivision\Import\Actions\UrlRewriteActionInterface $urlRewriteAction The action with the URL rewrite CRUD methods
+     * @param \TechDivision\Import\Actions\ActionInterface $urlRewriteAction The action with the URL rewrite CRUD methods
      *
      * @return void
      */
@@ -540,7 +535,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the URL rewrite CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\UrlRewriteActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getUrlRewriteAction()
     {

@@ -51,49 +51,49 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
     /**
      * Return's the action with the category CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getCategoryAction();
 
     /**
      * Return's the action with the category varchar attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryVarcharActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getCategoryVarcharAction();
 
     /**
      * Return's the action with the category text attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryTextActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getCategoryTextAction();
 
     /**
      * Return's the action with the category int attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryIntActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getCategoryIntAction();
 
     /**
      * Return's the action with the category decimal attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryDecimalActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getCategoryDecimalAction();
 
     /**
      * Return's the action with the category datetime attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Category\Actions\CategoryDatetimeActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getCategoryDatetimeAction();
 
     /**
      * Return's the action with the URL rewrite CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\UrlRewriteActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getUrlRewriteAction();
 
