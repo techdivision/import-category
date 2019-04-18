@@ -527,7 +527,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
      *
      * @return void
      */
-    public function setUrlRewriteAction(UrlRewriteActionInterface $urlRewriteAction)
+    public function setUrlRewriteAction(ActionInterface $urlRewriteAction)
     {
         $this->urlRewriteAction = $urlRewriteAction;
     }

@@ -1,3 +1,14 @@
+# Version 8.0.1
+
+## Bugfixes
+
+* Update default configuration files with listeners
+* Replace invalid type hint in CategoryBunchProcessor
+
+## Features
+
+* None
+
 # Version 8.0.0
 
 ## Bugfixes
