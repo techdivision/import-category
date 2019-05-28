@@ -227,6 +227,18 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
     }
 
     /**
+     * Unifiy the passed path.
+     *
+     * @param string $path The path to unify
+     *
+     * @return string The unified path
+     */
+    protected function unifyPath($path)
+    {
+        return strtolower($path);
+    }
+
+    /**
      * Queries whether or not the path has already been processed.
      *
      * @param string $path The path to check been processed
@@ -235,7 +247,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
      */
     public function hasBeenProcessed($path)
     {
-        return isset($this->pathEntityIdMapping[$path]);
+        return isset($this->pathEntityIdMapping[$this->unifyPath($path)]);
     }
 
     /**
@@ -260,7 +272,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
      */
     public function removePathEntityIdMapping($path)
     {
-        unset($this->pathEntityIdMapping[$path]);
+        unset($this->pathEntityIdMapping[$this->unifyPath($path)]);
     }
 
     /**
@@ -272,7 +284,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
      */
     public function addPathEntityIdMapping($path)
     {
-        $this->pathEntityIdMapping[$path] = $this->getLastEntityId();
+        $this->pathEntityIdMapping[$this->unifyPath($path)] = $this->getLastEntityId();
     }
 
     /**
@@ -287,8 +299,8 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
     {
 
         // query whether or not a entity ID for the passed path has been mapped
-        if (isset($this->pathEntityIdMapping[$path])) {
-            return $this->pathEntityIdMapping[$path];
+        if (isset($this->pathEntityIdMapping[$unifiedPath = $this->unifyPath($path)])) {
+            return $this->pathEntityIdMapping[$unifiedPath];
         }
 
         // throw an exception if not
@@ -330,7 +342,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
 
         // load the available category path => entity ID mappings
         foreach ($this->categories as $resolvedPath => $category) {
-            $this->pathEntityIdMapping[$resolvedPath] = $category[MemberNames::ENTITY_ID];
+            $this->pathEntityIdMapping[$this->unifyPath($resolvedPath)] = $category[MemberNames::ENTITY_ID];
         }
 
         // prepare the callbacks

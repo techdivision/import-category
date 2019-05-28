@@ -1,3 +1,13 @@
+# Version 10.0.0
+
+## Bugfixes
+
+* Fixed techdivision/import#147
+
+## Features
+
+* Switch to latest techdivision/import 9.0.* version as dependency
+
 # Version 9.0.0
 
 ## Bugfixes
