@@ -1,3 +1,13 @@
+# Version 11.0.0
+
+## Bugfixes
+
+* Fixed multi bunch import issue
+
+## Features
+
+* None
+
 # Version 10.0.0
 
 ## Bugfixes

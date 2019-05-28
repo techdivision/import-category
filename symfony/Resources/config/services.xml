@@ -274,15 +274,6 @@
             <argument type="service" id="import.generator.core.config.data.uid"/>
             <argument type="service" id="loggers"/>
             <argument type="service" id="import.events.emitter"/>
-            <argument type="service" id="import_category.processor.category.bunch"/>
-        </service>
-
-        <service id="import_category.subject.media" class="TechDivision\Import\Category\Subjects\MediaSubject" shared="false">
-            <argument type="service" id="import.processor.registry"/>
-            <argument type="service" id="import.generator.core.config.data.uid"/>
-            <argument type="service" id="loggers"/>
-            <argument type="service" id="import.events.emitter"/>
-            <argument type="service" id="import_category.processor.category.bunch"/>
         </service>
 
         <service id="import_category.plugin.children.count" class="TechDivision\Import\Category\Plugins\ChildrenCountPlugin">

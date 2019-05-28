@@ -152,7 +152,11 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
         }
 
         // throw an exception, if not
-        throw new \Exception(sprintf('Found invalid display mode %s', $displayMode));
+        throw new \Exception(
+            $this->appendExceptionSuffix(
+                sprintf('Found invalid display mode %s', $displayMode)
+            )
+        );
     }
 
     /**
@@ -172,7 +176,11 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
         }
 
         // throw an exception, if not
-        throw new \Exception(printf('Found invalid page layout %s', $pageLayout));
+        throw new \Exception(
+            $this->appendExceptionSuffix(
+                sprintf('Found invalid page layout %s', $pageLayout)
+            )
+        );
     }
 
     /**
@@ -217,7 +225,11 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
         }
 
         // throw an exception, if the root category is NOT available
-        throw new \Exception(printf('Can\'t load root category "%s" for path "%s"', $rootCategoryPath, $path));
+        throw new \Exception(
+            $this->appendExceptionSuffix(
+                sprintf('Can\'t load root category "%s" for path "%s"', $rootCategoryPath, $path)
+            )
+        );
     }
 
     /**

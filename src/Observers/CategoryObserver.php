@@ -97,9 +97,12 @@ class CategoryObserver extends AbstractCategoryImportObserver
                     // prepare the expected category name
                     $categoryPath = implode('/', array_slice($categories, 0, $i + 1));
                     // load the existing category
-                    $category = $this->loadCategory($this->mapPath($categoryPath));
-                    // prepend the ID the array with the category IDs
-                    array_push($this->categoryIds, (integer) $category[MemberNames::ENTITY_ID]);
+                    if ($category = $this->loadCategory($this->mapPath($categoryPath))) {
+                        // prepend the ID the array with the category IDs
+                        array_push($this->categoryIds, (integer) $category[MemberNames::ENTITY_ID]);
+                    } else {
+                        throw new \Exception(sprintf('Can\'t load category %s from database', $categoryPath));
+                    }
                 } catch (\Exception $e) {
                     // log a message that requested category is NOT available
                     $this->getSystemLogger()->debug(sprintf('Can\'t load category %s, create a new one', $categoryPath));
@@ -218,47 +221,6 @@ class CategoryObserver extends AbstractCategoryImportObserver
     protected function loadCategory($id)
     {
         return $this->getCategoryBunchProcessor()->loadCategory($id);
-    }
-
-    /**
-     * Add's the passed category to the internal list.
-     *
-     * @param string $path     The path of the category to add
-     * @param array  $category The category to add
-     *
-     * @return void
-     * @deprecated Since 7.0.0
-     */
-    protected function addCategory($path, $category)
-    {
-        $this->getSubject()->addCategory($path, $category);
-    }
-
-    /**
-     * Return's the category with the passed ID.
-     *
-     * @param integer $categoryId The ID of the category to return
-     *
-     * @return array The category data
-     * @throws \Exception Is thrown, if the category is not available
-     * @deprecated Since 7.0.0
-     */
-    protected function getCategory($categoryId)
-    {
-        return $this->getSubject()->getCategory($categoryId);
-    }
-
-    /**
-     * Return's the category with the passed path.
-     *
-     * @param string $path The path of the category to return
-     *
-     * @return array The category
-     * @deprecated Since 7.0.0
-     */
-    protected function getCategoryByPath($path)
-    {
-        return $this->getSubject()->getCategoryByPath($path);
     }
 
     /**

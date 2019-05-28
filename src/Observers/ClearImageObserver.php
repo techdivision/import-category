@@ -125,19 +125,6 @@ class ClearImageObserver extends AbstractCategoryImportObserver
     }
 
     /**
-     * Return's the category with the passed path.
-     *
-     * @param string $path The path of the category to return
-     *
-     * @return array The category
-     * @deprecated Since 7.0.0
-     */
-    protected function getCategoryByPath($path)
-    {
-        return $this->getSubject()->getCategoryByPath($path);
-    }
-
-    /**
      * Return's the PK to create the product => attribute relation.
      *
      * @return integer The PK to create the relation with

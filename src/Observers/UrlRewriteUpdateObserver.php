@@ -212,20 +212,6 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
     }
 
     /**
-     * Return's the category with the passed ID.
-     *
-     * @param integer $categoryId The ID of the category to return
-     *
-     * @return array The category data
-     * @throws \Exception Is thrown, if the category is not available
-     * @deprecated Since 7.0.0
-     */
-    protected function getCategory($categoryId)
-    {
-        return $this->getSubject()->getCategory($categoryId);
-    }
-
-    /**
      * Return's the URL rewrites for the passed URL entity type and ID.
      *
      * @param string  $entityType The entity type to load the URL rewrites for

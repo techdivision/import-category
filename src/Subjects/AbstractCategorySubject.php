@@ -20,16 +20,12 @@
 
 namespace TechDivision\Import\Category\Subjects;
 
-use League\Event\EmitterInterface;
-use Doctrine\Common\Collections\Collection;
-use TechDivision\Import\Category\Utils\RegistryKeys;
-use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
+use TechDivision\Import\Utils\FrontendInputTypes;
 use TechDivision\Import\Category\Utils\MemberNames;
-use TechDivision\Import\Services\RegistryProcessorInterface;
+use TechDivision\Import\Category\Utils\RegistryKeys;
 use TechDivision\Import\Subjects\AbstractEavSubject;
 use TechDivision\Import\Subjects\EntitySubjectInterface;
-use TechDivision\Import\Utils\FrontendInputTypes;
-use TechDivision\Import\Utils\Generators\GeneratorInterface;
+use TechDivision\Import\Utils\StoreViewCodes;
 
 /**
  * The abstract product subject implementation that provides basic category
@@ -43,13 +39,6 @@ use TechDivision\Import\Utils\Generators\GeneratorInterface;
  */
 abstract class AbstractCategorySubject extends AbstractEavSubject implements EntitySubjectInterface
 {
-
-    /**
-     * The processor to read/write the necessary category data.
-     *
-     * @var \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface
-     */
-    protected $categoryBunchProcessor;
 
     /**
      * The available store websites.
@@ -69,7 +58,6 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
      * The available categories.
      *
      * @var array
-     * @deprecated Since 7.0.0
      */
     protected $categories = array();
 
@@ -127,30 +115,6 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
         FrontendInputTypes::MULTISELECT => array('import_category.callback.multiselect'),
         FrontendInputTypes::BOOLEAN     => array('import_category.callback.boolean')
     );
-
-    /**
-     * Initialize the subject instance.
-     *
-     * @param \TechDivision\Import\Services\RegistryProcessorInterface               $registryProcessor          The registry processor instance
-     * @param \TechDivision\Import\Utils\Generators\GeneratorInterface               $coreConfigDataUidGenerator The UID generator for the core config data
-     * @param \Doctrine\Common\Collections\Collection;                               $systemLoggers              The array with the system logger instances
-     * @param \League\Event\EmitterInterface                                         $emitter                    The event emitter instance
-     * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface $categoryBunchProcessor     The category processor instance
-     */
-    public function __construct(
-        RegistryProcessorInterface $registryProcessor,
-        GeneratorInterface $coreConfigDataUidGenerator,
-        Collection $systemLoggers,
-        EmitterInterface $emitter,
-        CategoryBunchProcessorInterface $categoryBunchProcessor
-    ) {
-
-        // pass the arguments to the parent constructor
-        parent::__construct($registryProcessor, $coreConfigDataUidGenerator, $systemLoggers, $emitter);
-
-        // initialize the category bunch processor
-        $this->categoryBunchProcessor = $categoryBunchProcessor;
-    }
 
     /**
      * Return's the default callback frontend input mappings for the user defined attributes.
@@ -304,7 +268,11 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
         }
 
         // throw an exception if not
-        throw new \Exception(sprintf('Can\'t map path %s to any entity ID', $path));
+        throw new \Exception(
+            $this->appendExceptionSuffix(
+                sprintf('Can\'t map path %s to any entity ID', $path)
+            )
+        );
     }
 
     /**
@@ -337,16 +305,46 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
         $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
         $this->storeWebsites =  $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORE_WEBSITES];
 
-        // load the available categories
-        $this->categories = $this->getCategoryBunchProcessor()->getCategoriesWithResolvedPath();
+        // load the categories for the admin store view from the global data
+        $this->categories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CATEGORIES][StoreViewCodes::ADMIN];
 
         // load the available category path => entity ID mappings
         foreach ($this->categories as $resolvedPath => $category) {
             $this->pathEntityIdMapping[$this->unifyPath($resolvedPath)] = $category[MemberNames::ENTITY_ID];
         }
 
+        // load the category path => entity ID mappings from the previous subject
+        if (isset($status[RegistryKeys::PATH_ENTITY_ID_MAPPING])) {
+            $this->pathEntityIdMapping = array_merge($this->pathEntityIdMapping, $status[RegistryKeys::PATH_ENTITY_ID_MAPPING]);
+        }
+
         // prepare the callbacks
         parent::setUp($serial);
+    }
+
+    /**
+     * Clean up the global data after importing the variants.
+     *
+     * @param string $serial The serial of the actual import
+     *
+     * @return void
+     */
+    public function tearDown($serial)
+    {
+
+        // load the registry processor
+        $registryProcessor = $this->getRegistryProcessor();
+
+        // update the status with the actual path => entity ID mappings
+        $registryProcessor->mergeAttributesRecursive(
+            $serial,
+            array(
+                RegistryKeys::PATH_ENTITY_ID_MAPPING => $this->pathEntityIdMapping
+            )
+        );
+
+        // invoke the parent method
+        parent::tearDown($serial);
     }
 
     /**
@@ -376,7 +374,11 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
         }
 
         // throw an exception, if not
-        throw new \Exception(sprintf('Found invalid store view code "%s"', $storeViewCode));
+        throw new \Exception(
+            $this->appendExceptionSuffix(
+                sprintf('Found invalid store view code "%s"', $storeViewCode)
+            )
+        );
     }
 
     /**
@@ -396,7 +398,11 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
         }
 
         // throw an exception, if not
-        throw new \Exception(sprintf('Found invalid website code "%s"', $code));
+        throw new \Exception(
+            $this->appendExceptionSuffix(
+                sprintf('Found invalid website code "%s"', $code)
+            )
+        );
     }
 
 
@@ -407,7 +413,6 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
      *
      * @return array The category
      * @throws \Exception Is thrown, if the requested category is not available
-     * @deprecated Since 7.0.0
      */
     public function getCategoryByPath($path)
     {
@@ -419,56 +424,5 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
 
         // throw an exception, if not
         throw new \Exception(sprintf('Can\'t find category with path "%s"', $path));
-    }
-
-    /**
-     * Add the passed category to the available categories.
-     *
-     * @param string $path     The path to register the category with
-     * @param array  $category The category to add
-     *
-     * @return void
-     * @deprecated Since 7.0.0
-     */
-    public function addCategory($path, $category)
-    {
-        $this->categories[$path] = $category;
-    }
-
-    /**
-     * Updates the category with the passed path.
-     *
-     * @param string $path     The path of the category to update
-     * @param array  $category The category data to update
-     *
-     * @return void
-     * @deprecated Since 7.0.0
-     */
-    public function updateCategory($path, $category)
-    {
-        $this->categories[$path] = array_merge($this->categories[$path], $category);
-    }
-
-    /**
-     * Return's the category with the passed ID.
-     *
-     * @param integer $categoryId The ID of the category to return
-     *
-     * @return array The category data
-     * @throws \Exception Is thrown, if the category is not available
-     * @deprecated Since 7.0.0
-     */
-    public function getCategory($categoryId)
-    {
-
-        // try to load the category with the passed ID
-        foreach ($this->categories as $category) {
-            if ($category[MemberNames::ENTITY_ID] == $categoryId) {
-                return $category;
-            }
-        }
-
-        // throw an exception if the category is NOT available
-        throw new \Exception(sprintf('Can\'t load category with ID %d in file %s on line %d', $categoryId));
     }
 }
