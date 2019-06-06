@@ -299,7 +299,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
     {
 
         // load the status of the actual import
-        $status = $this->getRegistryProcessor()->getAttribute($serial);
+        $status = $this->getRegistryProcessor()->getAttribute(RegistryKeys::STATUS);
 
         // load the global data we've prepared initially
         $this->taxClasses = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::TAX_CLASSES];
@@ -337,7 +337,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
 
         // update the status with the actual path => entity ID mappings
         $registryProcessor->mergeAttributesRecursive(
-            $serial,
+            RegistryKeys::STATUS,
             array(
                 RegistryKeys::PATH_ENTITY_ID_MAPPING => $this->pathEntityIdMapping
             )
