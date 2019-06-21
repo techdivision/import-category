@@ -1,3 +1,13 @@
+# Version 13.0.1
+
+## Bugfixes
+
+* Fixed issue with categories that contains a /
+
+## Features
+
+* None
+
 # Version 13.0.0
 
 ## Bugfixes
