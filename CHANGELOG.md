@@ -1,3 +1,13 @@
+# Version 14.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Switch to latest techdivision/import 12.* version as dependency
+
 # Version 13.0.1
 
 ## Bugfixes
