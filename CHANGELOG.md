@@ -1,3 +1,13 @@
+# Version 16.0.0
+
+## Bugfixes
+
+* Fixed techdivision/import#156
+
+## Features
+
+* Switch to latest techdivision/import 14.* version as dependency
+
 # Version 15.0.0
 
 ## Bugfixes

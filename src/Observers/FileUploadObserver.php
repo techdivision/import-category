@@ -56,7 +56,7 @@ class FileUploadObserver extends AbstractCategoryImportObserver
                 );
 
                 // write the new image path to the target column
-                $this->setValue(ColumnKeys::IMAGE_PATH, $imagePath);
+                $this->setValue(ColumnKeys::IMAGE_PATH, ltrim($imagePath, DIRECTORY_SEPARATOR));
             }
         }
     }
