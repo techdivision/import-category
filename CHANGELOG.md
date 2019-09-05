@@ -1,3 +1,13 @@
+# Version 16.0.1
+
+## Bugfixes
+
+* Change artefact prefix for category URL rewrites from url-rewrite to category-url-rewrite to avoid conflicts with product import
+
+## Features
+
+* None
+
 # Version 16.0.0
 
 ## Bugfixes

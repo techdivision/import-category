@@ -40,7 +40,7 @@ class CategoryUrlRewriteObserver extends AbstractCategoryImportObserver
      *
      * @var string
      */
-    const ARTEFACT_TYPE = 'url-rewrite';
+    const ARTEFACT_TYPE = 'category-url-rewrite';
 
     /**
      * The image artefacts that has to be exported.
