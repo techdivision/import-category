@@ -5,7 +5,9 @@
 
     <services>
 
-        <service id="import_category.repository.sql.statement" class="TechDivision\Import\Category\Repositories\SqlStatementRepository"/>
+        <service id="import_category.repository.sql.statement" class="TechDivision\Import\Category\Repositories\SqlStatementRepository">
+            <argument type="service" id="import.util.sql.compilers"/>
+        </service>
         <service id="import_category.repository.category.datetime" class="TechDivision\Import\Category\Repositories\CategoryDatetimeRepository">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
