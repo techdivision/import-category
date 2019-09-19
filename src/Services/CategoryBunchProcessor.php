@@ -22,7 +22,6 @@ namespace TechDivision\Import\Category\Services;
 
 use TechDivision\Import\Actions\ActionInterface;
 use TechDivision\Import\Connection\ConnectionInterface;
-use TechDivision\Import\Actions\UrlRewriteActionInterface;
 use TechDivision\Import\Repositories\UrlRewriteRepositoryInterface;
 use TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface;
 use TechDivision\Import\Repositories\EavAttributeRepositoryInterface;
@@ -847,22 +846,6 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     public function getCategoryAttributesByPrimaryKeyAndStoreId($pk, $storeId)
     {
         return $this->getCategoryAttributeAssembler()->getCategoryAttributesByPrimaryKeyAndStoreId($pk, $storeId);
-    }
-
-    /**
-     * Load's and return's the EAV attribute option value with the passed code, store ID and value.
-     *
-     * @param string  $attributeCode The code of the EAV attribute option to load
-     * @param integer $storeId       The store ID of the attribute option to load
-     * @param string  $value         The value of the attribute option to load
-     *
-     * @return array The EAV attribute option value
-     * @deprecated Since 5.0.0
-     * @see \TechDivision\Import\Services\EavAwareProcessorInterface::loadAttributeOptionValueByEntityTypeIdAndAttributeCodeAndStoreIdAndValue()
-     */
-    public function loadEavAttributeOptionValueByAttributeCodeAndStoreIdAndValue($attributeCode, $storeId, $value)
-    {
-        return $this->getEavAttributeOptionValueRepository()->findOneByAttributeCodeAndStoreIdAndValue($attributeCode, $storeId, $value);
     }
 
     /**
