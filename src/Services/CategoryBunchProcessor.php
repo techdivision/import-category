@@ -970,6 +970,36 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     }
 
     /**
+     * Load's and return's the varchar attribute with the passed params.
+     *
+     * @param integer $attributeCode The attribute code of the varchar attribute
+     * @param integer $entityTypeId  The entity type ID of the varchar attribute
+     * @param integer $storeId       The store ID of the varchar attribute
+     * @param string  $value         The value of the varchar attribute
+     *
+     * @return array|null The varchar attribute
+     */
+    public function loadVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndValue($attributeCode, $entityTypeId, $storeId, $value)
+    {
+        return $this->loadCategoryVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndValue($attributeCode, $entityTypeId, $storeId, $value);
+    }
+
+    /**
+     * Load's and return's the varchar attribute with the passed params.
+     *
+     * @param integer $attributeCode The attribute code of the varchar attribute
+     * @param integer $entityTypeId  The entity type ID of the varchar attribute
+     * @param integer $storeId       The store ID of the varchar attribute
+     * @param string  $value         The value of the varchar attribute
+     *
+     * @return array|null The varchar attribute
+     */
+    public function loadCategoryVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndValue($attributeCode, $entityTypeId, $storeId, $value)
+    {
+        return $this->getCategoryVarcharRepository()->findOneByAttributeCodeAndEntityTypeIdAndStoreIdAndValue($attributeCode, $entityTypeId, $storeId, $value);
+    }
+
+    /**
      * Persist's the passed category data and return's the ID.
      *
      * @param array       $category The category data to persist

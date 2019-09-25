@@ -157,4 +157,32 @@ class ColumnKeys extends \TechDivision\Import\Utils\ColumnKeys
      * @var string
      */
     const NAME = 'name';
+
+    /**
+     * Name for the column 'categories'.
+     *
+     * @var string
+     */
+    const CATEGORIES = 'categories';
+
+    /**
+     * Name for the column 'is_active'.
+     *
+     * @var string
+     */
+    const IS_ACTIVE = 'is_active';
+
+    /**
+     * Name for the column 'is_anchor'.
+     *
+     * @var string
+     */
+    const IS_ANCHOR = 'is_anchor';
+
+    /**
+     * Name for the column 'include_in_menu'.
+     *
+     * @var string
+     */
+    const INCLUDE_IN_MENU = 'include_in_menu';
 }

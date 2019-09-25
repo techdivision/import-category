@@ -93,9 +93,10 @@ class CategoryObserver extends AbstractCategoryImportObserver
 
             // iterate over the category names and try to load the category therefore
             for ($i = 0; $i < sizeof($categories); $i++) {
+                // prepare the expected category name
+                $categoryPath = implode('/', array_slice($categories, 0, $i + 1));
+
                 try {
-                    // prepare the expected category name
-                    $categoryPath = implode('/', array_slice($categories, 0, $i + 1));
                     // load the existing category
                     if ($category = $this->loadCategory($this->mapPath($categoryPath))) {
                         // prepend the ID the array with the category IDs
@@ -116,6 +117,10 @@ class CategoryObserver extends AbstractCategoryImportObserver
 
                     // append the ID of the new category to array with the IDs
                     array_push($this->categoryIds, $category[MemberNames::ENTITY_ID]);
+
+                    // add the category by the given path as well as the path mapping
+                    $this->addCategoryByPath($categoryPath, $category);
+                    $this->addPathEntityIdMapping($categoryPath);
                 }
             }
 
@@ -187,6 +192,19 @@ class CategoryObserver extends AbstractCategoryImportObserver
     protected function initializeCategory(array $attr)
     {
         return $attr;
+    }
+
+    /**
+     * Add's the passed category with the given path.
+     *
+     * @param string $path     The path to add the category with
+     * @param array  $category The catagory to add
+     *
+     * @return void
+     */
+    protected function addCategoryByPath($path, array $category)
+    {
+        $this->getSubject()->addCategoryByPath($path, $category);
     }
 
     /**

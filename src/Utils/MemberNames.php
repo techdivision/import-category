@@ -96,13 +96,6 @@ class MemberNames extends \TechDivision\Import\Utils\MemberNames
     const CHILDREN_COUNT = 'children_count';
 
     /**
-     * Name for the member 'url_key'.
-     *
-     * @var string
-     */
-    const URL_KEY = 'url_key';
-
-    /**
      * Name for the member 'category_id'.
      *
      * @var string

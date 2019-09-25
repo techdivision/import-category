@@ -23,9 +23,11 @@ namespace TechDivision\Import\Category\Observers;
 use Zend\Filter\FilterInterface;
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Utils\UrlKeyUtilInterface;
 use TechDivision\Import\Utils\Filter\UrlKeyFilterTrait;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
+use TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface;
 
 /**
  * Observer that extracts the URL key/path from the category path
@@ -48,6 +50,13 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
     use UrlKeyFilterTrait;
 
     /**
+     * The URL key utility instance.
+     *
+     * @var \TechDivision\Import\Utils\UrlKeyUtilInterface
+     */
+    protected $urlKeyUtil;
+
+    /**
      * The category bunch processor instance.
      *
      * @var \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface
@@ -59,15 +68,18 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
      *
      * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface $categoryBunchProcessor  The category bunch processor instance
      * @param \Zend\Filter\FilterInterface                                           $convertLiteralUrlFilter The URL filter instance
+     * @param \TechDivision\Import\Utils\UrlKeyUtilInterface                         $urlKeyUtil              The URL key utility instance
      */
     public function __construct(
         CategoryBunchProcessorInterface $categoryBunchProcessor,
-        FilterInterface $convertLiteralUrlFilter
+        FilterInterface $convertLiteralUrlFilter,
+        UrlKeyUtilInterface $urlKeyUtil
     ) {
 
         // set the processor and the URL filter instance
         $this->categoryBunchProcessor = $categoryBunchProcessor;
         $this->convertLiteralUrlFilter = $convertLiteralUrlFilter;
+        $this->urlKeyUtil = $urlKeyUtil;
     }
 
     /**
@@ -82,13 +94,20 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
         $urlKey = null;
         $categories = array();
 
+        // set the entity ID for the category with the passed path
+        try {
+            $this->setIds($this->getCategoryByPath($this->getValue(ColumnKeys::PATH)));
+        } catch (\Exception $e) {
+            $this->setIds(array());
+        }
+
         // query whether or not the URL key column has a value
         if ($this->hasValue(ColumnKeys::URL_KEY)) {
-            $urlKey = $this->getValue(ColumnKeys::URL_KEY);
+            $urlKey = $this->makeUnique($this->getSubject(), $this->getValue(ColumnKeys::URL_KEY));
         } else {
             $this->setValue(
                 ColumnKeys::URL_KEY,
-                $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME))
+                $urlKey = $this->makeUnique($this->getSubject(), $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME)))
             );
         }
 
@@ -130,6 +149,16 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
     }
 
     /**
+     * Return the primary key member name.
+     *
+     * @return string The primary key member name
+     */
+    protected function getPkMemberName()
+    {
+        return MemberNames::ENTITY_ID;
+    }
+
+    /**
      * Returns the category bunch processor instance.
      *
      * @return \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface The category bunch processor instance
@@ -140,15 +169,26 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
     }
 
     /**
-     * Return's the category with the passed ID.
+     * Returns the URL key utility instance.
      *
-     * @param string $id The ID of the category to return
+     * @return \TechDivision\Import\Utils\UrlKeyUtilInterface The URL key utility instance
+     */
+    protected function getUrlKeyUtil()
+    {
+        return $this->urlKeyUtil;
+    }
+
+    /**
+     * Return's the category with the passed path.
+     *
+     * @param string $path The path of the category to return
      *
      * @return array The category
+     * @throws \Exception Is thrown, if the requested category is not available
      */
-    protected function loadCategory($id)
+    protected function getCategoryByPath($path)
     {
-        return $this->getCategoryBunchProcessor()->loadCategory($id);
+        return $this->getSubject()->getCategoryByPath($path);
     }
 
     /**
@@ -162,5 +202,41 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
     protected function getCategoryByPkAndStoreId($pk, $storeId)
     {
         return $this->getCategoryBunchProcessor()->getCategoryByPkAndStoreId($pk, $storeId);
+    }
+
+    /**
+     * Temporarily persist's the IDs of the passed category.
+     *
+     * @param array $category The category to temporarily persist the IDs for
+     *
+     * @return void
+     */
+    protected function setIds(array $category)
+    {
+        $this->setLastEntityId(isset($category[$this->getPkMemberName()]) ? $category[$this->getPkMemberName()] : null);
+    }
+
+    /**
+     * Set's the ID of the category that has been created recently.
+     *
+     * @param string $lastEntityId The entity ID
+     *
+     * @return void
+     */
+    protected function setLastEntityId($lastEntityId)
+    {
+        $this->getSubject()->setLastEntityId($lastEntityId);
+    }
+
+    /**
+     * Make's the passed URL key unique by adding the next number to the end.
+     *
+     * @param string $urlKey The URL key to make unique
+     *
+     * @return string The unique URL key
+     */
+    protected function makeUnique(UrlKeyAwareSubjectInterface $subject, $urlKey)
+    {
+        return $this->getUrlKeyUtil()->makeUnique($subject, $urlKey);
     }
 }

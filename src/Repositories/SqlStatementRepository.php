@@ -234,7 +234,16 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                FROM ${table:catalog_category_entity}
               WHERE path = :path',
         SqlStatementKeys::CATEGORY_COUNT_CHILDREN =>
-            'SELECT COUNT(*) FROM ${table:catalog_category_entity} WHERE path LIKE :path'
+            'SELECT COUNT(*) FROM ${table:catalog_category_entity} WHERE path LIKE :path',
+        SqlStatementKeys::CATEGORY_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE =>
+            'SELECT t1.*
+                   FROM ${table:catalog_category_entity_varchar} t1,
+                        ${table:eav_attribute} t2
+                  WHERE t2.attribute_code = :attribute_code
+                    AND t2.entity_type_id = :entity_type_id
+                    AND t1.attribute_id = t2.attribute_id
+                    AND t1.store_id = :store_id
+                    AND t1.value = BINARY :value',
     );
 
     /**

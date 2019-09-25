@@ -213,4 +213,12 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
      * @var string
      */
     const CATEGORY_COUNT_CHILDREN = 'category.count.children';
+
+    /**
+     * The SQL statement to load a category varchar attribute by the passed attribute code,
+     * entity typy and store ID as well as the passed value.
+     *
+     * @var string
+     */
+    const CATEGORY_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_VALUE = 'category_varchar.by.attribute_code.and.entity_type_id.and.store_id.and.value';
 }

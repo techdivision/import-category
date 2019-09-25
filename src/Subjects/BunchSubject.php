@@ -24,10 +24,13 @@ use TechDivision\Import\Subjects\ExportableTrait;
 use TechDivision\Import\Subjects\FileUploadTrait;
 use TechDivision\Import\Subjects\ExportableSubjectInterface;
 use TechDivision\Import\Subjects\FileUploadSubjectInterface;
+use TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface;
 use TechDivision\Import\Category\Utils\PageLayoutKeys;
 use TechDivision\Import\Category\Utils\DisplayModeKeys;
 use TechDivision\Import\Category\Utils\ConfigurationKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Utils\StoreViewCodes;
+use TechDivision\Import\Category\Utils\RegistryKeys;
 
 /**
  * The subject implementation that handles the business logic to persist products.
@@ -38,7 +41,7 @@ use TechDivision\Import\Category\Utils\MemberNames;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-class BunchSubject extends AbstractCategorySubject implements ExportableSubjectInterface, FileUploadSubjectInterface
+class BunchSubject extends AbstractCategorySubject implements ExportableSubjectInterface, FileUploadSubjectInterface, UrlKeyAwareSubjectInterface
 {
 
     /**
@@ -89,6 +92,13 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
     );
 
     /**
+     * The available entity types.
+     *
+     * @var array
+     */
+    protected $entityTypes = array();
+
+    /**
      * Intializes the previously loaded global data for exactly one bunch.
      *
      * @param string $serial The serial of the actual import
@@ -97,6 +107,12 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
      */
     public function setUp($serial)
     {
+
+        // load the status of the actual import
+        $status = $this->getRegistryProcessor()->getAttribute(RegistryKeys::STATUS);
+
+        // load the global data we've prepared initially
+        $this->entityTypes = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::ENTITY_TYPES];
 
         // initialize the flag whether to copy images or not
         if ($this->getConfiguration()->hasParam(ConfigurationKeys::COPY_IMAGES)) {
@@ -240,5 +256,40 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
     protected function getPrimaryKeyMemberName()
     {
         return MemberNames::ENTITY_ID;
+    }
+
+    /**
+     * Return's the entity type for the configured entity type code.
+     *
+     * @return array The requested entity type
+     * @throws \Exception Is thrown, if the requested entity type is not available
+     */
+    public function getEntityType()
+    {
+
+        // query whether or not the entity type with the passed code is available
+        if (isset($this->entityTypes[$entityTypeCode = $this->getEntityTypeCode()])) {
+            return $this->entityTypes[$entityTypeCode];
+        }
+
+        // throw a new exception
+        throw new \Exception(
+            $this->appendExceptionSuffix(
+                sprintf('Requested entity type "%s" is not available', $entityTypeCode)
+            )
+        );
+    }
+
+    /**
+     * Return's TRUE, if the passed URL key varchar value IS related with the actual PK.
+     *
+     * @param array $categoryVarcharAttribute The varchar value to check
+     *
+     * @return boolean TRUE if the URL key is related, else FALSE
+     */
+    public function isUrlKeyOf(array $categoryVarcharAttribute)
+    {
+        return ((integer) $categoryVarcharAttribute[MemberNames::ENTITY_ID] === (integer) $this->getLastEntityId()) &&
+               ((integer) $categoryVarcharAttribute[MemberNames::STORE_ID] === (integer) $this->getRowStoreId(StoreViewCodes::ADMIN));
     }
 }

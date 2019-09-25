@@ -5,6 +5,15 @@
 
     <services>
 
+        <service id="import_category.listeners.category.reduce" class="TechDivision\Import\Category\Listeners\CategoryReduceListener">
+            <argument type="service" id="import.processor.registry"/>
+        </service>
+
+        <service id="import_category.util.url.key" class="TechDivision\Import\Utils\UrlKeyUtil">
+            <argument type="service" id="configuration"/>
+            <argument type="service" id="import_category.processor.category.bunch"/>
+        </service>
+
         <service id="import_category.repository.sql.statement" class="TechDivision\Import\Category\Repositories\SqlStatementRepository">
             <argument type="service" id="import.util.sql.compilers"/>
         </service>
@@ -31,6 +40,7 @@
         <service id="import_category.repository.category.varchar" class="TechDivision\Import\Category\Repositories\CategoryVarcharRepository">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="cache.configurable"/>
         </service>
 
         <service id="import_category.action.processor.category.create" class="TechDivision\Import\Category\Actions\Processors\CategoryCreateProcessor">
@@ -169,6 +179,7 @@
         <service id="import_category.observer.url.key.and.path" class="TechDivision\Import\Category\Observers\UrlKeyAndPathObserver">
             <argument type="service" id="import_category.processor.category.bunch"/>
             <argument type="service" id="import_category.filter.convert.literal.url"/>
+            <argument type="service" id="import_category.util.url.key"/>
         </service>
         <service id="import_category.observer.category.copy" class="TechDivision\Import\Category\Observers\CopyCategoryObserver"/>
         <service id="import_category.observer.category.attribute" class="TechDivision\Import\Category\Observers\CategoryAttributeObserver">
@@ -277,7 +288,19 @@
             <argument type="service" id="loggers"/>
             <argument type="service" id="import.events.emitter"/>
         </service>
+        <service id="import_category.subject.export.from.product" class="TechDivision\Import\Category\Subjects\ExportFromProductSubject" shared="false">
+            <argument type="service" id="import.processor.registry"/>
+            <argument type="service" id="import.generator.core.config.data.uid"/>
+            <argument type="service" id="loggers"/>
+            <argument type="service" id="import.events.emitter"/>
+        </service>
 
+        <service id="import_category.plugin.export.from.product" class="TechDivision\Import\Category\Plugins\ExportFromProductPlugin">
+            <argument type="service" id="import_app_simple.simple"/>
+            <argument type="service" id="import.plugin.subject.executor"/>
+            <argument type="service" id="import.subject.file.resolver.factory"/>
+            <argument type="service" id="import.processor.registry"/>
+        </service>
         <service id="import_category.plugin.children.count" class="TechDivision\Import\Category\Plugins\ChildrenCountPlugin">
             <argument type="service" id="import_app_simple.simple"/>
             <argument type="service" id="import_category.processor.category.bunch"/>

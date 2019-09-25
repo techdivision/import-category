@@ -50,6 +50,55 @@
   ],
   "operations" : [
     {
+      "name" : "convert",
+      "plugins" : [
+        {
+          "id": "import.plugin.cache.warmer"
+        },
+        {
+          "id": "import.plugin.global.data"
+        },
+        {
+          "id": "import_converter.plugin.exportable.converter.generic",
+          "params" : [
+            {
+              "exportable-artefact-types": [ "category-import" ]
+            }
+          ],
+          "listeners" : [
+            {
+              "plugin.export.start" : [
+                "import_converter_product_category.listeners.reduce.category"
+              ]
+            }
+          ],
+          "subjects": [
+            {
+              "id": "import.subject.move.files",
+              "file-resolver": {
+                "prefix": "product-import"
+              },
+              "ok-file-needed": true
+            },
+            {
+              "id": "import_converter_product_category.subject.converter",
+              "create-imported-file": false,
+              "file-resolver": {
+                "prefix": "product-import"
+              },
+              "observers": [
+                {
+                  "import": [
+                    "import_converter_product_category.observer.product.to.category"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name" : "delete",
       "plugins" : [
         {

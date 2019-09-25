@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Category\Services;
 
 use TechDivision\Import\Services\EavAwareProcessorInterface;
+use TechDivision\Import\Services\UrlKeyAwareProcessorInterface;
 
 /**
  * Interface for a category bunch processor.
@@ -31,7 +32,7 @@ use TechDivision\Import\Services\EavAwareProcessorInterface;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, EavAwareProcessorInterface
+interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, EavAwareProcessorInterface, UrlKeyAwareProcessorInterface
 {
 
     /**
@@ -314,6 +315,18 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
      * @return array|null The varchar attribute
      */
     public function loadCategoryVarcharAttribute($entityId, $attributeId, $storeId);
+
+    /**
+     * Load's and return's the varchar attribute with the passed params.
+     *
+     * @param integer $attributeCode The attribute code of the varchar attribute
+     * @param integer $entityTypeId  The entity type ID of the varchar attribute
+     * @param integer $storeId       The store ID of the varchar attribute
+     * @param string  $value         The value of the varchar attribute
+     *
+     * @return array|null The varchar attribute
+     */
+    public function loadCategoryVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndValue($attributeCode, $entityTypeId, $storeId, $value);
 
     /**
      * Load's and return's the EAV attribute option value with the passed entity type ID, code, store ID and value.
