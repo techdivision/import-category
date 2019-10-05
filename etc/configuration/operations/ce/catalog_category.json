@@ -1,0 +1,222 @@
+{
+  "shortcuts": {
+    "ce": {
+      "catalog_category": {
+        "delete": [
+          "general/general/move-files",
+          "general/general/global-data",
+          "ce/catalog_category/delete",
+          "general/general/archive-artefacts"
+        ],
+        "replace": [
+          "general/general/move-files",
+          "general/general/cache-warmer",
+          "general/general/global-data",
+          "ce/catalog_category/replace",
+          "general/general/archive-artefacts"
+        ],
+        "add-update": [
+          "general/general/move-files",
+          "general/general/cache-warmer",
+          "general/general/global-data",
+          "ce/catalog_category/add-update",
+          "general/general/archive-artefacts"
+        ]
+      }
+    }
+  },
+  "operations": {
+    "ce": {
+      "catalog_category": [
+        {
+          "name": "convert",
+          "plugins": [
+            {
+              "id": "import_converter.plugin.exportable.converter.generic",
+              "params": [
+                {
+                  "exportable-artefact-types": [
+                    "category-import"
+                  ]
+                }
+              ],
+              "listeners": [
+                {
+                  "plugin.export.start": [
+                    "import_converter_product_category.listeners.reduce.category"
+                  ]
+                }
+              ],
+              "subjects": [
+                {
+                  "id": "import_converter_product_category.subject.converter",
+                  "create-imported-file": false,
+                  "file-resolver": {
+                    "prefix": "product-import"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_converter_product_category.observer.product.to.category"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "delete",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_category.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "category-import"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_category.observer.clear.category"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "replace",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_category.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "category-import"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_category.observer.composite.replace"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "import_category.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "category-create"
+                  },
+                  "params": [
+                    {
+                      "copy-images": false
+                    }
+                  ],
+                  "observers": [
+                    {
+                      "import": [
+                        "import_category.observer.composite.create.replace"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "import_category.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "category-path"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_category.observer.category.path"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "import_category.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "category-url-rewrite"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_category.observer.url.rewrite"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_category.plugin.children.count"
+            }
+          ]
+        },
+        {
+          "name": "add-update",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_category.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "category-import"
+                  },
+                  "params": [
+                    {
+                      "copy-images": false
+                    }
+                  ],
+                  "observers": [
+                    {
+                      "import": [
+                        "import_category.observer.composite.add_update"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "import_category.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "category-path"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_category.observer.category.path"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "import_category.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "category-url-rewrite"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_category.observer.url.rewrite.update"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "import_category.plugin.children.count"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

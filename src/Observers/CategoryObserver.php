@@ -113,7 +113,14 @@ class CategoryObserver extends AbstractCategoryImportObserver
 
                     // update the persisted category with the entity ID
                     $category[$this->getPkMemberName()] = $this->persistCategory($category);
+
+                    // update the persisted category with the additional attribute values
+                    $category[MemberNames::NAME] = $this->getValue(ColumnKeys::NAME);
                     $category[MemberNames::URL_KEY] = $this->getValue(ColumnKeys::URL_KEY);
+                    $category[MemberNames::URL_PATH] = $this->getValue(ColumnKeys::URL_PATH);
+                    $category[MemberNames::IS_ACTIVE] = $this->getValue(ColumnKeys::IS_ACTIVE);
+                    $category[MemberNames::IS_ANCHOR] = $this->getValue(ColumnKeys::IS_ANCHOR);
+                    $category[MemberNames::INCLUDE_IN_MENU] = $this->getValue(ColumnKeys::INCLUDE_IN_MENU);
 
                     // append the ID of the new category to array with the IDs
                     array_push($this->categoryIds, $category[MemberNames::ENTITY_ID]);

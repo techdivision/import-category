@@ -101,4 +101,18 @@ class MemberNames extends \TechDivision\Import\Utils\MemberNames
      * @var string
      */
     const CATEGORY_ID = 'category_id';
+
+    /**
+     * Name for the member 'is_anchor'.
+     *
+     * @var string
+     */
+    const IS_ANCHOR = 'is_anchor';
+
+    /**
+     * Name for the member 'include_in_menu'.
+     *
+     * @var string
+     */
+    const INCLUDE_IN_MENU = 'include_in_menu';
 }

@@ -335,15 +335,26 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
         // load the registry processor
         $registryProcessor = $this->getRegistryProcessor();
 
+        // load the status of the actual import
+        $status = $registryProcessor->getAttribute(RegistryKeys::STATUS);
+
+        // load the categories for the admin store view from the global data
+        $categories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CATEGORIES];
+
+        // update the categories of the global data with the new ones
+        foreach (array_keys($this->stores) as $storeWebsiteCode) {
+            foreach ($this->categories as $path => $category) {
+                $categories[$storeWebsiteCode][$path] = $category;
+            }
+        }
+
         // update the status with the actual path => entity ID mappings
         $registryProcessor->mergeAttributesRecursive(
             RegistryKeys::STATUS,
             array(
                 RegistryKeys::PATH_ENTITY_ID_MAPPING => $this->pathEntityIdMapping,
                 RegistryKeys::GLOBAL_DATA => array(
-                    RegistryKeys::CATEGORIES => array(
-                        StoreViewCodes::ADMIN => $this->categories
-                    )
+                    RegistryKeys::CATEGORIES => $categories
                 )
             )
         );

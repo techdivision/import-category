@@ -10,6 +10,7 @@
 * Add techdivision/import#146
 * Add techdivision/import-cli-simple#216
 * Remove unnecessary identifiers from configuration
+* Update categories in global data with created ones
 * Switch to latest techdivision/import 15.* version as dependency
 
 # Version 16.0.1
