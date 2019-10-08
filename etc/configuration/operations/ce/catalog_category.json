@@ -3,24 +3,30 @@
     "ce": {
       "catalog_category": {
         "delete": [
+          "general/general/initialize",
           "general/general/move-files",
           "general/general/global-data",
           "ce/catalog_category/delete",
-          "general/general/archive-artefacts"
+          "general/general/archive-artefacts",
+          "general/general/clean-up"
         ],
         "replace": [
+          "general/general/initialize",
           "general/general/move-files",
           "general/general/cache-warmer",
           "general/general/global-data",
           "ce/catalog_category/replace",
-          "general/general/archive-artefacts"
+          "general/general/archive-artefacts",
+          "general/general/clean-up"
         ],
         "add-update": [
+          "general/general/initialize",
           "general/general/move-files",
           "general/general/cache-warmer",
           "general/general/global-data",
           "ce/catalog_category/add-update",
-          "general/general/archive-artefacts"
+          "general/general/archive-artefacts",
+          "general/general/clean-up"
         ]
       }
     }
@@ -33,13 +39,11 @@
           "plugins": [
             {
               "id": "import_converter.plugin.exportable.converter.generic",
-              "params": [
-                {
-                  "exportable-artefact-types": [
-                    "category-import"
-                  ]
-                }
-              ],
+              "params": {
+                "exportable-artefact-types": [
+                  "category-import"
+                ]
+              },
               "listeners": [
                 {
                   "plugin.export.start": [
@@ -113,11 +117,9 @@
                   "file-resolver": {
                     "prefix": "category-create"
                   },
-                  "params": [
-                    {
-                      "copy-images": false
-                    }
-                  ],
+                  "params": {
+                    "copy-images": false
+                  },
                   "observers": [
                     {
                       "import": [
@@ -170,11 +172,9 @@
                   "file-resolver": {
                     "prefix": "category-import"
                   },
-                  "params": [
-                    {
-                      "copy-images": false
-                    }
-                  ],
+                  "params": {
+                    "copy-images": false
+                  },
                   "observers": [
                     {
                       "import": [
