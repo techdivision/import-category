@@ -16,6 +16,10 @@
           "general/general/cache-warmer",
           "general/general/global-data",
           "ce/catalog_category/replace",
+          "ce/catalog_category/replace.create",
+          "ce/catalog_category/replace.path",
+          "ce/catalog_category/replace.url-rewrite",
+          "general/catalog_category/children-count",
           "general/general/archive-artefacts",
           "general/general/clean-up"
         ],
@@ -25,6 +29,9 @@
           "general/general/cache-warmer",
           "general/general/global-data",
           "ce/catalog_category/add-update",
+          "ce/catalog_category/add-update.path",
+          "ce/catalog_category/add-update.url-rewrite",
+          "general/catalog_category/children-count",
           "general/general/archive-artefacts",
           "general/general/clean-up"
         ]
@@ -32,8 +39,16 @@
     }
   },
   "operations": {
-    "ce": {
+    "general": {
       "catalog_category": [
+        {
+          "name": "children-count",
+          "plugins": [
+            {
+              "id": "import_category.plugin.children.count"
+            }
+          ]
+        },
         {
           "name": "convert",
           "plugins": [
@@ -69,7 +84,11 @@
               ]
             }
           ]
-        },
+        }
+      ]
+    },
+    "ce": {
+      "catalog_category": [
         {
           "name": "delete",
           "plugins": [
@@ -111,7 +130,17 @@
                       ]
                     }
                   ]
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "replace.create",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
                 {
                   "id": "import_category.subject.bunch",
                   "file-resolver": {
@@ -127,7 +156,17 @@
                       ]
                     }
                   ]
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "replace.path",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
                 {
                   "id": "import_category.subject.bunch",
                   "file-resolver": {
@@ -140,7 +179,17 @@
                       ]
                     }
                   ]
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "replace.url-rewrite",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
                 {
                   "id": "import_category.subject.bunch",
                   "file-resolver": {
@@ -155,9 +204,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "id": "import_category.plugin.children.count"
             }
           ]
         },
@@ -182,7 +228,17 @@
                       ]
                     }
                   ]
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "add-update.path",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
                 {
                   "id": "import_category.subject.bunch",
                   "file-resolver": {
@@ -195,7 +251,17 @@
                       ]
                     }
                   ]
-                },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "add-update.url-rewrite",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "subjects": [
                 {
                   "id": "import_category.subject.bunch",
                   "file-resolver": {
@@ -210,9 +276,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "id": "import_category.plugin.children.count"
             }
           ]
         }
