@@ -3,15 +3,11 @@
     "ce": {
       "catalog_category": {
         "delete": [
-          "general/general/initialize",
           "general/general/move-files",
           "general/general/global-data",
-          "ce/catalog_category/delete",
-          "general/general/archive-artefacts",
-          "general/general/clean-up"
+          "ce/catalog_category/delete"
         ],
         "replace": [
-          "general/general/initialize",
           "general/general/move-files",
           "general/general/cache-warmer",
           "general/general/global-data",
@@ -19,21 +15,16 @@
           "ce/catalog_category/replace.create",
           "ce/catalog_category/replace.path",
           "ce/catalog_category/replace.url-rewrite",
-          "general/catalog_category/children-count",
-          "general/general/archive-artefacts",
-          "general/general/clean-up"
+          "general/catalog_category/children-count"
         ],
         "add-update": [
-          "general/general/initialize",
           "general/general/move-files",
           "general/general/cache-warmer",
           "general/general/global-data",
           "ce/catalog_category/add-update",
           "ce/catalog_category/add-update.path",
           "ce/catalog_category/add-update.url-rewrite",
-          "general/catalog_category/children-count",
-          "general/general/archive-artefacts",
-          "general/general/clean-up"
+          "general/catalog_category/children-count"
         ]
       }
     }
