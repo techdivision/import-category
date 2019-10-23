@@ -8,6 +8,7 @@
 
 * Remove deprecated classes and methods
 * Add techdivision/import#146
+* Add techdivision/import#162
 * Add techdivision/import-cli-simple#216
 * Remove unnecessary identifiers from configuration
 * Update categories in global data with created ones
