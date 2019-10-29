@@ -30,7 +30,7 @@ use TechDivision\Import\Category\Utils\ConfigurationKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
 
 /**
- * The subject implementation that handles the business logic to persist products.
+ * The subject implementation that handles the business logic to persist categories.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2019 TechDivision GmbH <info@techdivision.com>
