@@ -1,3 +1,13 @@
+# Version 16.1.1
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Clean-Up configuration files
+
 # Version 16.1.0
 
 ## Bugfixes
