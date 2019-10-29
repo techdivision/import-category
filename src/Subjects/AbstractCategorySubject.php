@@ -97,15 +97,6 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
     protected $coreConfigData;
 
     /**
-     * Mappings for attribute code => CSV column header.
-     *
-     * @var array
-     */
-    protected $headerMappings = array(
-        'image_path' => 'image'
-    );
-
-    /**
      * The default mappings for the user defined attributes, based on the attributes frontend input type.
      *
      * @var array

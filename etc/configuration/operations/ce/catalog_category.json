@@ -1,4 +1,9 @@
 {
+  "header-mappings": {
+    "catalog_category": {
+      "image_path": "image"
+    }
+  },
   "shortcuts": {
     "ce": {
       "catalog_category": {
