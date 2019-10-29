@@ -1,3 +1,13 @@
+# Version 16.1.2
+
+## Bugfixes
+
+* Fixed invalid configuration file
+
+## Features
+
+* None
+
 # Version 16.1.1
 
 ## Bugfixes
