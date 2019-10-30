@@ -5,6 +5,9 @@
 
     <services>
 
+        <service id="import_category.listener.sort.category" class="TechDivision\Import\Category\Listeners\SortCategoryListener">
+            <argument type="service" id="import.processor.registry"/>
+        </service>
         <service id="import_category.listeners.category.reduce" class="TechDivision\Import\Category\Listeners\CategoryReduceListener">
             <argument type="service" id="import.processor.registry"/>
         </service>
@@ -211,18 +214,6 @@
         </service>
 
         <!--
-         | The DI configuration for the composite observers of the category replace operation.
-         |-->
-        <service id="import_category.observer.composite.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
-            <call method="addObserver">
-                <argument id="import_category.observer.category.copy" type="service"/>
-            </call>
-            <call method="addObserver">
-                <argument id="import_category.observer.clear.category" type="service"/>
-            </call>
-        </service>
-
-        <!--
          | The DI configuration for the composite observers of the category create replace operation.
          |-->
         <service id="import_category.observer.composite.create.replace" class="TechDivision\Import\Observers\GenericCompositeObserver">
@@ -283,6 +274,12 @@
         </service>
  
         <service id="import_category.subject.bunch" class="TechDivision\Import\Category\Subjects\BunchSubject" shared="false">
+            <argument type="service" id="import.processor.registry"/>
+            <argument type="service" id="import.generator.core.config.data.uid"/>
+            <argument type="service" id="loggers"/>
+            <argument type="service" id="import.events.emitter"/>
+        </service>
+        <service id="import_category.subject.sortable.bunch" class="TechDivision\Import\Category\Subjects\SortableBunchSubject" shared="false">
             <argument type="service" id="import.processor.registry"/>
             <argument type="service" id="import.generator.core.config.data.uid"/>
             <argument type="service" id="loggers"/>
