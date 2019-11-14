@@ -23,19 +23,13 @@ namespace TechDivision\Import\Category\Utils;
 /**
  * Utility class containing parameter names for prepared statements.
  *
- * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
- * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
- * @link      https://github.com/techdivision/import-category
- * @link      http://www.techdivision.com
+ * @author     Tim Wagner <t.wagner@techdivision.com>
+ * @copyright  2016 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       https://github.com/techdivision/import-category
+ * @link       http://www.techdivision.com
+ * @deprecated Since 17.0.0 use MemberNames instead
  */
 class ParamNames extends \TechDivision\Import\Category\Utils\MemberNames
 {
-
-    /**
-     * Name for the parameter name 'pk'.
-     *
-     * @var string
-     */
-    const PK = 'pk';
 }
