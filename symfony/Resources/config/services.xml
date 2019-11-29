@@ -272,6 +272,18 @@
                 <argument id="import_category.observer.clean.up" type="service"/>
             </call>
         </service>
+
+        <!--
+         | The DI configuration for the composite observers of the validation operation.
+         |-->
+        <service id="import_category.observer.composite.base.validate" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import.observer.additional.attribute" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import.observer.generic.validator" type="service"/>
+            </call>
+        </service>
  
         <service id="import_category.subject.bunch" class="TechDivision\Import\Category\Subjects\BunchSubject" shared="false">
             <argument type="service" id="import.processor.registry"/>

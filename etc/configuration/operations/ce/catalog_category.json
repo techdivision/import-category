@@ -48,6 +48,56 @@
           ]
         },
         {
+          "name": "validate",
+          "plugins": [
+            {
+              "id": "import.plugin.subject",
+              "listeners": [
+                {
+                  "plugin.process.success": [
+                    "import.listener.stop.validation"
+                  ]
+                }
+              ],
+              "subjects": [
+                {
+                  "id": "import.subject.validator",
+                  "create-imported-file": false,
+                  "file-resolver": {
+                    "prefix": "category-import"
+                  },
+                  "listeners": [
+                    {
+                      "subject.artefact.header.row.process.start": [
+                        "import.listener.validate.header.row"
+                      ]
+                    }
+                  ],
+                  "params" : {
+                    "custom-validations" : {
+                      "path" :  [ "/.+/" ]
+                    }
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_category.observer.composite.base.validate"
+                      ]
+                    }
+                  ],
+                  "callbacks": [
+                    {
+                      "path": [ "import.callback.custom.regex.validator" ],
+                      "store_view_code": [ "import.callback.store.view.code.validator" ],
+                      "attribute_set_code": [ "import.callback.attribute.set.name.validator" ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
           "name": "convert",
           "plugins": [
             {
