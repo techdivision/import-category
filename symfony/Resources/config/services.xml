@@ -209,9 +209,7 @@
         <service id="import_category.observer.url.rewrite.update" class="TechDivision\Import\Category\Observers\UrlRewriteUpdateObserver">
             <argument type="service" id="import_category.processor.category.bunch"/>
         </service>
-        <service id="import_category.observer.category.url.rewrite" class="TechDivision\Import\Category\Observers\CategoryUrlRewriteObserver">
-            <argument type="service" id="import_category.processor.category.bunch"/>
-        </service>
+        <service id="import_category.observer.category.url.rewrite" class="TechDivision\Import\Category\Observers\CategoryUrlRewriteObserver"/>
 
         <!--
          | The DI configuration for the composite observers of the category create replace operation.

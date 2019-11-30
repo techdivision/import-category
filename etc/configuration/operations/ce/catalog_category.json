@@ -7,6 +7,11 @@
   "shortcuts": {
     "ce": {
       "catalog_category": {
+        "validate": [
+          "general/general/global-data",
+          "general/general/move-files",
+          "general/catalog_category/validate"
+        ],
         "delete": [
           "general/general/move-files",
           "general/general/global-data",
@@ -89,7 +94,11 @@
                     {
                       "path": [ "import.callback.custom.regex.validator" ],
                       "store_view_code": [ "import.callback.store.view.code.validator" ],
-                      "attribute_set_code": [ "import.callback.attribute.set.name.validator" ]
+                      "attribute_set_code": [ "import.callback.attribute.set.name.validator" ],
+                      "created_at" : [ "import.callback.validator.datetime" ],
+                      "updated_at" : [ "import.callback.validator.datetime" ],
+                      "custom_design_to" : [ "import.callback.validator.datetime" ],
+                      "custom_design_from" : [ "import.callback.validator.datetime" ]
                     }
                   ]
                 }
