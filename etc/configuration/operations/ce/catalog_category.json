@@ -4,6 +4,11 @@
       "image_path": "image"
     }
   },
+  "default-values": {
+    "catalog_product": {
+      "is_anchor": 0
+    }
+  },
   "shortcuts": {
     "ce": {
       "catalog_category": {
