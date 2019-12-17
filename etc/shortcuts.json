@@ -1,0 +1,37 @@
+{
+  "shortcuts": {
+    "ce": {
+      "catalog_category": {
+        "validate": [
+          "general/general/global-data",
+          "general/general/move-files",
+          "general/catalog_category/validate"
+        ],
+        "delete": [
+          "general/general/move-files",
+          "general/general/global-data",
+          "ce/catalog_category/delete"
+        ],
+        "replace": [
+          "general/general/move-files",
+          "general/general/global-data",
+          "ce/catalog_category/sort",
+          "ce/catalog_category/delete",
+          "ce/catalog_category/replace",
+          "ce/catalog_category/replace.path",
+          "ce/catalog_category/replace.url-rewrite",
+          "general/catalog_category/children-count"
+        ],
+        "add-update": [
+          "general/general/move-files",
+          "general/general/global-data",
+          "ce/catalog_category/sort",
+          "ce/catalog_category/add-update",
+          "ce/catalog_category/add-update.path",
+          "ce/catalog_category/add-update.url-rewrite",
+          "general/catalog_category/children-count"
+        ]
+      }
+    }
+  }
+}

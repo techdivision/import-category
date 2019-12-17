@@ -1,66 +1,17 @@
 {
-  "header-mappings": {
-    "catalog_category": {
-      "image_path": "image"
-    }
-  },
-  "default-values": {
-    "catalog_product": {
-      "is_anchor": 0
-    }
-  },
-  "shortcuts": {
-    "ce": {
-      "catalog_category": {
-        "validate": [
-          "general/general/global-data",
-          "general/general/move-files",
-          "general/catalog_category/validate"
-        ],
-        "delete": [
-          "general/general/move-files",
-          "general/general/global-data",
-          "ce/catalog_category/delete"
-        ],
-        "replace": [
-          "general/general/move-files",
-          "general/general/cache-warmer",
-          "general/general/global-data",
-          "ce/catalog_category/sort",
-          "ce/catalog_category/delete",
-          "ce/catalog_category/replace",
-          "ce/catalog_category/replace.path",
-          "ce/catalog_category/replace.url-rewrite",
-          "general/catalog_category/children-count"
-        ],
-        "add-update": [
-          "general/general/move-files",
-          "general/general/cache-warmer",
-          "general/general/global-data",
-          "ce/catalog_category/sort",
-          "ce/catalog_category/add-update",
-          "ce/catalog_category/add-update.path",
-          "ce/catalog_category/add-update.url-rewrite",
-          "general/catalog_category/children-count"
-        ]
-      }
-    }
-  },
   "operations": {
     "general": {
-      "catalog_category": [
-        {
-          "name": "children-count",
-          "plugins": [
-            {
+      "catalog_category": {
+        "children-count": {
+          "plugins": {
+            "children-count": {
               "id": "import_category.plugin.children.count"
             }
-          ]
+          }
         },
-        {
-          "name": "validate",
-          "plugins": [
-            {
+        "validate": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "listeners": [
                 {
@@ -109,12 +60,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "convert",
-          "plugins": [
-            {
+        "convert": {
+          "plugins": {
+            "converter": {
               "id": "import_converter.plugin.exportable.converter.generic",
               "params": {
                 "exportable-artefact-types": [
@@ -145,16 +95,15 @@
                 }
               ]
             }
-          ]
+          }
         }
-      ]
+      }
     },
     "ce": {
-      "catalog_category": [
-        {
-          "name": "sort",
-          "plugins": [
-            {
+      "catalog_category": {
+        "sort": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
 	            {
@@ -180,12 +129,11 @@
 	            }
 	          ]
 	        }
-	      ]
+	      }
         },
-        {
-          "name": "delete",
-          "plugins": [
-            {
+        "delete": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -203,12 +151,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "replace",
-          "plugins": [
-            {
+        "replace": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -229,12 +176,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "replace.path",
-          "plugins": [
-            {
+        "replace.path": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -252,12 +198,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "replace.url-rewrite",
-          "plugins": [
-            {
+        "replace.url-rewrite": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -275,12 +220,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "add-update",
-          "plugins": [
-            {
+        "add-update": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -301,12 +245,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "add-update.path",
-          "plugins": [
-            {
+        "add-update.path": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -324,12 +267,11 @@
                 }
               ]
             }
-          ]
+          }
         },
-        {
-          "name": "add-update.url-rewrite",
-          "plugins": [
-            {
+        "add-update.url-rewrite": {
+          "plugins": {
+            "subject": {
               "id": "import.plugin.subject",
               "subjects": [
                 {
@@ -347,9 +289,9 @@
                 }
               ]
             }
-          ]
+          }
         }
-      ]
+      }
     }
   }
 }

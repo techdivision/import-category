@@ -1,0 +1,7 @@
+{
+  "default-values": {
+    "catalog_product": {
+      "is_anchor": 0
+    }
+  }
+}
