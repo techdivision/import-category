@@ -279,6 +279,9 @@
                   "file-resolver": {
                     "prefix": "category-url-rewrite"
                   },
+                  "params": {
+                    "clean-up-url-rewrites": true
+                  },
                   "observers": [
                     {
                       "import": [
