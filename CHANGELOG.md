@@ -1,3 +1,13 @@
+# Version 16.1.3
+
+## Bugfixes
+
+* Fixed issue when creating root categories, update categories in global data with created ones therefore
+
+## Features
+
+* None
+
 # Version 16.1.2
 
 ## Bugfixes

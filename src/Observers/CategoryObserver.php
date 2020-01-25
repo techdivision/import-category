@@ -93,13 +93,16 @@ class CategoryObserver extends AbstractCategoryImportObserver
 
             // iterate over the category names and try to load the category therefore
             for ($i = 0; $i < sizeof($categories); $i++) {
+                // prepare the expected category name
+                $categoryPath = implode('/', array_slice($categories, 0, $i + 1));
+
                 try {
-                    // prepare the expected category name
-                    $categoryPath = implode('/', array_slice($categories, 0, $i + 1));
                     // load the existing category
                     if ($category = $this->loadCategory($this->mapPath($categoryPath))) {
                         // prepend the ID the array with the category IDs
                         array_push($this->categoryIds, (integer) $category[MemberNames::ENTITY_ID]);
+                        // temporary persist primary keys
+                        $this->updatePrimaryKeys($category);
                     } else {
                         throw new \Exception(sprintf('Can\'t load category %s from database', $categoryPath));
                     }
@@ -112,24 +115,32 @@ class CategoryObserver extends AbstractCategoryImportObserver
 
                     // update the persisted category with the entity ID
                     $category[$this->getPkMemberName()] = $this->persistCategory($category);
+
+                    // update the persisted category with the additional attribute values
+                    $category[MemberNames::NAME] = $this->getValue(ColumnKeys::NAME);
                     $category[MemberNames::URL_KEY] = $this->getValue(ColumnKeys::URL_KEY);
+                    $category[MemberNames::URL_PATH] = $this->getValue(ColumnKeys::URL_PATH);
+                    $category[MemberNames::IS_ACTIVE] = $this->getValue(ColumnKeys::IS_ACTIVE);
+                    $category[MemberNames::IS_ANCHOR] = $this->getValue(ColumnKeys::IS_ANCHOR);
+                    $category[MemberNames::INCLUDE_IN_MENU] = $this->getValue(ColumnKeys::INCLUDE_IN_MENU);
 
                     // append the ID of the new category to array with the IDs
                     array_push($this->categoryIds, $category[MemberNames::ENTITY_ID]);
+
+                    // temporary persist primary keys
+                    $this->updatePrimaryKeys($category);
+
+                    // add the category by the given path as well as the path mapping
+                    $this->addCategoryByPath($categoryPath, $category);
+                    $this->addPathEntityIdMapping($categoryPath);
+                } finally {
+                    // prepare the artefact and put it on the stack
+                    $artefacts[] = array(
+                        $this->getPkMemberName() => $category[$this->getPkMemberName()],
+                        MemberNames::PATH        => implode('/', $this->categoryIds)
+                    );
                 }
             }
-
-            // temporary persist primary keys
-            $this->updatePrimaryKeys($category);
-
-            // prepare the artefact
-            $artefact = array(
-                $this->getPkMemberName() => $category[$this->getPkMemberName()],
-                MemberNames::PATH        => implode('/', $this->categoryIds)
-            );
-
-            // put the artefact on the stack
-            $artefacts[] = $artefact;
 
             // add the artefacts
             $this->addArtefacts($artefacts);
@@ -187,6 +198,19 @@ class CategoryObserver extends AbstractCategoryImportObserver
     protected function initializeCategory(array $attr)
     {
         return $attr;
+    }
+
+    /**
+     * Add's the passed category with the given path.
+     *
+     * @param string $path     The path to add the category with
+     * @param array  $category The catagory to add
+     *
+     * @return void
+     */
+    protected function addCategoryByPath($path, array $category)
+    {
+        $this->getSubject()->addCategoryByPath($path, $category);
     }
 
     /**

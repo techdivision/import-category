@@ -335,11 +335,27 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
         // load the registry processor
         $registryProcessor = $this->getRegistryProcessor();
 
+        // load the status of the actual import
+        $status = $registryProcessor->getAttribute(RegistryKeys::STATUS);
+
+        // load the categories for the admin store view from the global data
+        $categories = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::CATEGORIES];
+
+        // update the categories of the global data with the new ones
+        foreach (array_keys($this->stores) as $storeWebsiteCode) {
+            foreach ($this->categories as $path => $category) {
+                $categories[$storeWebsiteCode][$path] = $category;
+            }
+        }
+
         // update the status with the actual path => entity ID mappings
         $registryProcessor->mergeAttributesRecursive(
             RegistryKeys::STATUS,
             array(
-                RegistryKeys::PATH_ENTITY_ID_MAPPING => $this->pathEntityIdMapping
+                RegistryKeys::PATH_ENTITY_ID_MAPPING => $this->pathEntityIdMapping,
+                RegistryKeys::GLOBAL_DATA => array(
+                    RegistryKeys::CATEGORIES => $categories
+                )
             )
         );
 
@@ -405,7 +421,6 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
         );
     }
 
-
     /**
      * Return's the category with the passed path.
      *
@@ -424,5 +439,30 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
 
         // throw an exception, if not
         throw new \Exception(sprintf('Can\'t find category with path "%s"', $path));
+    }
+
+    /**
+     * Add's the passed category with the given path.
+     *
+     * @param string $path     The path to add the category with
+     * @param array  $category The catagory to add
+     *
+     * @return void
+     */
+    public function addCategoryByPath($path, array $category)
+    {
+        $this->categories[$path] = $category;
+    }
+
+    /**
+     * Query's whether or not the category with the passed path is available or not.
+     *
+     * @param string $path The path of the category to query
+     *
+     * @return boolean TRUE if the category is available, else FALSE
+     */
+    public function hasCategoryByPath($path)
+    {
+        return isset($this->categories[$path]);
     }
 }
