@@ -1,3 +1,13 @@
+# Version 17.0.2
+
+## Bugfixes
+
+* Fixed issue when creating root categories
+
+## Features
+
+* None
+
 # Version 17.0.1
 
 ## Bugfixes

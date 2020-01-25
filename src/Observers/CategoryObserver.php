@@ -101,6 +101,8 @@ class CategoryObserver extends AbstractCategoryImportObserver
                     if ($category = $this->loadCategory($this->mapPath($categoryPath))) {
                         // prepend the ID the array with the category IDs
                         array_push($this->categoryIds, (integer) $category[MemberNames::ENTITY_ID]);
+                        // temporary persist primary keys
+                        $this->updatePrimaryKeys($category);
                     } else {
                         throw new \Exception(sprintf('Can\'t load category %s from database', $categoryPath));
                     }
@@ -125,23 +127,20 @@ class CategoryObserver extends AbstractCategoryImportObserver
                     // append the ID of the new category to array with the IDs
                     array_push($this->categoryIds, $category[MemberNames::ENTITY_ID]);
 
+                    // temporary persist primary keys
+                    $this->updatePrimaryKeys($category);
+
                     // add the category by the given path as well as the path mapping
                     $this->addCategoryByPath($categoryPath, $category);
                     $this->addPathEntityIdMapping($categoryPath);
+                } finally {
+                    // prepare the artefact and put it on the stack
+                    $artefacts[] = array(
+                        $this->getPkMemberName() => $category[$this->getPkMemberName()],
+                        MemberNames::PATH        => implode('/', $this->categoryIds)
+                    );
                 }
             }
-
-            // temporary persist primary keys
-            $this->updatePrimaryKeys($category);
-
-            // prepare the artefact
-            $artefact = array(
-                $this->getPkMemberName() => $category[$this->getPkMemberName()],
-                MemberNames::PATH        => implode('/', $this->categoryIds)
-            );
-
-            // put the artefact on the stack
-            $artefacts[] = $artefact;
 
             // add the artefacts
             $this->addArtefacts($artefacts);
