@@ -20,7 +20,7 @@
           "ce/catalog_category/replace",
           "ce/catalog_category/replace.path",
           "ce/catalog_category/replace.url-rewrite",
-          "general/catalog_category/children-count"
+          "ce/catalog_category/children-count"
         ],
         "add-update": [
           "general/general/move-files",
@@ -29,7 +29,7 @@
           "ce/catalog_category/add-update",
           "ce/catalog_category/add-update.path",
           "ce/catalog_category/add-update.url-rewrite",
-          "general/catalog_category/children-count"
+          "ce/catalog_category/children-count"
         ]
       }
     }

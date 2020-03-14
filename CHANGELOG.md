@@ -1,3 +1,13 @@
+# Version 17.0.4
+
+## Bugfixes
+
+* Fixed invalid configuration for children count plugin
+
+## Features
+
+* None
+
 # Version 17.0.3
 
 ## Bugfixes

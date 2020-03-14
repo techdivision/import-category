@@ -2,13 +2,6 @@
   "operations": {
     "general": {
       "catalog_category": {
-        "children-count": {
-          "plugins": {
-            "children-count": {
-              "id": "import_category.plugin.children.count"
-            }
-          }
-        },
         "validate": {
           "plugins": {
             "subject": {
@@ -101,6 +94,13 @@
     },
     "ce": {
       "catalog_category": {
+        "children-count": {
+          "plugins": {
+            "children-count": {
+              "id": "import_category.plugin.children.count"
+            }
+          }
+        },
         "sort": {
           "plugins": {
             "subject": {
