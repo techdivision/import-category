@@ -1,3 +1,14 @@
+# Version 17.0.3
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Extract dev autoloading
+* Move configuration files from etc to configuration subdirectory
+
 # Version 17.0.2
 
 ## Bugfixes
