@@ -1,3 +1,13 @@
+# Version 18.0.0
+
+## Bugfixes
+
+* Replace Zend/Filter with new Laminas/Filter library
+
+## Features
+
+* None
+
 # Version 17.0.4
 
 ## Bugfixes
