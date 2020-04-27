@@ -2,6 +2,10 @@
   "shortcuts": {
     "ce": {
       "catalog_category": {
+        "convert": [
+          "general/general/global-data",
+          "general/catalog_category/convert"
+        ],
         "validate": [
           "general/general/global-data",
           "general/general/move-files",
