@@ -1,3 +1,13 @@
+# Version 18.0.1
+
+## Bugfixes
+
+* Fixed techdivision/import-cli-simple#246 by reverting PR #165
+
+## Features
+
+* None
+
 # Version 18.0.0
 
 ## Bugfixes
