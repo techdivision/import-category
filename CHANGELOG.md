@@ -1,3 +1,13 @@
+# Version 18.0.2
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add functionality write a log warning instead throwing an exception if the configured media + images file dirctory are not available
+
 # Version 18.0.1
 
 ## Bugfixes

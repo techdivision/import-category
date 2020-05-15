@@ -121,20 +121,20 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
 
         // initialize media directory => can be absolute or relative
         if ($this->getConfiguration()->hasParam(ConfigurationKeys::MEDIA_DIRECTORY)) {
-            $this->setMediaDir(
-                $this->resolvePath(
-                    $this->getConfiguration()->getParam(ConfigurationKeys::MEDIA_DIRECTORY)
-                )
-            );
+            try {
+                $this->setMediaDir($this->resolvePath($this->getConfiguration()->getParam(ConfigurationKeys::MEDIA_DIRECTORY)));
+            } catch (\InvalidArgumentException $iae) {
+                $this->getSystemLogger()->warning($iae);
+            }
         }
 
         // initialize images directory => can be absolute or relative
         if ($this->getConfiguration()->hasParam(ConfigurationKeys::IMAGES_FILE_DIRECTORY)) {
-            $this->setImagesFileDir(
-                $this->resolvePath(
-                    $this->getConfiguration()->getParam(ConfigurationKeys::IMAGES_FILE_DIRECTORY)
-                )
-            );
+            try {
+                $this->setImagesFileDir($this->resolvePath($this->getConfiguration()->getParam(ConfigurationKeys::IMAGES_FILE_DIRECTORY)));
+            } catch (\InvalidArgumentException $iae) {
+                $this->getSystemLogger()->warning($iae);
+            }
         }
 
         // prepare the callbacks

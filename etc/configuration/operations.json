@@ -164,7 +164,9 @@
                     "prefix": "category-create"
                   },
                   "params": {
-                    "copy-images": false
+                    "copy-images": false,
+                    "media-directory" : "pub/media/catalog/category",
+                    "images-file-directory" : "var/importexport/media/catalog/category"
                   },
                   "observers": [
                     {
@@ -233,7 +235,9 @@
                     "prefix": "category-create"
                   },
                   "params": {
-                    "copy-images": false
+                    "copy-images": false,
+                    "media-directory" : "pub/media/catalog/category",
+                    "images-file-directory" : "var/importexport/media/catalog/category"
                   },
                   "observers": [
                     {
