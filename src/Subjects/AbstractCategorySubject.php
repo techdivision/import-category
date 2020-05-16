@@ -202,7 +202,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
      */
     public function hasBeenProcessed($path)
     {
-        return isset($this->pathEntityIdMapping[$this->unifyPath($path)]);
+        return $this->hasPathEntityIdMapping($path);
     }
 
     /**
@@ -240,6 +240,18 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
     public function addPathEntityIdMapping($path)
     {
         $this->pathEntityIdMapping[$this->unifyPath($path)] = $this->getLastEntityId();
+    }
+
+    /**
+     * Query whether or not a mapping for the passed path is available.
+     *
+     * @param string $path The path
+     *
+     * @return bool TRUE if the mapping is available, else FALSE
+     */
+    public function hasPathEntityIdMapping($path)
+    {
+        return isset($this->pathEntityIdMapping[$this->unifyPath($path)]);
     }
 
     /**

@@ -21,7 +21,6 @@
 namespace TechDivision\Import\Category\Observers;
 
 use TechDivision\Import\Utils\StoreViewCodes;
-use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
 
 /**
@@ -46,28 +45,35 @@ class CategoryUpdateObserver extends CategoryObserver
     protected function initializeCategory(array $attr)
     {
 
-        // load the path of the category that has to be initialized
-        $path = $this->getValue(ColumnKeys::PATH);
-        // prepare the store view code
-        $this->prepareStoreViewCode();
         // load ID of the actual store view
         $storeId = $this->getRowStoreId(StoreViewCodes::ADMIN);
 
-        try {
-            // try to load the category and the entity with the passed path
-            $category = $this->getCategoryByPkAndStoreId($this->mapPath($path), $storeId);
-            // load the category entity itself
-            $entity = $this->loadCategory($this->getPrimaryKey($category));
-            // remove the created at date from the attributes, when we update the entity
-            unset($attr[MemberNames::CREATED_AT]);
+        // try to load the category by the given path and store ID
+        $category = $this->hasPathEntityIdMapping($this->categoryPath) ? $this->getCategoryByPkAndStoreId($this->mapPath($this->categoryPath), $storeId) : null;
+
+        // try to load the entity, if the category is available
+        if ($category && $entity = $this->loadCategory($this->getPrimaryKey($category))) {
+            // remove the fake path from the attributes (because this contains
+            // the names instead of the entity IDs), when we update the entity
+            unset($attr[MemberNames::PATH]);
             // merge it with the attributes, if we can find it
             return $this->mergeEntity($entity, $attr);
-        } catch (\Exception $e) {
-            $this->getSystemLogger()->debug(sprintf('Can\'t load category with path %s', $path));
         }
 
         // otherwise simply return the attributes
         return $attr;
+    }
+
+    /**
+     * Query whether or not a mapping for the passed path is available.
+     *
+     * @param string $path The path
+     *
+     * @return bool TRUE if the mapping is available, else FALSE
+     */
+    protected function hasPathEntityIdMapping($path)
+    {
+        return $this->getSubject()->hasPathEntityIdMapping($path);
     }
 
     /**
