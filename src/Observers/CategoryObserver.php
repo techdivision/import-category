@@ -20,9 +20,13 @@
 
 namespace TechDivision\Import\Category\Observers;
 
+use TechDivision\Import\Utils\BackendTypeKeys;
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
+use TechDivision\Import\Category\Utils\EntityTypeCodes;
+use TechDivision\Import\Observers\AttributeLoaderInterface;
+use TechDivision\Import\Observers\DynamicAttributeObserverInterface;
 
 /**
  * Observer that create's the category itself.
@@ -33,7 +37,7 @@ use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-class CategoryObserver extends AbstractCategoryImportObserver
+class CategoryObserver extends AbstractCategoryImportObserver implements DynamicAttributeObserverInterface
 {
 
     /**
@@ -51,6 +55,13 @@ class CategoryObserver extends AbstractCategoryImportObserver
     protected $categoryIds = array();
 
     /**
+     * Initialize the dedicated column.
+     *
+     * @var array
+     */
+    protected $columns = array(MemberNames::POSITION => array(ColumnKeys::POSITION, BackendTypeKeys::BACKEND_TYPE_INT, 0));
+
+    /**
      * The processor to read/write the necessary category data.
      *
      * @var \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface
@@ -58,13 +69,24 @@ class CategoryObserver extends AbstractCategoryImportObserver
     protected $categoryBunchProcessor;
 
     /**
+     * The attribute loader instance.
+     *
+     * @var \TechDivision\Import\Observers\AttributeLoaderInterface
+     */
+    protected $attributeLoader;
+
+    /**
      * Initialize the subject instance.
      *
      * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface $categoryBunchProcessor The category bunch processor instance
+     * @param \TechDivision\Import\Observers\AttributeLoaderInterface|null           $attributeLoader        The attribute loader instance
      */
-    public function __construct(CategoryBunchProcessorInterface $categoryBunchProcessor)
-    {
+    public function __construct(
+        CategoryBunchProcessorInterface $categoryBunchProcessor,
+        AttributeLoaderInterface $attributeLoader = null
+    ) {
         $this->categoryBunchProcessor = $categoryBunchProcessor;
+        $this->attributeLoader = $attributeLoader;
     }
 
     /**
@@ -111,7 +133,7 @@ class CategoryObserver extends AbstractCategoryImportObserver
                     $this->getSystemLogger()->debug(sprintf('Can\'t load category %s, create a new one', $categoryPath));
 
                     // prepare the static entity values, insert the entity and set the entity ID
-                    $category = $this->initializeCategory($this->prepareAttributes());
+                    $category = $this->initializeCategory($this->prepareDynamicAttributes());
 
                     // update the persisted category with the entity ID
                     $category[$this->getPkMemberName()] = $this->persistCategory($category);
@@ -148,6 +170,17 @@ class CategoryObserver extends AbstractCategoryImportObserver
     }
 
     /**
+     * Appends the dynamic to the static attributes for the EAV attribute
+     * and returns them.
+     *
+     * @return array The array with all available attributes
+     */
+    protected function prepareDynamicAttributes()
+    {
+        return array_merge($this->prepareAttributes(), $this->attributeLoader ? $this->attributeLoader->load($this, $this->columns) : array());
+    }
+
+    /**
      * Prepare the attributes of the entity that has to be persisted.
      *
      * @return array The prepared attributes
@@ -175,17 +208,31 @@ class CategoryObserver extends AbstractCategoryImportObserver
 
         // return the prepared product
         return $this->initializeEntity(
-            array(
-                MemberNames::CREATED_AT       => $createdAt,
-                MemberNames::UPDATED_AT       => $updatedAt,
-                MemberNames::ATTRIBUTE_SET_ID => $attributeSetId,
-                MemberNames::PATH             => '',
-                MemberNames::PARENT_ID        => $parentId,
-                MemberNames::POSITION         => $position,
-                MemberNames::LEVEL            => $level,
-                MemberNames::CHILDREN_COUNT   => 0
+            $this->loadRawEntity(
+                array(
+                    MemberNames::CREATED_AT       => $createdAt,
+                    MemberNames::UPDATED_AT       => $updatedAt,
+                    MemberNames::ATTRIBUTE_SET_ID => $attributeSetId,
+                    MemberNames::PATH             => '',
+                    MemberNames::PARENT_ID        => $parentId,
+                    MemberNames::POSITION         => $position,
+                    MemberNames::LEVEL            => $level,
+                    MemberNames::CHILDREN_COUNT   => 0
+                )
             )
         );
+    }
+
+    /**
+     * Load's and return's a raw category entity without primary key but the mandatory members only and nulled values.
+     *
+     * @param array $data An array with data that will be used to initialize the raw entity with
+     *
+     * @return array The initialized entity
+     */
+    protected function loadRawEntity(array $data = array())
+    {
+        return $this->getCategoryBunchProcessor()->loadRawEntity(EntityTypeCodes::CATALOG_CATEGORY_ENTITY, $data);
     }
 
     /**

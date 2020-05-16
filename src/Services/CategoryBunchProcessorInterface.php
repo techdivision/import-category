@@ -36,6 +36,13 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
 {
 
     /**
+     * Return's the raw entity loader instance.
+     *
+     * @return \TechDivision\Import\Loaders\LoaderInterface The raw entity loader instance
+     */
+    public function getRawEntityLoader();
+
+    /**
      * Return's the repository to access EAV attribute option values.
      *
      * @return \TechDivision\Import\Repositories\EavAttributeOptionValueRepositoryInterface The repository instance
@@ -242,6 +249,16 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
      * @return array The entity attributes
      */
     public function getCategoryAttributesByPrimaryKeyAndStoreId($pk, $storeId);
+
+    /**
+     * Load's and return's a raw entity without primary key but the mandatory members only and nulled values.
+     *
+     * @param string $entityTypeCode The entity type code to return the raw entity for
+     * @param array  $data           An array with data that will be used to initialize the raw entity with
+     *
+     * @return array The initialized entity
+     */
+    public function loadRawEntity($entityTypeCode, array $data = array());
 
     /**
      * Return's the children count of the category with the passed path.

@@ -110,34 +110,12 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
               WHERE t0.entity_id = :pk
                 AND t0.store_id = :store_id',
         SqlStatementKeys::CREATE_CATEGORY =>
-            'INSERT
-               INTO ${table:catalog_category_entity}
-                    (attribute_set_id,
-                     parent_id,
-                     created_at,
-                     updated_at,
-                     path,
-                     position,
-                     level,
-                     children_count)
-             VALUES (:attribute_set_id,
-                     :parent_id,
-                     :created_at,
-                     :updated_at,
-                     :path,
-                     :position,
-                     :level,
-                     :children_count)',
+            'INSERT ${table:catalog_category_entity}
+                    (${column-names:catalog_category_entity})
+             VALUES (${column-placeholders:catalog_category_entity})',
         SqlStatementKeys::UPDATE_CATEGORY =>
             'UPDATE ${table:catalog_category_entity}
-                SET attribute_set_id = :attribute_set_id,
-                    parent_id = :parent_id,
-                    created_at = :created_at,
-                    updated_at = :updated_at,
-                    path = :path,
-                    position = :position,
-                    level = :level,
-                    children_count = :children_count
+                SET ${column-values:catalog_category_entity}
               WHERE entity_id = :entity_id',
         SqlStatementKeys::CREATE_CATEGORY_DATETIME =>
             'INSERT

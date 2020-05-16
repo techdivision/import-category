@@ -1,3 +1,13 @@
+# Version 19.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add #PAC-47
+
 # Version 18.0.2
 
 ## Bugfixes

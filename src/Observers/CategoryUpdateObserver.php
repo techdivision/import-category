@@ -22,6 +22,7 @@ namespace TechDivision\Import\Category\Observers;
 
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Category\Utils\ColumnKeys;
+use TechDivision\Import\Category\Utils\MemberNames;
 
 /**
  * Observer that add's/update's the category itself.
@@ -57,6 +58,8 @@ class CategoryUpdateObserver extends CategoryObserver
             $category = $this->getCategoryByPkAndStoreId($this->mapPath($path), $storeId);
             // load the category entity itself
             $entity = $this->loadCategory($this->getPrimaryKey($category));
+            // remove the created at date from the attributes, when we update the entity
+            unset($attr[MemberNames::CREATED_AT]);
             // merge it with the attributes, if we can find it
             return $this->mergeEntity($entity, $attr);
         } catch (\Exception $e) {

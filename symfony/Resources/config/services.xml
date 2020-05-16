@@ -5,6 +5,27 @@
 
     <services>
 
+        <!--
+         | The DI utility configuration
+         |-->
+        <service id="import_category.util.sql.compilers" class="\ArrayObject">
+            <call method="append">
+                <argument id="import.util.primary.key" type="service"/>
+            </call>
+            <call method="append">
+                <argument id="import.util.table.prefix" type="service"/>
+            </call>
+            <call method="append">
+                <argument id="import.util.column.names" type="service"/>
+            </call>
+            <call method="append">
+                <argument id="import.util.column.placeholders" type="service"/>
+            </call>
+            <call method="append">
+                <argument id="import.util.column.values" type="service"/>
+            </call>
+        </service>
+
         <service id="import_category.listener.sort.category" class="TechDivision\Import\Category\Listeners\SortCategoryListener">
             <argument type="service" id="import.processor.registry"/>
         </service>
@@ -18,7 +39,7 @@
         </service>
 
         <service id="import_category.repository.sql.statement" class="TechDivision\Import\Category\Repositories\SqlStatementRepository">
-            <argument type="service" id="import.util.sql.compilers"/>
+            <argument type="service" id="import_category.util.sql.compilers"/>
         </service>
         <service id="import_category.repository.category.datetime" class="TechDivision\Import\Category\Repositories\CategoryDatetimeRepository">
             <argument type="service" id="connection"/>
@@ -139,6 +160,12 @@
             <argument type="service" id="import_category.assembler.category.attribute"/>
         </service>
 
+        <service id="import_category.loader.raw.entity" class="TechDivision\Import\Category\Loaders\RawEntityLoader">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import.loader.column.metadata"/>
+            <argument type="service" id="import.loader.raw.entity"/>
+        </service>
+
         <service id="import_category.processor.category.bunch" class="TechDivision\Import\Category\Services\CategoryBunchProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.category"/>
@@ -160,6 +187,7 @@
             <argument type="service" id="import.action.url.rewrite"/>
             <argument type="service" id="import_category.assembler.category"/>
             <argument type="service" id="import_category.assembler.category.attribute"/>
+            <argument type="service" id="import_category.loader.raw.entity"/>
         </service>
 
         <service id="import_category.filter.convert.literal.url" class="TechDivision\Import\Utils\Filter\ConvertLiteralUrl"/>
@@ -193,12 +221,14 @@
         </service>
         <service id="import_category.observer.category" class="TechDivision\Import\Category\Observers\CategoryObserver">
             <argument type="service" id="import_category.processor.category.bunch"/>
+            <argument type="service" id="import.observer.dynamic.attribute.loader"/>
         </service>
         <service id="import_category.observer.category.path" class="TechDivision\Import\Category\Observers\CategoryPathObserver">
             <argument type="service" id="import_category.processor.category.bunch"/>
         </service>
         <service id="import_category.observer.category.update" class="TechDivision\Import\Category\Observers\CategoryUpdateObserver">
             <argument type="service" id="import_category.processor.category.bunch"/>
+            <argument type="service" id="import.observer.dynamic.attribute.loader"/>
         </service>
         <service id="import_category.observer.clear.category" class="TechDivision\Import\Category\Observers\ClearCategoryObserver">
             <argument type="service" id="import_category.processor.category.bunch"/>

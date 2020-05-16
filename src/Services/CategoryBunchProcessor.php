@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Category\Services;
 
+use TechDivision\Import\Loaders\LoaderInterface;
 use TechDivision\Import\Actions\ActionInterface;
 use TechDivision\Import\Connection\ConnectionInterface;
 use TechDivision\Import\Repositories\UrlRewriteRepositoryInterface;
@@ -188,6 +189,13 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     protected $categoryAttributeAssembler;
 
     /**
+     * The raw entity loader instance.
+     *
+     * @var \TechDivision\Import\Loaders\LoaderInterface
+     */
+    protected $rawEntityLoader;
+
+    /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
      * @param \TechDivision\Import\Connection\ConnectionInterface                            $connection                        The connection to use
@@ -210,6 +218,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
      * @param \TechDivision\Import\Actions\ActionInterface                                   $urlRewriteAction                  The URL rewrite action to use
      * @param \TechDivision\Import\Category\Assembler\CategoryAssemblerInterface             $categoryAssembler                 The category assembler to use
      * @param \TechDivision\Import\Category\Assembler\CategoryAttributeAssemblerInterface    $categoryAttributeAssembler        The assembler to load the category attributes with
+     * @param \TechDivision\Import\Loaders\LoaderInterface                                   $rawEntityLoader                   The raw entity loader instance
      */
     public function __construct(
         ConnectionInterface $connection,
@@ -231,7 +240,8 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
         ActionInterface $categoryVarcharAction,
         ActionInterface $urlRewriteAction,
         CategoryAssemblerInterface $categoryAssembler,
-        CategoryAttributeAssemblerInterface $categoryAttributeAssembler
+        CategoryAttributeAssemblerInterface $categoryAttributeAssembler,
+        LoaderInterface $rawEntityLoader
     ) {
         $this->setConnection($connection);
         $this->setCategoryRepository($categoryRepository);
@@ -253,6 +263,29 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
         $this->setUrlRewriteAction($urlRewriteAction);
         $this->setCategoryAssembler($categoryAssembler);
         $this->setCategoryAttributeAssembler($categoryAttributeAssembler);
+        $this->setRawEntityLoader($rawEntityLoader);
+    }
+
+    /**
+     * Set's the raw entity loader instance.
+     *
+     * @param \TechDivision\Import\Loaders\LoaderInterface $rawEntityLoader The raw entity loader instance to set
+     *
+     * @return void
+     */
+    public function setRawEntityLoader(LoaderInterface $rawEntityLoader)
+    {
+        $this->rawEntityLoader = $rawEntityLoader;
+    }
+
+    /**
+     * Return's the raw entity loader instance.
+     *
+     * @return \TechDivision\Import\Loaders\LoaderInterface The raw entity loader instance
+     */
+    public function getRawEntityLoader()
+    {
+        return $this->rawEntityLoader;
     }
 
     /**
@@ -846,6 +879,19 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     public function getCategoryAttributesByPrimaryKeyAndStoreId($pk, $storeId)
     {
         return $this->getCategoryAttributeAssembler()->getCategoryAttributesByPrimaryKeyAndStoreId($pk, $storeId);
+    }
+
+    /**
+     * Load's and return's a raw entity without primary key but the mandatory members only and nulled values.
+     *
+     * @param string $entityTypeCode The entity type code to return the raw entity for
+     * @param array  $data           An array with data that will be used to initialize the raw entity with
+     *
+     * @return array The initialized entity
+     */
+    public function loadRawEntity($entityTypeCode, array $data = array())
+    {
+        return $this->getRawEntityLoader()->load($entityTypeCode, $data);
     }
 
     /**
