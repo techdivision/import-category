@@ -1,3 +1,13 @@
+# Version 19.0.1
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Remove unneccessary clean-up-empty-columns array from configuration of replace operation
+
 # Version 19.0.0
 
 ## Bugfixes
