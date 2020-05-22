@@ -1,3 +1,13 @@
+# Version 19.1.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add #PAC-96
+
 # Version 19.0.1
 
 ## Bugfixes
