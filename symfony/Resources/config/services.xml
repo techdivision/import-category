@@ -6,23 +6,18 @@
     <services>
 
         <!--
-         | The DI utility configuration
+         | The DI configuration for the entity mergers
          |-->
-        <service id="import_category.util.sql.compilers" class="\ArrayObject">
+        <service id="import_category.loader.header.mapping.category" class="TechDivision\Import\Loaders\EntityTypeHeaderMappingLoader">
+            <argument type="service" id="import.loader.header.mapping"/>
+            <argument type="constant">TechDivision\Import\Category\Utils\EntityTypeCodes::CATALOG_CATEGORY</argument>
+        </service>
+        <service id="import_category.entity.merger.empty.columns.category" class="TechDivision\Import\Observers\EntityMergers\CleanUpColumnsEntityMerger">
+            <argument type="service" id="import_category.loader.header.mapping.category"/>
+        </service>
+        <service id="import_category.entity.merger.composite.category" class="TechDivision\Import\Observers\EntityMergers\GenericCompositeEntityMerger">
             <call method="append">
-                <argument id="import.util.primary.key" type="service"/>
-            </call>
-            <call method="append">
-                <argument id="import.util.table.prefix" type="service"/>
-            </call>
-            <call method="append">
-                <argument id="import.util.column.names" type="service"/>
-            </call>
-            <call method="append">
-                <argument id="import.util.column.placeholders" type="service"/>
-            </call>
-            <call method="append">
-                <argument id="import.util.column.values" type="service"/>
+                <argument type="service" id="import_category.entity.merger.empty.columns.category"/>
             </call>
         </service>
 
@@ -39,7 +34,7 @@
         </service>
 
         <service id="import_category.repository.sql.statement" class="TechDivision\Import\Category\Repositories\SqlStatementRepository">
-            <argument type="service" id="import_category.util.sql.compilers"/>
+            <argument type="service" id="import.util.sql.compilers"/>
         </service>
         <service id="import_category.repository.category.datetime" class="TechDivision\Import\Category\Repositories\CategoryDatetimeRepository">
             <argument type="service" id="connection"/>
@@ -70,10 +65,12 @@
         <service id="import_category.action.processor.category.create" class="TechDivision\Import\Category\Actions\Processors\CategoryCreateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
         </service>
         <service id="import_category.action.processor.category.update" class="TechDivision\Import\Category\Actions\Processors\CategoryUpdateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
         </service>
         <service id="import_category.action.processor.category.delete" class="TechDivision\Import\Category\Actions\Processors\CategoryDeleteProcessor">
             <argument type="service" id="connection"/>
@@ -222,13 +219,10 @@
         <service id="import_category.observer.category" class="TechDivision\Import\Category\Observers\CategoryObserver">
             <argument type="service" id="import_category.processor.category.bunch"/>
             <argument type="service" id="import.observer.dynamic.attribute.loader"/>
+            <argument type="service" id="import_category.entity.merger.composite.category"/>
         </service>
         <service id="import_category.observer.category.path" class="TechDivision\Import\Category\Observers\CategoryPathObserver">
             <argument type="service" id="import_category.processor.category.bunch"/>
-        </service>
-        <service id="import_category.observer.category.update" class="TechDivision\Import\Category\Observers\CategoryUpdateObserver">
-            <argument type="service" id="import_category.processor.category.bunch"/>
-            <argument type="service" id="import.observer.dynamic.attribute.loader"/>
         </service>
         <service id="import_category.observer.clear.category" class="TechDivision\Import\Category\Observers\ClearCategoryObserver">
             <argument type="service" id="import_category.processor.category.bunch"/>
@@ -288,7 +282,7 @@
                 <argument id="import_category.observer.file.upload" type="service"/>
             </call>
             <call method="addObserver">
-                <argument id="import_category.observer.category.update" type="service"/>
+                <argument id="import_category.observer.category" type="service"/>
             </call>
             <call method="addObserver">
                 <argument id="import_category.observer.category.attribute.update" type="service"/>

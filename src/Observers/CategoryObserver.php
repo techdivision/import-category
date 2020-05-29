@@ -20,13 +20,17 @@
 
 namespace TechDivision\Import\Category\Observers;
 
+use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Utils\BackendTypeKeys;
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
 use TechDivision\Import\Category\Utils\EntityTypeCodes;
+use TechDivision\Import\Observers\StateDetectorInterface;
 use TechDivision\Import\Observers\AttributeLoaderInterface;
 use TechDivision\Import\Observers\DynamicAttributeObserverInterface;
+use TechDivision\Import\Observers\EntityMergers\EntityMergerInterface;
+use TechDivision\Import\Utils\StoreViewCodes;
 
 /**
  * Observer that create's the category itself.
@@ -83,17 +87,34 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
     protected $attributeLoader;
 
     /**
+     * The entity merger instance.
+     *
+     * @var \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface
+     */
+    protected $entityMerger;
+
+    /**
      * Initialize the subject instance.
      *
-     * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface $categoryBunchProcessor The category bunch processor instance
-     * @param \TechDivision\Import\Observers\AttributeLoaderInterface|null           $attributeLoader        The attribute loader instance
+     * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface  $categoryBunchProcessor The category bunch processor instance
+     * @param \TechDivision\Import\Observers\AttributeLoaderInterface|null            $attributeLoader        The attribute loader instance
+     * @param \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface|null $entityMerger           The entity merger instance
+     * @param \TechDivision\Import\Observers\StateDetectorInterface|null              $stateDetector          The state detector instance to use
      */
     public function __construct(
         CategoryBunchProcessorInterface $categoryBunchProcessor,
-        AttributeLoaderInterface $attributeLoader = null
+        AttributeLoaderInterface $attributeLoader = null,
+        EntityMergerInterface $entityMerger = null,
+        StateDetectorInterface $stateDetector = null
     ) {
+
+        // initialize the bunch processor and the attribute loader instance
         $this->categoryBunchProcessor = $categoryBunchProcessor;
         $this->attributeLoader = $attributeLoader;
+        $this->entityMerger = $entityMerger;
+
+        // pass the state detector to the parent method
+        parent::__construct($stateDetector);
     }
 
     /**
@@ -162,6 +183,26 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
             // add the artefacts
             $this->addArtefacts($artefacts);
         }
+    }
+
+    /**
+     * Merge's and return's the entity with the passed attributes and set's the
+     * passed status.
+     *
+     * @param array       $entity        The entity to merge the attributes into
+     * @param array       $attr          The attributes to be merged
+     * @param string|null $changeSetName The change set name to use
+     *
+     * @return array The merged entity
+     * @todo https://github.com/techdivision/import/issues/179
+     */
+    protected function mergeEntity(array $entity, array $attr, $changeSetName = null)
+    {
+        return array_merge(
+            $entity,
+            $this->entityMerger ? $this->entityMerger->merge($this, $entity, $attr) : $attr,
+            array(EntityStatus::MEMBER_NAME => $this->detectState($entity, $attr, $changeSetName))
+        );
     }
 
     /**
@@ -239,7 +280,61 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
      */
     protected function initializeCategory(array $attr)
     {
+
+        // load ID of the actual store view
+        $storeId = $this->getRowStoreId(StoreViewCodes::ADMIN);
+
+        // try to load the category by the given path and store ID
+        $category = $this->hasPathEntityIdMapping($this->categoryPath) ? $this->getCategoryByPkAndStoreId($this->mapPath($this->categoryPath), $storeId) : null;
+
+        // try to load the entity, if the category is available
+        if ($category && $entity = $this->loadCategory($this->getPrimaryKey($category))) {
+            // remove the fake path from the attributes (because this contains
+            // the names instead of the entity IDs), when we update the entity
+            unset($attr[MemberNames::PATH]);
+            // merge it with the attributes, if we can find it
+            return $this->mergeEntity($entity, $attr);
+        }
+
+        // otherwise simply return the attributes
         return $attr;
+    }
+
+    /**
+     * Query whether or not a mapping for the passed path is available.
+     *
+     * @param string $path The path
+     *
+     * @return bool TRUE if the mapping is available, else FALSE
+     */
+    protected function hasPathEntityIdMapping($path)
+    {
+        return $this->getSubject()->hasPathEntityIdMapping($path);
+    }
+
+    /**
+     * Return's the primary key of the category.
+     *
+     * @param array $category The category
+     *
+     * @return integer The primary key
+     */
+    protected function getPrimaryKey($category)
+    {
+        return $category[$this->getPkMemberName()];
+    }
+
+    /**
+     * Returns the category with the passed primary key and the attribute values for the passed store ID.
+     *
+     * @param string  $pk      The primary key of the category to return
+     * @param integer $storeId The store ID of the category values
+     *
+     * @return array|null The category data
+     */
+    protected function getCategoryByPkAndStoreId($pk, $storeId)
+    {
+        return $this->getCategoryBunchProcessor()->getCategoryByPkAndStoreId($pk, $storeId);
     }
 
     /**
