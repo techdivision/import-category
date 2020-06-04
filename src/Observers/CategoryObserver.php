@@ -155,29 +155,35 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
                 // update the persisted category with the entity ID
                 $category[$this->getPkMemberName()] = $this->persistCategory($category);
 
-                // update the persisted category with the additional attribute values
-                $category[MemberNames::NAME] = $this->getValue(ColumnKeys::NAME);
-                $category[MemberNames::URL_KEY] = $this->getValue(ColumnKeys::URL_KEY);
-                $category[MemberNames::URL_PATH] = $this->getValue(ColumnKeys::URL_PATH);
-                $category[MemberNames::IS_ACTIVE] = $this->getValue(ColumnKeys::IS_ACTIVE);
-                $category[MemberNames::IS_ANCHOR] = $this->getValue(ColumnKeys::IS_ANCHOR);
-                $category[MemberNames::INCLUDE_IN_MENU] = $this->getValue(ColumnKeys::INCLUDE_IN_MENU);
-
                 // append the ID of the new category to array with the IDs
                 array_push($this->categoryIds, $category[MemberNames::ENTITY_ID]);
-
-                // temporary persist primary keys
-                $this->updatePrimaryKeys($category);
-
-                // add the category by the given path as well as the path mapping
-                $this->addCategoryByPath($this->categoryPath, $category);
-                $this->addPathEntityIdMapping($this->categoryPath);
 
                 // prepare the artefact and put it on the stack
                 $artefacts[] = array(
                     $this->getPkMemberName() => $category[$this->getPkMemberName()],
                     MemberNames::PATH        => implode('/', $this->categoryIds)
                 );
+
+                // Attention: Only update the virtual category values if this is the
+                // last category from the path, because otherwise the values from the
+                // database will be overwritten and lead to an unexpected behaviour
+                // in case of create categories on-the-fly during the product import
+                if ($i === sizeof($categories) - 1) {
+                    // update the persisted category with the additional attribute values
+                    $category[MemberNames::NAME]            = $this->getValue(ColumnKeys::NAME);
+                    $category[MemberNames::URL_KEY]         = $this->getValue(ColumnKeys::URL_KEY);
+                    $category[MemberNames::URL_PATH]        = $this->getValue(ColumnKeys::URL_PATH);
+                    $category[MemberNames::IS_ACTIVE]       = $this->getValue(ColumnKeys::IS_ACTIVE);
+                    $category[MemberNames::IS_ANCHOR]       = $this->getValue(ColumnKeys::IS_ANCHOR);
+                    $category[MemberNames::INCLUDE_IN_MENU] = $this->getValue(ColumnKeys::INCLUDE_IN_MENU);
+
+                    // temporary persist primary keys
+                    $this->updatePrimaryKeys($category);
+
+                    // add the category by the given path as well as the path mapping
+                    $this->addCategoryByPath($this->categoryPath, $category);
+                    $this->addPathEntityIdMapping($this->categoryPath);
+                }
             }
 
             // add the artefacts
