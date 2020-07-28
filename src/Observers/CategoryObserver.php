@@ -140,19 +140,28 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
 
         // explode the path into the category names
         if ($categories = $this->explode($this->getValue(ColumnKeys::PATH), '/')) {
+            // initialize the flag to query whether or not the category is a leaf
+            $leaf = false;
             // initialize the artefacts and reset the category IDs
             $artefacts = array();
             $this->categoryIds = array(1);
 
             // iterate over the category names and try to load the category therefore
             for ($i = 0; $i < sizeof($categories); $i++) {
+                // query whether or not the category is a leaf
+                if ($i === sizeof($categories) - 1) {
+                    $leaf = true;
+                }
+
                 // prepare the expected category name
                 $this->categoryPath = implode('/', array_slice($categories, 0, $i + 1));
 
-                // prepare the static entity values, insert the entity and set the entity ID
-                $category = $this->initializeCategory($this->prepareDynamicAttributes());
+                // Attention: Prepare the static entity values, whether the category is
+                // a leaf or not, because ONLY when the category is a leaf, we want to
+                // OVERRIDE the values from the DB with the values from the import file
+                $category = $this->initializeCategory($leaf ? $this->prepareDynamicAttributes() : array());
 
-                // update the persisted category with the entity ID
+                // persist and update the category with the new/existing entity ID
                 $category[$this->getPkMemberName()] = $this->persistCategory($category);
 
                 // append the ID of the new category to array with the IDs
@@ -168,7 +177,7 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
                 // last category from the path, because otherwise the values from the
                 // database will be overwritten and lead to an unexpected behaviour
                 // in case of create categories on-the-fly during the product import
-                if ($i === sizeof($categories) - 1) {
+                if ($leaf) {
                     // update the persisted category with the additional attribute values
                     $category[MemberNames::NAME]            = $this->getValue(ColumnKeys::NAME);
                     $category[MemberNames::URL_KEY]         = $this->getValue(ColumnKeys::URL_KEY);
