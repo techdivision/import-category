@@ -101,6 +101,28 @@
             }
           }
         },
+        "position": {
+          "plugins": {
+            "subject": {
+              "id": "import.plugin.subject",
+              "subjects": [
+                {
+                  "id": "import_category.subject.bunch",
+                  "file-resolver": {
+                    "prefix": "category-position"
+                  },
+                  "observers": [
+                    {
+                      "import": [
+                        "import_category.observer.category"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
         "sort": {
           "plugins": {
             "subject": {
