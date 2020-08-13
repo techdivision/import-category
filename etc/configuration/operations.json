@@ -131,6 +131,12 @@
 	            {
 	              "id": "import_category.subject.sortable.bunch",
 	              "create-imported-file": false,
+                  "import-adapter": {
+                    "id": "import.adapter.import.csv.factory",
+                    "serializer": {
+                      "id": "import.serializer.factory.csv.value"
+                    }
+                  },
 	              "file-resolver": {
 	                "prefix": "category-import"
 	              },

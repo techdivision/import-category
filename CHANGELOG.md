@@ -1,3 +1,13 @@
+# Version 20.0.3
+
+## Bugfixes
+
+* Fixed techdivision/import-category#64
+
+## Features
+
+* None
+
 # Version 20.0.2
 
 ## Bugfixes
