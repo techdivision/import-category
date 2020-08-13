@@ -47,6 +47,13 @@ class ColumnKeys extends \TechDivision\Import\Utils\ColumnKeys
     const ATTRIBUTE_SET_CODE = 'attribute_set_code';
 
     /**
+     * Name for the column 'attribute_set_name'.
+     *
+     * @var string
+     */
+    const ATTRIBUTE_SET_NAME = 'attribute_set_name';
+
+    /**
      * Name for the column 'path'.
      *
      * @var string
@@ -185,4 +192,11 @@ class ColumnKeys extends \TechDivision\Import\Utils\ColumnKeys
      * @var string
      */
     const INCLUDE_IN_MENU = 'include_in_menu';
+
+    /**
+     * Name for the column 'parent_id'.
+     *
+     * @var string
+     */
+    const PARENT_ID = 'parent_id';
 }
