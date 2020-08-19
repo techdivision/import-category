@@ -52,4 +52,11 @@ class ConfigurationKeys extends \TechDivision\Import\Utils\ConfigurationKeys
      * @var string
      */
     const COPY_IMAGES = 'copy-images';
+
+    /**
+     * Name for the column 'override-images'.
+     *
+     * @var string
+     */
+    const OVERRIDE_IMAGES = 'override-images';
 }
