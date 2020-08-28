@@ -1,3 +1,24 @@
+# Version 21.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add `"include_in_menu": null` to `etc/configuration/default-values.json`
+* Remove stack trace of exception for missing media directories > log a simple debug message instead
+
+# Version 20.0.4
+
+## Bugfixes
+
+* Fixed techdivision/import-category#66
+
+## Features
+
+* None
+
 # Version 20.0.3
 
 ## Bugfixes
