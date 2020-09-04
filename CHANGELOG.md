@@ -2,7 +2,7 @@
 
 ## Bugfixes
 
-* None
+* Fixed techdivision/import-category#68
 
 ## Features
 

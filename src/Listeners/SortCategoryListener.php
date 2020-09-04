@@ -184,8 +184,7 @@ class SortCategoryListener extends AbstractListener
             usort($this->artefacts, function ($a, $b) {
                 return
                     strcmp($a[ColumnKeys::PATH], $b[ColumnKeys::PATH]) ?:
-                    strcmp($a[ColumnKeys::STORE_VIEW_CODE], $b[ColumnKeys::STORE_VIEW_CODE]) ?:
-                    strcmp($a[ColumnKeys::POSITION], $b[ColumnKeys::POSITION]);
+                    strcmp($a[ColumnKeys::STORE_VIEW_CODE], $b[ColumnKeys::STORE_VIEW_CODE]);
             });
 
             // replace the artefacts to be exported later
@@ -252,7 +251,12 @@ class SortCategoryListener extends AbstractListener
                 $diff = array_diff(array_slice($elements, 0, sizeof($elements) - 1), array_slice($el, 0, sizeof($elements)));
                 // BINGO: We found a category on the same level that has the same parent
                 if (sizeof($diff) === 0) {
-                    $categoriesOnSameLevel[$p] = $this->template($category);
+                    $categoriesOnSameLevel[$p] = $this->template(
+                        array_merge(
+                            $category,
+                            array(ColumnKeys::ATTRIBUTE_SET_CODE => $this->getAttributeSetNameById($category[MemberNames::ATTRIBUTE_SET_ID]))
+                        )
+                    );
                 }
             }
         }
@@ -372,9 +376,9 @@ class SortCategoryListener extends AbstractListener
                     array_merge(
                         $category,
                         array(
-                            ColumnKeys::PATH               => $p,
+                            ColumnKeys::PATH               => $category[MemberNames::PATH],
                             ColumnKeys::POSITION           => (int) $category[MemberNames::POSITION] + 1,
-                            ColumnKeys::ATTRIBUTE_SET_CODE => $this->getAttributeSetNameById($category[MemberNames::ATTRIBUTE_SET_ID])
+                            ColumnKeys::ATTRIBUTE_SET_CODE => $category[ColumnKeys::ATTRIBUTE_SET_CODE]
                         )
                     )
                 );
@@ -388,17 +392,17 @@ class SortCategoryListener extends AbstractListener
     /**
      * Return's the attribute set name of the attribute set with the given ID.
      *
-     * @param integer $attributeSetId The ID of the attribute set to return the name for
+     * @param int $attributeSetId The ID of the attribute set to return the name for
      *
-     * @return array The attribute set
+     * @return string The attribute set name
      * @throws \InvalidArgumentException Is thrown, if the attribute set with the passed ID is NOT available
      */
-    private function getAttributeSetNameById(int $attributeSetId) : array
+    private function getAttributeSetNameById(int $attributeSetId) : string
     {
 
         // try to load the attribute set with the given ID
         foreach ($this->attributeSets as $attributeSet) {
-            if ($attributeSet[MemberNames::ATTRIBUTE_SET_ID] === $attributeSetId) {
+            if ((int) $attributeSet[MemberNames::ATTRIBUTE_SET_ID] === $attributeSetId) {
                 return $attributeSet[MemberNames::ATTRIBUTE_SET_NAME];
             }
         }
