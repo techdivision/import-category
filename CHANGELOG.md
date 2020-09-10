@@ -1,3 +1,13 @@
+# Version 20.0.5
+
+## Bugfixes
+
+* Fixed issue when root category has to be created
+
+## Features
+
+* None
+
 # Version 20.0.4
 
 ## Bugfixes

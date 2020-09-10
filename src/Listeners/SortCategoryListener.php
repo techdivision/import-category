@@ -240,11 +240,13 @@ class SortCategoryListener extends AbstractListener
 
         // iterate over the existing categories to load the one's on the same level
         foreach ($this->existingCategories as $p => $category) {
-            // query whether or not the level (integer) is the same as the number of elements,
-            // what means we virtually cut off the last element of the passed category. Then
-            // we know the category is at least on the same level, but NOT if it has the same
-            // parent category!!!!!
-            if ((int) $category[MemberNames::LEVEL] == sizeof($elements)) {
+            // initialize the counter with the size of elements
+            $sizeOfElements = sizeof($elements);
+            // query whether or not the level (integer) is the same as the number of elements
+            // AND the category is NOT a root category. This means we virtually cut off the
+            // last element of the passed category. Then we know the category is at least on
+            // the same level, but NOT if it has the same parent category!!!!!
+            if ((int) $category[MemberNames::LEVEL] == $sizeOfElements && $sizeOfElements > 1) {
                 // extract the category's path by the category separator
                 $el = $this->serializer->unserialize($p, '/');
                 // diff the path of the parent category to make sure they are children of the same parent node
