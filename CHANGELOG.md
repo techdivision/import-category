@@ -3,6 +3,7 @@
 ## Bugfixes
 
 * Fixed techdivision/import-category#68
+* Fixed issue when root category has to be created
 
 ## Features
 
