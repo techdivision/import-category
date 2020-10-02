@@ -6,7 +6,7 @@
 
 ## Features
 
-* Remove stack trace of exception for missing media directories > log a simple debug message instead
+* Switch log level for exception stack trace for missing media directories from warning to debug
 
 # Version 20.0.4
 
