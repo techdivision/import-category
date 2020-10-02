@@ -256,7 +256,10 @@ class SortCategoryListener extends AbstractListener
                     $categoriesOnSameLevel[$p] = $this->template(
                         array_merge(
                             $category,
-                            array(ColumnKeys::ATTRIBUTE_SET_CODE => $this->getAttributeSetNameById($category[MemberNames::ATTRIBUTE_SET_ID]))
+                            array(
+                                ColumnKeys::ATTRIBUTE_SET_CODE => $this->getAttributeSetNameById($category[MemberNames::ATTRIBUTE_SET_ID]),
+                                ColumnKeys::PATH               => $this->resolveCategoryIdsToPath($category[MemberNames::PATH])
+                            )
                         )
                     );
                 }
@@ -377,11 +380,7 @@ class SortCategoryListener extends AbstractListener
                 $this->artefacts[$p] = $this->template(
                     array_merge(
                         $category,
-                        array(
-                            ColumnKeys::PATH               => $category[MemberNames::PATH],
-                            ColumnKeys::POSITION           => (int) $category[MemberNames::POSITION] + 1,
-                            ColumnKeys::ATTRIBUTE_SET_CODE => $category[ColumnKeys::ATTRIBUTE_SET_CODE]
-                        )
+                        array(ColumnKeys::POSITION => (int) $category[MemberNames::POSITION] + 1)
                     )
                 );
             }
@@ -411,5 +410,39 @@ class SortCategoryListener extends AbstractListener
 
         // throw an exception if the attribute set is NOT available
         throw new \InvalidArgumentException(sprintf('Can\'t find attribute set with ID "%s"', $attributeSetId));
+    }
+
+    /**
+     * Replaces the category IDs in the passed string with the category names
+     * and returns the category path, which is the category unique identifier.
+     *
+     * @param string $categoryIds The string containing the category IDs
+     *
+     * @return string The string with the category IDs replaced with the category names
+     */
+    private function resolveCategoryIdsToPath(string $categoryIds) : string
+    {
+
+        // explode the catgory IDs
+        $ids = explode('/', $categoryIds);
+
+        // initialize the array for the category names
+        $path = array();
+
+        // iterate over the IDs
+        foreach ($ids as $id) {
+            // load the category with the actual ID
+            $existingCategories = array_filter($this->existingCategories, function ($existingCategory) use ($id) {
+                return (int) $existingCategory[MemberNames::ENTITY_ID] === (int) $id;
+            });
+
+            // add the category name to the array with the paths
+            foreach ($existingCategories as $existingCategory) {
+                $path[] = $this->serializer->serialize(array($existingCategory[MemberNames::NAME]), '/');
+            }
+        }
+
+        // implode the paths and return it
+        return implode('/', $path);
     }
 }

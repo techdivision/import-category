@@ -2,11 +2,11 @@
 
 ## Bugfixes
 
-* Fixed issue when root category has to be created
+* Fixed techdivision/import-category#69
 
 ## Features
 
-* None
+* Remove stack trace of exception for missing media directories > log a simple debug message instead
 
 # Version 20.0.4
 
