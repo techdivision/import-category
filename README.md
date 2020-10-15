@@ -1,4 +1,4 @@
-# M2IF - Category Import
+# Pacemaker - Category Import
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/techdivision/import-category.svg?style=flat-square)](https://packagist.org/packages/techdivision/import-category) 
  [![Total Downloads](https://img.shields.io/packagist/dt/techdivision/import-category.svg?style=flat-square)](https://packagist.org/packages/techdivision/import-category)
