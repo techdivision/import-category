@@ -7,4 +7,4 @@
  [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/techdivision/import-category/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/techdivision/import-category/?branch=master)
  [![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/techdivision/import-category/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/techdivision/import-category/?branch=master)
 
-Please visit the M2IF [website](https://m2if.com) for documentation and additional information
+Please visit the Pacemaker [website](https://pacemaker.techdivision.com) or our [documentation](https://docs.met.tdintern.de/pacemaker/1.3/) for additional information
