@@ -135,6 +135,10 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                     store_id = :store_id,
                     value = :value
               WHERE value_id = :value_id',
+        SqlStatementKeys::DELETE_CATEGORY_DATETIME =>
+            'DELETE
+               FROM ${table:catalog_category_entity_datetime}
+              WHERE value_id = :value_id',
         SqlStatementKeys::CREATE_CATEGORY_DECIMAL =>
             'INSERT
                INTO ${table:catalog_category_entity_decimal}
@@ -152,6 +156,10 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                     attribute_id = :attribute_id,
                     store_id = :store_id,
                     value = :value
+              WHERE value_id = :value_id',
+        SqlStatementKeys::DELETE_CATEGORY_DECIMAL =>
+            'DELETE
+               FROM ${table:catalog_category_entity_decimal}
               WHERE value_id = :value_id',
         SqlStatementKeys::CREATE_CATEGORY_INT =>
             'INSERT
@@ -171,6 +179,10 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                     store_id = :store_id,
                     value = :value
               WHERE value_id = :value_id',
+        SqlStatementKeys::DELETE_CATEGORY_INT =>
+            'DELETE
+               FROM ${table:catalog_category_entity_int}
+              WHERE value_id = :value_id',
         SqlStatementKeys::CREATE_CATEGORY_VARCHAR =>
             'INSERT
                INTO ${table:catalog_category_entity_varchar}
@@ -189,6 +201,10 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                     store_id = :store_id,
                     value = :value
               WHERE value_id = :value_id',
+        SqlStatementKeys::DELETE_CATEGORY_VARCHAR =>
+            'DELETE
+               FROM ${table:catalog_category_entity_varchar}
+              WHERE value_id = :value_id',
         SqlStatementKeys::CREATE_CATEGORY_TEXT =>
             'INSERT
                 INTO ${table:catalog_category_entity_text}
@@ -206,6 +222,10 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                     attribute_id = :attribute_id,
                     store_id = :store_id,
                     value = :value
+              WHERE value_id = :value_id',
+        SqlStatementKeys::DELETE_CATEGORY_TEXT =>
+            'DELETE
+               FROM ${table:catalog_category_entity_text}
               WHERE value_id = :value_id',
         SqlStatementKeys::DELETE_CATEGORY =>
             'DELETE

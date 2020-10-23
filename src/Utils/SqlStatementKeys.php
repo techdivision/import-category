@@ -145,6 +145,13 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
     const UPDATE_CATEGORY_DATETIME = 'update.category_datetime';
 
     /**
+     * The SQL statement to delete an existing category datetime value.
+     *
+     * @var string
+     */
+    const DELETE_CATEGORY_DATETIME = 'delete.category_datetime';
+
+    /**
      * The SQL statement to create a new category decimal value.
      *
      * @var string
@@ -157,6 +164,13 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
      * @var string
      */
     const UPDATE_CATEGORY_DECIMAL = 'update.category_decimal';
+
+    /**
+     * The SQL statement to delete an existing category decimal value.
+     *
+     * @var string
+     */
+    const DELETE_CATEGORY_DECIMAL = 'delete.category_decimal';
 
     /**
      * The SQL statement to create a new category integer value.
@@ -173,6 +187,13 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
     const UPDATE_CATEGORY_INT = 'update.category_int';
 
     /**
+     * The SQL statement to delete an existing category integer value.
+     *
+     * @var string
+     */
+    const DELETE_CATEGORY_INT = 'delete.category_int';
+
+    /**
      * The SQL statement to create a new category varchar value.
      *
      * @var string
@@ -187,6 +208,13 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
     const UPDATE_CATEGORY_VARCHAR = 'update.category_varchar';
 
     /**
+     * The SQL statement to delete an existing category varchar value.
+     *
+     * @var string
+     */
+    const DELETE_CATEGORY_VARCHAR = 'delete.category_varchar';
+
+    /**
      * The SQL statement to create a new category text value.
      *
      * @var string
@@ -199,6 +227,13 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
      * @var string
      */
     const UPDATE_CATEGORY_TEXT = 'update.category_text';
+
+    /**
+     * The SQL statement to delete an existing category text value.
+     *
+     * @var string
+     */
+    const DELETE_CATEGORY_TEXT = 'delete.category_text';
 
     /**
      * The SQL statement to remove a existing category.

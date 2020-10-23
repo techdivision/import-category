@@ -1161,4 +1161,69 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     {
         $this->getCategoryAction()->delete($row, $name);
     }
+
+    /**
+     * Delete's the category datetime attribute with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function deleteCategoryDatetimeAttribute($row, $name = null)
+    {
+        $this->getCategoryDatetimeAction()->delete($row, $name);
+    }
+
+    /**
+     * Delete's the category decimal attribute with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function deleteCategoryDecimalAttribute($row, $name = null)
+    {
+        $this->getCategoryDecimalAction()->delete($row, $name);
+    }
+
+    /**
+     * Delete's the category integer attribute with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function deleteCategoryIntAttribute($row, $name = null)
+    {
+        $this->getCategoryIntAction()->delete($row, $name);
+    }
+
+    /**
+     * Delete's the category text attribute with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function deleteCategoryTextAttribute($row, $name = null)
+    {
+        $this->getCategoryTextAction()->delete($row, $name);
+    }
+
+    /**
+     * Delete's the category varchar attribute with the passed attributes.
+     *
+     * @param array       $row  The attributes of the entity to delete
+     * @param string|null $name The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function deleteCategoryVarcharAttribute($row, $name = null)
+    {
+        $this->getCategoryVarcharAction()->delete($row, $name);
+    }
 }
