@@ -10,6 +10,8 @@
 
 * Add `"include_in_menu": null` to `etc/configuration/default-values.json`
 * Remove stack trace of exception for missing media directories > log a simple debug message instead
+* Add #PAC-57: Deleting dedicated attribute values via import by setting a configurable value
+
 
 # Version 20.0.4
 
