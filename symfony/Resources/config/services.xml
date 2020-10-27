@@ -84,11 +84,19 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
+        <service id="import_category.action.processor.category.datetime.delete" class="TechDivision\Import\Category\Actions\Processors\CategoryDatetimeDeleteProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
+        </service>
         <service id="import_category.action.processor.category.decimal.create" class="TechDivision\Import\Category\Actions\Processors\CategoryDecimalCreateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.action.processor.category.decimal.update" class="TechDivision\Import\Category\Actions\Processors\CategoryDecimalUpdateProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
+        </service>
+        <service id="import_category.action.processor.category.decimal.delete" class="TechDivision\Import\Category\Actions\Processors\CategoryDecimalDeleteProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
@@ -100,6 +108,10 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
+        <service id="import_category.action.processor.category.int.delete" class="TechDivision\Import\Category\Actions\Processors\CategoryIntDeleteProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
+        </service>
         <service id="import_category.action.processor.category.text.create" class="TechDivision\Import\Category\Actions\Processors\CategoryTextCreateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
@@ -108,11 +120,19 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
+        <service id="import_category.action.processor.category.text.delete" class="TechDivision\Import\Category\Actions\Processors\CategoryTextDeleteProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
+        </service>
         <service id="import_category.action.processor.category.varchar.create" class="TechDivision\Import\Category\Actions\Processors\CategoryVarcharCreateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
         <service id="import_category.action.processor.category.varchar.update" class="TechDivision\Import\Category\Actions\Processors\CategoryVarcharUpdateProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_category.repository.sql.statement"/>
+        </service>
+        <service id="import_category.action.processor.category.varchar.delete" class="TechDivision\Import\Category\Actions\Processors\CategoryVarcharDeleteProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
@@ -125,22 +145,27 @@
         <service id="import_category.action.category.datetime" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_category.action.processor.category.datetime.create"/>
             <argument type="service" id="import_category.action.processor.category.datetime.update"/>
+            <argument type="service" id="import_category.action.processor.category.datetime.delete"/>
         </service>
         <service id="import_category.action.category.decimal" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_category.action.processor.category.decimal.create"/>
             <argument type="service" id="import_category.action.processor.category.decimal.update"/>
+            <argument type="service" id="import_category.action.processor.category.decimal.delete"/>
         </service>
         <service id="import_category.action.category.int" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_category.action.processor.category.int.create"/>
             <argument type="service" id="import_category.action.processor.category.int.update"/>
+            <argument type="service" id="import_category.action.processor.category.int.delete"/>
         </service>
         <service id="import_category.action.category.text" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_category.action.processor.category.text.create"/>
             <argument type="service" id="import_category.action.processor.category.text.update"/>
+            <argument type="service" id="import_category.action.processor.category.text.delete"/>
         </service>
         <service id="import_category.action.category.varchar" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_category.action.processor.category.varchar.create"/>
             <argument type="service" id="import_category.action.processor.category.varchar.update"/>
+            <argument type="service" id="import_category.action.processor.category.varchar.delete"/>
         </service>
 
         <service id="import_category.assembler.category.attribute" class="TechDivision\Import\Category\Assembler\CategoryAttributeAssembler">
