@@ -47,7 +47,11 @@ class PageLayoutCallback extends AbstractCategoryImportCallback
         // set the observer
         $this->setObserver($observer);
 
-        // replace the passed attribute value into the page layout
-        return $this->getSubject()->getPageLayoutByValue($observer->getAttributeValue());
+        try {
+            // replace the passed attribute value into the page layout
+            return $this->getSubject()->getPageLayoutByValue($observer->getAttributeValue());
+        } catch (\Exception $e) {
+            $this->getSystemLogger()->info($e->getMessage());
+        }
     }
 }
