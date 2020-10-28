@@ -47,7 +47,11 @@ class DisplayModeCallback extends AbstractCategoryImportCallback
         // set the observer
         $this->setObserver($observer);
 
-        // replace the passed attribute value into the display mode
-        return $this->getSubject()->getDisplayModeByValue($observer->getAttributeValue());
+        try {
+            // replace the passed attribute value into the display mode
+            return $this->getSubject()->getDisplayModeByValue($observer->getAttributeValue());
+        } catch (\Exception $e) {
+            $this->getSystemLogger()->info($e->getMessage());
+        }
     }
 }
