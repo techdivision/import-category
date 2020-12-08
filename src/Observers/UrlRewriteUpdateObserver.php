@@ -93,7 +93,6 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
             // query whether or not 301 redirects have to be created, so don't
             // create redirects if the the rewrite history has been deactivated
             if ($this->getSubject()->getCoreConfigData(CoreConfigDataKeys::CATALOG_SEO_SAVE_REWRITES_HISTORY, true)) {
-
                 // load target path
                 $targetPath = $this->prepareRequestPath();
 
