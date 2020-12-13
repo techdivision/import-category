@@ -1046,6 +1046,19 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     }
 
     /**
+     * Load's and return's the URL rewrite for the given request path and store ID
+     *
+     * @param string $requestPath The request path to load the URL rewrite for
+     * @param int    $storeId     The store ID to load the URL rewrite for
+     *
+     * @return array|null The URL rewrite found for the given request path and store ID
+     */
+    public function loadUrlRewriteByRequestPathAndStoreId(string $requestPath, int $storeId)
+    {
+        return $this->getUrlRewriteRepository()->findOneByUrlRewriteByRequestPathAndStoreId($requestPath, $storeId);
+    }
+
+    /**
      * Persist's the passed category data and return's the ID.
      *
      * @param array       $category The category data to persist
