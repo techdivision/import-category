@@ -53,9 +53,15 @@ class CategoryUrlRewriteObserver extends AbstractCategoryImportObserver
      * Process the observer's business logic.
      *
      * @return array The processed row
+     * @todo See PAC-307
      */
     protected function process()
     {
+
+        // do nothing if the column `url_key` is empty
+        if ($this->hasValue(ColumnKeys::URL_KEY) === false) {
+            return;
+        }
 
         // initialize the array for the artefacts and the store view codes
         $this->artefacts = array();

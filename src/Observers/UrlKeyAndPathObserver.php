@@ -86,31 +86,39 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
      * Process the observer's business logic.
      *
      * @return void
+     * @todo See PAC-307
      */
     protected function process()
     {
 
-        // initialize the URL key and array for the categories
-        $urlKey = null;
-        $categories = array();
-
-        // set the entity ID for the category with the passed path
         try {
-            $this->setIds($this->getCategoryByPath($this->getValue(ColumnKeys::PATH)));
+            // try to set the entity IDs for the category with the passed path
+            if ($category = $this->getCategoryByPath($this->getValue(ColumnKeys::PATH)) && $this->hasValue(ColumnKeys::URL_KEY)) {
+                $this->setIds($category);
+            } else {
+                // @todo See PAC-307
+                // category already exists and NO new URL key
+                // has been specified in column `url_key`, so
+                // we stop processing here
+
+                return;
+            }
         } catch (\Exception $e) {
             $this->setIds(array());
         }
+
+        // prepare the store view code
+        $this->prepareStoreViewCode();
+
+        // load ID of the actual store view
+        $storeId = $this->getRowStoreId(StoreViewCodes::ADMIN);
 
         // explode the path into the category names
         if ($categories = $this->explode($this->getValue(ColumnKeys::PATH), '/')) {
             // initialize the array for the category paths
             $categoryPaths = array();
-            // prepare the store view code
-            $this->prepareStoreViewCode();
-            // load ID of the actual store view
-            $storeId = $this->getRowStoreId(StoreViewCodes::ADMIN);
-
-            // iterate over the category names and try to load the category therefore
+            // iterate over the parent category names and try
+            // to load the categories to build the URL path
             for ($i = sizeof($categories) - 1; $i > 1; $i--) {
                 try {
                     // prepare the expected category name
@@ -121,39 +129,39 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
                     if (isset($existingCategory[MemberNames::URL_KEY])) {
                         array_unshift($categoryPaths, $existingCategory[MemberNames::URL_KEY]);
                     } else {
-                        $this->getSystemLogger()->debug(sprintf('Can\'t find URL key for category %s', $categoryPath));
+                        $this->getSystemLogger()->debug(sprintf('Can\'t find URL key for category "%s"', $categoryPath));
                     }
                 } catch (\Exception $e) {
-                    $this->getSystemLogger()->debug(sprintf('Can\'t load parent category %s', $categoryPath));
+                    $this->getSystemLogger()->debug(sprintf('Can\'t load parent category "%s"', $categoryPath));
                 }
             }
-
-            // query whether or not the URL key column has a value if not, extract the URL key
-            // from the last path element and set it as the value for the URL key column
-            if ($this->hasValue(ColumnKeys::URL_KEY)) {
-                $urlKey = $this->makeUnique($this->getSubject(), $this->getValue(ColumnKeys::URL_KEY));
-            } else {
-                $this->setValue(
-                    ColumnKeys::URL_KEY,
-                    $urlKey = $this->makeUnique(
-                        $this->getSubject(),
-                        $this->convertNameToUrlKey($categories[sizeof($categories) - 1]),
-                        implode('/', $categoryPaths)
-                    )
-                );
-            }
-
-            // create the header for the URL path
-            if (!$this->hasHeader(ColumnKeys::URL_PATH)) {
-                $this->addHeader(ColumnKeys::URL_PATH);
-            }
-
-            // finally, append the URL key as last element to the path
-            array_push($categoryPaths, $urlKey);
-
-            // set the URL path
-            $this->setValue(ColumnKeys::URL_PATH, implode('/', $categoryPaths));
         }
+
+        // query whether or not the URL key column has a
+        // value, if yes, use the value from the column
+        if ($this->hasValue(ColumnKeys::URL_KEY)) {
+            $urlKey =  $this->getValue(ColumnKeys::URL_KEY);
+        } else {
+            // initialize the URL key with the converted name
+            $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME));
+        }
+
+        // update the URL key with the unique value
+        $this->setValue(
+            ColumnKeys::URL_KEY,
+            $urlKey = $this->makeUnique($this->getSubject(), $urlKey, implode('/', $categoryPaths))
+        );
+
+        // finally, append the URL key as last element to the path
+        array_push($categoryPaths, $urlKey);
+
+        // create the virtual column for the URL path
+        if ($this->hasHeader(ColumnKeys::URL_PATH) === false) {
+            $this->addHeader(ColumnKeys::URL_PATH);
+        }
+
+        // set the URL path
+        $this->setValue(ColumnKeys::URL_PATH, implode('/', $categoryPaths));
     }
 
     /**
