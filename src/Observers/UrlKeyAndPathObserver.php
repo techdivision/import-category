@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Category\Observers;
 
+use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use Zend\Filter\FilterInterface;
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
@@ -86,25 +87,36 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
      * Process the observer's business logic.
      *
      * @return void
-     * @todo See PAC-307
      */
     protected function process()
     {
+        // initialize the URL key and array for the categories
+        $category = array();
 
+        // set the entity ID for the category with the passed path
         try {
-            // try to set the entity IDs for the category with the passed path
-            if ($category = $this->getCategoryByPath($this->getValue(ColumnKeys::PATH)) && $this->hasValue(ColumnKeys::URL_KEY)) {
-                $this->setIds($category);
-            } else {
-                // @todo See PAC-307
-                // category already exists and NO new URL key
-                // has been specified in column `url_key`, so
-                // we stop processing here
-
-                return;
-            }
+            $this->setIds($category = $this->getCategoryByPath($this->getValue(ColumnKeys::PATH)));
         } catch (\Exception $e) {
             $this->setIds(array());
+        }
+
+        // query whether or not the URL key column has a
+        // value, if yes, use the value from the column
+        if ($this->hasValue(ColumnKeys::URL_KEY)) {
+            $urlKey =  $this->getValue(ColumnKeys::URL_KEY);
+        } else {
+            // query whether or not the column `url_key` has a value
+            if ($category &&
+                $this->getSubject()->getConfiguration()->hasParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME) &&
+                !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)
+            ) {
+                // product already exists and NO new URL key
+                // has been specified in column `url_key`, so
+                // we stop processing here
+                return;
+            }
+            // initialize the URL key with the converted name
+            $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME));
         }
 
         // prepare the store view code
@@ -135,15 +147,6 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
                     $this->getSystemLogger()->debug(sprintf('Can\'t load parent category "%s"', $categoryPath));
                 }
             }
-        }
-
-        // query whether or not the URL key column has a
-        // value, if yes, use the value from the column
-        if ($this->hasValue(ColumnKeys::URL_KEY)) {
-            $urlKey =  $this->getValue(ColumnKeys::URL_KEY);
-        } else {
-            // initialize the URL key with the converted name
-            $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME));
         }
 
         // update the URL key with the unique value
