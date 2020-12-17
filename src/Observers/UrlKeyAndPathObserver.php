@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Category\Observers;
 
+use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use Zend\Filter\FilterInterface;
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
@@ -93,10 +94,11 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
         // initialize the URL key and array for the categories
         $urlKey = null;
         $categories = array();
+        $category = array();
 
         // set the entity ID for the category with the passed path
         try {
-            $this->setIds($this->getCategoryByPath($this->getValue(ColumnKeys::PATH)));
+            $this->setIds($category = $this->getCategoryByPath($this->getValue(ColumnKeys::PATH)));
         } catch (\Exception $e) {
             $this->setIds(array());
         }
@@ -105,6 +107,15 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
         if ($this->hasValue(ColumnKeys::URL_KEY)) {
             $urlKey = $this->makeUnique($this->getSubject(), $this->getValue(ColumnKeys::URL_KEY));
         } else {
+            // query whether or not the column `url_key` has a value
+            if ($category &&
+                !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)
+            ) {
+                // product already exists and NO new URL key
+                // has been specified in column `url_key`, so
+                // we stop processing here
+                return;
+            }
             $this->setValue(
                 ColumnKeys::URL_KEY,
                 $urlKey = $this->makeUnique($this->getSubject(), $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME)))
