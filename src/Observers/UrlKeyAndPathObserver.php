@@ -20,7 +20,6 @@
 
 namespace TechDivision\Import\Category\Observers;
 
-use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use Zend\Filter\FilterInterface;
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
@@ -29,6 +28,7 @@ use TechDivision\Import\Utils\UrlKeyUtilInterface;
 use TechDivision\Import\Utils\Filter\UrlKeyFilterTrait;
 use TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface;
 use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
+use TechDivision\Import\Category\Utils\ConfigurationKeys;
 
 /**
  * Observer that extracts the URL key/path from the category path
@@ -90,6 +90,7 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
      */
     protected function process()
     {
+
         // initialize the URL key and array for the categories
         $category = array();
 
@@ -232,7 +233,7 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
      */
     protected function setIds(array $category)
     {
-        $this->setLastEntityId(isset($category[$this->getPkMemberName()]) ? $category[$this->getPkMemberName()] : null);
+        $this->setLastEntityId(isset($category[MemberNames::ENTITY_ID]) ? $category[MemberNames::ENTITY_ID] : null);
     }
 
     /**
