@@ -20,13 +20,13 @@
 
 namespace TechDivision\Import\Category\Observers;
 
-use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use Zend\Filter\FilterInterface;
-use TechDivision\Import\Category\Utils\ColumnKeys;
-use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\UrlKeyUtilInterface;
 use TechDivision\Import\Utils\Filter\UrlKeyFilterTrait;
+use TechDivision\Import\Category\Utils\ColumnKeys;
+use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Category\Utils\ConfigurationKeys;
 use TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface;
 use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
 
@@ -93,7 +93,6 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
 
         // initialize the URL key and array for the categories
         $urlKey = null;
-        $categories = array();
         $category = array();
 
         // set the entity ID for the category with the passed path

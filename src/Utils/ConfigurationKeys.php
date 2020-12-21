@@ -52,4 +52,11 @@ class ConfigurationKeys extends \TechDivision\Import\Utils\ConfigurationKeys
      * @var string
      */
     const COPY_IMAGES = 'copy-images';
+
+    /**
+     * Name for the configuration key 'clean-up-empty-image-columns'.
+     *
+     * @var string
+     */
+    const UPDATE_URL_KEY_FROM_NAME = 'update-url-key-from-name';
 }
