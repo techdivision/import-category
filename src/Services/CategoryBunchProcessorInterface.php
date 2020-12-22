@@ -346,6 +346,18 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
     public function loadCategoryVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndValue($attributeCode, $entityTypeId, $storeId, $value);
 
     /**
+     * Load's and return's the varchar attribute with the passed params.
+     *
+     * @param integer $attributeCode The attribute code of the varchar attribute
+     * @param integer $entityTypeId  The entity type ID of the varchar attribute
+     * @param integer $storeId       The store ID of the varchar attribute
+     * @param string  $pk            The primary key ID of the category
+     *
+     * @return string|null The url_key from category
+     */
+    public function loadCategoryVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndPk($attributeCode, $entityTypeId, $storeId, $pk);
+
+    /**
      * Load's and return's the EAV attribute option value with the passed entity type ID, code, store ID and value.
      *
      * @param string  $entityTypeId  The entity type ID of the EAV attribute to load the option value for

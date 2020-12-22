@@ -92,6 +92,7 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
     {
 
         // initialize the URL key and array for the categories
+        $urlKey = false;
         $category = array();
 
         // set the entity ID for the category with the passed path
@@ -108,16 +109,19 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
         } else {
             // query whether or not the column `url_key` has a value
             if ($category &&
-                $this->getSubject()->getConfiguration()->hasParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME) &&
                 !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)
             ) {
-                // product already exists and NO new URL key
-                // has been specified in column `url_key`, so
-                // we stop processing here
-                return;
+                // product already exists and NO recalc from product key,
+                // so we search origin url_key from product
+                $urlKey = $this->loadUrlKey(
+                    $this->getSubject(),
+                    $this->getPrimaryKey()
+                );
             }
-            // initialize the URL key with the converted name
-            $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME));
+            if (!$urlKey) {
+                // initialize the URL key with the converted name
+                $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME));
+            }
         }
 
         // prepare the store view code
@@ -246,6 +250,29 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
     protected function setLastEntityId($lastEntityId)
     {
         $this->getSubject()->setLastEntityId($lastEntityId);
+    }
+
+    /**
+     * Return's the PK to of the product.
+     *
+     * @return integer The PK to create the relation with
+     */
+    protected function getPrimaryKey()
+    {
+        $this->getSubject()->getLastEntityId();
+    }
+
+    /**
+     * Load's and return's the url_key with the passed primary ID.
+     *
+     * @param \TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface $subject      The subject to load the URL key
+     * @param int                                                       $primaryKeyId The ID from category
+     *
+     * @return string|null url_key or null
+     */
+    protected function loadUrlKey(UrlKeyAwareSubjectInterface $subject, $primaryKeyId)
+    {
+        return $this->getUrlKeyUtil()->loadUrlKey($subject, $primaryKeyId);
     }
 
     /**
