@@ -222,6 +222,15 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
                     AND t1.attribute_id = t2.attribute_id
                     AND t1.store_id = :store_id
                     AND t1.value = BINARY :value',
+        SqlStatementKeys::CATEGORY_VARCHAR_BY_ATTRIBUTE_CODE_AND_ENTITY_TYPE_ID_AND_STORE_ID_AND_PK =>
+            'SELECT t1.*
+               FROM ${table:catalog_category_entity_varchar} t1,
+                    ${table:eav_attribute} t2
+              WHERE t2.attribute_code = :attribute_code
+                AND t2.entity_type_id = :entity_type_id
+                AND t1.attribute_id = t2.attribute_id
+                AND t1.store_id = :store_id
+                AND t1.entity_id = :pk',
     );
 
     /**

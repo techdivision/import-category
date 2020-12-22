@@ -110,14 +110,20 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
             if ($category &&
                 !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)
             ) {
-                // product already exists and NO new URL key
-                // has been specified in column `url_key`, so
-                // we stop processing here
-                return;
+                // product already exists and NO recalc from product key,
+                // so we search origin url_key from product
+                $urlKey = $this->loadUrlKey(
+                    $this->getSubject(),
+                    $this->getPrimaryKey()
+                );
             }
+            if (!$urlKey) {
+                $urlKey = $this->makeUnique($this->getSubject(), $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME)));
+            }
+            // let the `url_key` has a value
             $this->setValue(
                 ColumnKeys::URL_KEY,
-                $urlKey = $this->makeUnique($this->getSubject(), $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME)))
+                $urlKey
             );
         }
 
@@ -236,6 +242,29 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
     protected function setLastEntityId($lastEntityId)
     {
         $this->getSubject()->setLastEntityId($lastEntityId);
+    }
+
+    /**
+     * Return's the PK to of the product.
+     *
+     * @return integer The PK to create the relation with
+     */
+    protected function getPrimaryKey()
+    {
+        $this->getSubject()->getLastEntityId();
+    }
+
+    /**
+     * Load's and return's the url_key with the passed primary ID.
+     *
+     * @param \TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface $subject      The subject to load the URL key
+     * @param int                                                       $primaryKeyId The ID from category
+     *
+     * @return string|null url_key or null
+     */
+    protected function loadUrlKey(UrlKeyAwareSubjectInterface $subject, $primaryKeyId)
+    {
+        return $this->getUrlKeyUtil()->loadUrlKey($subject, $primaryKeyFromSku);
     }
 
     /**
