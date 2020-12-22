@@ -264,7 +264,7 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
      */
     protected function loadUrlKey(UrlKeyAwareSubjectInterface $subject, $primaryKeyId)
     {
-        return $this->getUrlKeyUtil()->loadUrlKey($subject, $primaryKeyFromSku);
+        return $this->getUrlKeyUtil()->loadUrlKey($subject, $primaryKeyId);
     }
 
     /**
