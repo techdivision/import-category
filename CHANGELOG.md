@@ -1,3 +1,13 @@
+# Version 20.0.6
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add #PAC-307: Functionality to control automatic update of URL rewrites when product or category name changes
+
 # Version 20.0.5
 
 ## Bugfixes
