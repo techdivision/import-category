@@ -1,3 +1,13 @@
+# Version 20.0.7
+
+## Bugfixes
+
+* Fixed invalid behaviour of #PAC-307: Add fallback for URL key to value of default store view when initial import has been done without store view rows
+
+## Features
+
+* None
+
 # Version 20.0.6
 
 ## Bugfixes
