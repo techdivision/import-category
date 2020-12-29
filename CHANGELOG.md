@@ -1,3 +1,13 @@
+# Version 20.0.8
+
+## Bugfixes
+
+* Fixed issue with missing `sprintf()` function when creating an exception in `UrlKeyAndPathObserver::process()` method 
+
+## Features
+
+* None
+
 # Version 20.0.7
 
 ## Bugfixes
