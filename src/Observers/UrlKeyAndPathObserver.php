@@ -91,41 +91,49 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
     protected function process()
     {
 
-        // initialize the URL key and array for the categories
-        $urlKey = false;
+        // initialize the URL key and the category
+        $urlKey = null;
         $category = array();
+
+        // prepare the store view code
+        $this->prepareStoreViewCode();
 
         // set the entity ID for the category with the passed path
         try {
-            $this->setIds($category = $this->getCategoryByPath($this->getValue(ColumnKeys::PATH)));
+            $this->setIds($category = $this->getCategoryByPath($path = $this->getValue(ColumnKeys::PATH)));
         } catch (\Exception $e) {
             $this->setIds(array());
         }
 
-        // query whether or not the URL key column has a
-        // value, if yes, use the value from the column
+        // query whether or not the URL key column has a value
         if ($this->hasValue(ColumnKeys::URL_KEY)) {
-            $urlKey =  $this->getValue(ColumnKeys::URL_KEY);
+            $urlKey = $this->getValue(ColumnKeys::URL_KEY);
         } else {
-            // query whether or not the column `url_key` has a value
-            if ($category &&
-                !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)
-            ) {
-                // product already exists and NO recalc from product key,
-                // so we search origin url_key from product
-                $urlKey = $this->loadUrlKey(
-                    $this->getSubject(),
-                    $this->getPrimaryKey()
-                );
+            // query whether or not the existing category `url_key` should be re-created from the category name
+            if ($category && !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)) {
+                // if the category already exists and NO re-creation from the category name has to
+                // be done, load the original `url_key`from the category and use that to proceed
+                $urlKey = $this->loadUrlKey($this->getSubject(), $this->getPrimaryKey());
             }
-            if (!$urlKey) {
-                // initialize the URL key with the converted name
+
+            // try to load the value from column `name` if URL key is still
+            // empty, because we need it to process the the rewrites later on
+            if ($urlKey === null || $urlKey === '' && $this->hasValue(ColumnKeys::NAME)) {
                 $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME));
             }
         }
 
-        // prepare the store view code
-        $this->prepareStoreViewCode();
+        // stop processing, if no URL key is available
+        if ($urlKey === null || $urlKey === '') {
+            // throw an exception, that the URL key can not be
+            // initialized and we're in the default store view
+            if ($this->getSubject()->getStoreViewCode(StoreViewCodes::ADMIN) === StoreViewCodes::ADMIN) {
+                throw new \Exception(sprintf('Can\'t initialize the URL key for category "%s" because columns "url_key" or "name" have a value set for default store view', $path));
+            }
+            // stop processing, because we're in a store
+            // view row and a URL key is not mandatory
+            return;
+        }
 
         // load ID of the actual store view
         $storeId = $this->getRowStoreId(StoreViewCodes::ADMIN);
