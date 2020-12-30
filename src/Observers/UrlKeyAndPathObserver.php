@@ -127,7 +127,7 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
         if ($urlKey === null || $urlKey === '') {
             // throw an exception, that the URL key can not be
             // initialized and we're in the default store view
-            if ($this->getSubject()->getStoreViewCode(StoreViewCodes::ADMIN) === StoreViewCodes::ADMIN) {
+            if ($this->getStoreViewCode(StoreViewCodes::ADMIN) === StoreViewCodes::ADMIN) {
                 throw new \Exception(sprintf('Can\'t initialize the URL key for category "%s" because columns "url_key" or "name" have a value set for default store view', $path));
             }
             // stop processing, because we're in a store
@@ -165,7 +165,7 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
         // update the URL key with the unique value
         $this->setValue(
             ColumnKeys::URL_KEY,
-            $urlKey = $this->makeUnique($this->getSubject(), $urlKey, implode('/', $categoryPaths))
+            $urlKey = $this->makeUnique($this->getSubject(), $urlKey, array(implode('/', $categoryPaths)))
         );
 
         // finally, append the URL key as last element to the path

@@ -1085,7 +1085,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
      */
     public function loadUrlRewriteByRequestPathAndStoreId(string $requestPath, int $storeId)
     {
-        return $this->getUrlRewriteRepository()->findOneByUrlRewriteByRequestPathAndStoreId($requestPath, $storeId);
+        return $this->getUrlRewriteRepository()->findOneByRequestPathAndStoreId($requestPath, $storeId);
     }
 
     /**
