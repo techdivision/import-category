@@ -160,7 +160,7 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
         $storeId = $this->getSubject()->getRowStoreId();
 
         // load the existing URL rewrites of the actual entity
-        $existingUrlRewrites = $this->getUrlRewritesByEntityTypeAndEntityIdAndStoreId($entityType, $pk, $storeId);
+        $existingUrlRewrites = $this->loadUrlRewritesByEntityTypeAndEntityIdAndStoreId($entityType, $pk, $storeId);
 
         // prepare the existing URL rewrites to improve searching them by store ID/request path
         foreach ($existingUrlRewrites as $existingUrlRewrite) {
@@ -213,9 +213,9 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
      *
      * @return array The URL rewrites
      */
-    protected function getUrlRewritesByEntityTypeAndEntityIdAndStoreId($entityType, $entityId, $storeId)
+    protected function loadUrlRewritesByEntityTypeAndEntityIdAndStoreId($entityType, $entityId, $storeId)
     {
-        return $this->getCategoryBunchProcessor()->getUrlRewritesByEntityTypeAndEntityIdAndStoreId($entityType, $entityId, $storeId);
+        return $this->getCategoryUrlRewriteProcessor()->loadUrlRewritesByEntityTypeAndEntityIdAndStoreId($entityType, $entityId, $storeId);
     }
 
     /**
@@ -228,6 +228,6 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
      */
     protected function deleteUrlRewrite($row, $name = null)
     {
-        $this->getCategoryBunchProcessor()->deleteUrlRewrite($row, $name);
+        $this->getCategoryUrlRewriteProcessor()->deleteUrlRewrite($row, $name);
     }
 }

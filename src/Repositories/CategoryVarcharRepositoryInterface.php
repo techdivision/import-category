@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Category\Repositories;
 
-use TechDivision\Import\Repositories\RepositoryInterface;
+use TechDivision\Import\Dbal\Repositories\RepositoryInterface;
 
 /**
  * Interface for repositories providing functionality to load category varchar attribute data.

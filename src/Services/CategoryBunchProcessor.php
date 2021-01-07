@@ -21,8 +21,8 @@
 namespace TechDivision\Import\Category\Services;
 
 use TechDivision\Import\Loaders\LoaderInterface;
-use TechDivision\Import\Actions\ActionInterface;
-use TechDivision\Import\Connection\ConnectionInterface;
+use TechDivision\Import\Dbal\Actions\ActionInterface;
+use TechDivision\Import\Dbal\Connection\ConnectionInterface;
 use TechDivision\Import\Repositories\UrlRewriteRepositoryInterface;
 use TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface;
 use TechDivision\Import\Repositories\EavAttributeRepositoryInterface;
@@ -51,7 +51,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * A PDO connection initialized with the values from the Doctrine EntityManager.
      *
-     * @var \TechDivision\Import\Connection\ConnectionInterface
+     * @var \TechDivision\Import\Dbal\Connection\ConnectionInterface
      */
     protected $connection;
 
@@ -86,49 +86,49 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * The action for category CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $categoryAction;
 
     /**
      * The action for category varchar attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $categoryVarcharAction;
 
     /**
      * The action for category text attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $categoryTextAction;
 
     /**
      * The action for category int attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $categoryIntAction;
 
     /**
      * The action for category decimal attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $categoryDecimalAction;
 
     /**
      * The action for category datetime attribute CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $categoryDatetimeAction;
 
     /**
      * The action for URL rewrite CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $urlRewriteAction;
 
@@ -198,7 +198,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
-     * @param \TechDivision\Import\Connection\ConnectionInterface                            $connection                        The connection to use
+     * @param \TechDivision\Import\Dbal\Connection\ConnectionInterface                       $connection                        The connection to use
      * @param \TechDivision\Import\Category\Repositories\CategoryRepositoryInterface         $categoryRepository                The category repository to use
      * @param \TechDivision\Import\Category\Repositories\CategoryDatetimeRepositoryInterface $categoryDatetimeRepository        The category datetime repository to use
      * @param \TechDivision\Import\Category\Repositories\CategoryDecimalRepositoryInterface  $categoryDecimalRepository         The category decimal repository to use
@@ -209,13 +209,13 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
      * @param \TechDivision\Import\Repositories\EavAttributeRepositoryInterface              $eavAttributeRepository            The EAV attribute repository to use
      * @param \TechDivision\Import\Repositories\UrlRewriteRepositoryInterface                $urlRewriteRepository              The URL rewrite repository to use
      * @param \TechDivision\Import\Repositories\EavEntityTypeRepositoryInterface             $eavEntityTypeRepository           The EAV entity type repository to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                   $categoryDatetimeAction            The category datetime action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                   $categoryDecimalAction             The category decimal action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                   $categoryIntAction                 The category integer action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                   $categoryAction                    The category action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                   $categoryTextAction                The category text action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                   $categoryVarcharAction             The category varchar action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                   $urlRewriteAction                  The URL rewrite action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                              $categoryDatetimeAction            The category datetime action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                              $categoryDecimalAction             The category decimal action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                              $categoryIntAction                 The category integer action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                              $categoryAction                    The category action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                              $categoryTextAction                The category text action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                              $categoryVarcharAction             The category varchar action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                              $urlRewriteAction                  The URL rewrite action to use
      * @param \TechDivision\Import\Category\Assembler\CategoryAssemblerInterface             $categoryAssembler                 The category assembler to use
      * @param \TechDivision\Import\Category\Assembler\CategoryAttributeAssemblerInterface    $categoryAttributeAssembler        The assembler to load the category attributes with
      * @param \TechDivision\Import\Loaders\LoaderInterface                                   $rawEntityLoader                   The raw entity loader instance
@@ -291,7 +291,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the passed connection.
      *
-     * @param \TechDivision\Import\Connection\ConnectionInterface $connection The connection to set
+     * @param \TechDivision\Import\Dbal\Connection\ConnectionInterface $connection The connection to set
      *
      * @return void
      */
@@ -303,7 +303,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the connection.
      *
-     * @return \TechDivision\Import\Connection\ConnectionInterface The connection instance
+     * @return \TechDivision\Import\Dbal\Connection\ConnectionInterface The connection instance
      */
     public function getConnection()
     {
@@ -423,7 +423,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category CRUD methods.
      *
-     * @param \TechDivision\Import\Actions\ActionInterface $categoryAction The action with the category CRUD methods
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface $categoryAction The action with the category CRUD methods
      *
      * @return void
      */
@@ -435,7 +435,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getCategoryAction()
     {
@@ -445,7 +445,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category varchar attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Actions\ActionInterface $categoryVarcharAction The action with the category varchar attriute CRUD methods
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface $categoryVarcharAction The action with the category varchar attriute CRUD methods
      *
      * @return void
      */
@@ -457,7 +457,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category varchar attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getCategoryVarcharAction()
     {
@@ -467,7 +467,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category text attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Actions\ActionInterface $categoryTextAction The action with the category text attriute CRUD methods
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface $categoryTextAction The action with the category text attriute CRUD methods
      *
      * @return void
      */
@@ -479,7 +479,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category text attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getCategoryTextAction()
     {
@@ -489,7 +489,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category int attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Actions\ActionInterface $categoryIntAction The action with the category int attriute CRUD methods
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface $categoryIntAction The action with the category int attriute CRUD methods
      *
      * @return void
      */
@@ -501,7 +501,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category int attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getCategoryIntAction()
     {
@@ -511,7 +511,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category decimal attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Actions\ActionInterface $categoryDecimalAction The action with the category decimal attriute CRUD methods
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface $categoryDecimalAction The action with the category decimal attriute CRUD methods
      *
      * @return void
      */
@@ -523,7 +523,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category decimal attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getCategoryDecimalAction()
     {
@@ -533,7 +533,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the category datetime attribute CRUD methods.
      *
-     * @param \TechDivision\Import\Actions\ActionInterface $categoryDatetimeAction The action with the category datetime attriute CRUD methods
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface $categoryDatetimeAction The action with the category datetime attriute CRUD methods
      *
      * @return void
      */
@@ -545,7 +545,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the category datetime attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getCategoryDatetimeAction()
     {
@@ -555,7 +555,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Set's the action with the URL rewrite CRUD methods.
      *
-     * @param \TechDivision\Import\Actions\ActionInterface $urlRewriteAction The action with the URL rewrite CRUD methods
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface $urlRewriteAction The action with the URL rewrite CRUD methods
      *
      * @return void
      */
@@ -567,7 +567,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     /**
      * Return's the action with the URL rewrite CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getUrlRewriteAction()
     {
@@ -839,33 +839,6 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     public function getCategoryVarcharsByEntityIds(array $entityIds)
     {
         return $this->getCategoryVarcharRepository()->findAllByEntityIds($entityIds);
-    }
-
-    /**
-     * Return's the URL rewrites for the passed URL entity type and ID.
-     *
-     * @param string  $entityType The entity type to load the URL rewrites for
-     * @param integer $entityId   The entity ID to laod the rewrites for
-     *
-     * @return array The URL rewrites
-     */
-    public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId)
-    {
-        return $this->getUrlRewriteRepository()->findAllByEntityTypeAndEntityId($entityType, $entityId);
-    }
-
-    /**
-     * Return's the URL rewrites for the passed URL entity type and ID.
-     *
-     * @param string  $entityType The entity type to load the URL rewrites for
-     * @param integer $entityId   The entity ID to load the URL rewrites for
-     * @param integer $storeId    The store ID to load the URL rewrites for
-     *
-     * @return array The URL rewrites
-     */
-    public function getUrlRewritesByEntityTypeAndEntityIdAndStoreId($entityType, $entityId, $storeId)
-    {
-        return $this->getUrlRewriteRepository()->findAllByEntityTypeAndEntityIdAndStoreId($entityType, $entityId, $storeId);
     }
 
     /**
@@ -1268,18 +1241,5 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     public function deleteCategoryVarcharAttribute($row, $name = null)
     {
         $this->getCategoryVarcharAction()->delete($row, $name);
-    }
-
-    /**
-     * Persist's the passed URL rewrites in a bulk operation.
-     *
-     * @param array       $rows The URL rewrites that has to be persisted in a bulk operation
-     * @param string|null $name The name of the prepared statement that has to be executed
-     *
-     * @return void
-     */
-    public function bulkPersistTemporaryUrlRewrites(array $rows, $name = null)
-    {
-        // bulk update the registry processor here ...
     }
 }

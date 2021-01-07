@@ -22,7 +22,7 @@ namespace TechDivision\Import\Category\Repositories;
 
 use TechDivision\Import\Category\Utils\ParamNames;
 use TechDivision\Import\Category\Utils\SqlStatementKeys;
-use TechDivision\Import\Repositories\AbstractRepository;
+use TechDivision\Import\Dbal\Repositories\AbstractRepository;
 
 /**
  * Repository implementation to load category decimal attribute data.

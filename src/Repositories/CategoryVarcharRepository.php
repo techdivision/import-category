@@ -20,13 +20,13 @@
 
 namespace TechDivision\Import\Category\Repositories;
 
-use TechDivision\Import\Category\Utils\ParamNames;
 use TechDivision\Import\Category\Utils\CacheKeys;
+use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Category\Utils\ParamNames;
 use TechDivision\Import\Category\Utils\SqlStatementKeys;
 use TechDivision\Import\Cache\CacheAdapterInterface;
-use TechDivision\Import\Connection\ConnectionInterface;
-use TechDivision\Import\Repositories\SqlStatementRepositoryInterface;
-use TechDivision\Import\Category\Utils\MemberNames;
+use TechDivision\Import\Dbal\Connection\ConnectionInterface;
+use TechDivision\Import\Dbal\Repositories\SqlStatementRepositoryInterface;
 
 /**
  * Repository implementation to load category varchar attribute data.
@@ -73,9 +73,9 @@ class CategoryVarcharRepository extends \TechDivision\Import\Repositories\Catego
     /**
      * Initialize the repository with the passed connection and utility class name.
      * .
-     * @param \TechDivision\Import\Connection\ConnectionInterface               $connection             The connection instance
-     * @param \TechDivision\Import\Repositories\SqlStatementRepositoryInterface $sqlStatementRepository The SQL repository instance
-     * @param \TechDivision\Import\Cache\CacheAdapterInterface                  $cacheAdapter           The cache adapter instance
+     * @param \TechDivision\Import\Dbal\Connection\ConnectionInterface               $connection             The connection instance
+     * @param \TechDivision\Import\Dbal\Repositories\SqlStatementRepositoryInterface $sqlStatementRepository The SQL repository instance
+     * @param \TechDivision\Import\Cache\CacheAdapterInterface                       $cacheAdapter           The cache adapter instance
      */
     public function __construct(
         ConnectionInterface $connection,

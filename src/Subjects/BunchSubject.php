@@ -287,20 +287,6 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
     }
 
     /**
-     * Return's TRUE, if the passed URL rewrite IS related with the actual entity.
-     *
-     * @param array $urlRewrite The URL rewrite to check
-     *
-     * @return boolean TRUE if the URL rewrite is related, else FALSE
-     */
-    public function isUrlKeyOf(array $urlRewrite)
-    {
-        return ((integer) $urlRewrite[MemberNames::ENTITY_ID]      === (integer) $this->getLastEntityId()) &&
-               ((integer) $urlRewrite[MemberNames::STORE_ID]       === (integer) $this->getRowStoreId()) &&
-               ((integer) $urlRewrite[MemberNames::REDIRECT_TYPE]  === 0);
-    }
-
-    /**
      * Merge the columns from the configuration with all image type columns to define which
      * columns should be cleaned-up.
      *

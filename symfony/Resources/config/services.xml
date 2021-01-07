@@ -6,6 +6,14 @@
     <services>
 
         <!--
+         | The DI configuration for the cache keys
+         |-->
+        <service id="import_category.cache.key.url.rewrite" class="TechDivision\Import\Category\Utils\CacheKeys">
+            <factory class="TechDivision\Import\Category\Utils\CacheKeys" method="get"/>
+            <argument type="constant">TechDivision\Import\Category\Utils\CacheKeys::URL_REWRITE</argument>
+        </service>
+
+        <!--
          | The DI configuration for the entity mergers
          |-->
         <service id="import_category.loader.header.mapping.category" class="TechDivision\Import\Loaders\EntityTypeHeaderMappingLoader">
@@ -30,6 +38,8 @@
 
         <service id="import_category.util.url.key" class="TechDivision\Import\Utils\UrlKeyUtil">
             <argument type="service" id="import_category.processor.category.bunch"/>
+            <argument type="service" id="import.loader.core.config.data"/>
+            <argument type="service" id="import.loader.store.view.id"/>
         </service>
 
         <service id="import_category.repository.sql.statement" class="TechDivision\Import\Category\Repositories\SqlStatementRepository">
@@ -135,6 +145,16 @@
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
         </service>
+        <service id="import_category.action.processor.url.rewrite.create" class="TechDivision\Import\Actions\Processors\BlackHoleProcessor">
+            <argument type="service" id="import.action.processor.url.rewrite.create"/>
+        </service>
+        <service id="import_category.action.processor.url.rewrite.update" class="TechDivision\Import\Actions\Processors\BlackHoleProcessor">
+            <argument type="service" id="import.action.processor.url.rewrite.update"/>
+        </service>
+        <service id="import_category.action.processor.url.rewrite.delete" class="TechDivision\Import\Actions\Processors\BlackHoleProcessor">
+            <argument type="service" id="import.action.processor.url.rewrite.delete"/>
+        </service>
+        
 
         <service id="import_category.action.category" class="TechDivision\Import\Actions\GenericIdentifierAction">
             <argument type="service" id="import_category.action.processor.category.create"/>
@@ -174,6 +194,22 @@
             <argument type="service" id="import_category.repository.category.text"/>
             <argument type="service" id="import_category.repository.category.varchar"/>
         </service>
+        
+        <!--
+         | The DI configuration for the black hole enabled URL rewrite action because 
+         | we do NOT want to persist the URL rewrites here, we ONLY want tempoarily 
+         | add them to cache used to make sure we generate unique request paths
+         |-->
+        <service id="import_category.action.wrapped.url.rewrite" class="TechDivision\Import\Actions\GenericIdentifierAction">
+            <argument type="service" id="import_category.action.processor.url.rewrite.create"/>
+            <argument type="service" id="import_category.action.processor.url.rewrite.update"/>
+            <argument type="service" id="import_category.action.processor.url.rewrite.delete"/>
+        </service>
+        <service id="import_category.action.url.rewrite" class="TechDivision\Import\Cache\Actions\GenericCachedEventAwareIdentifierAction">
+            <argument type="service" id="import.events.emitter"/>
+            <argument type="service" id="import_category.action.wrapped.url.rewrite"/>
+            <argument type="service" id="import_category.cache.key.url.rewrite"/>
+        </service>  
 
         <service id="import_category.assembler.category" class="TechDivision\Import\Category\Assembler\CategoryAssembler">
             <argument type="service" id="import_category.repository.category"/>
@@ -205,10 +241,17 @@
             <argument type="service" id="import_category.action.category"/>
             <argument type="service" id="import_category.action.category.text"/>
             <argument type="service" id="import_category.action.category.varchar"/>
-            <argument type="service" id="import.action.url.rewrite"/>
+            <argument type="service" id="import_category.action.url.rewrite"/>
             <argument type="service" id="import_category.assembler.category"/>
             <argument type="service" id="import_category.assembler.category.attribute"/>
             <argument type="service" id="import_category.loader.raw.entity"/>
+        </service>
+
+        <service id="import_category.processor.url.rewrite" class="TechDivision\Import\Category\Services\CategoryUrlRewriteProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_category.repository.category"/>
+            <argument type="service" id="import.repository.url.rewrite"/>
+            <argument type="service" id="import.action.url.rewrite"/>
         </service>
 
         <service id="import_category.filter.convert.literal.url" class="TechDivision\Import\Utils\Filter\ConvertLiteralUrl"/>
@@ -232,6 +275,7 @@
             <argument type="service" id="import_category.processor.category.bunch"/>
             <argument type="service" id="import_category.filter.convert.literal.url"/>
             <argument type="service" id="import_category.util.url.key"/>
+            <argument type="service" id="import.generator.reverse.sequence"/>
         </service>
         <service id="import_category.observer.category.copy" class="TechDivision\Import\Category\Observers\CopyCategoryObserver"/>
         <service id="import_category.observer.category.attribute" class="TechDivision\Import\Category\Observers\CategoryAttributeObserver">
@@ -252,10 +296,10 @@
             <argument type="service" id="import_category.processor.category.bunch"/>
         </service>
         <service id="import_category.observer.url.rewrite" class="TechDivision\Import\Category\Observers\UrlRewriteObserver">
-            <argument type="service" id="import_category.processor.category.bunch"/>
+            <argument type="service" id="import_category.processor.url.rewrite"/>
         </service>
         <service id="import_category.observer.url.rewrite.update" class="TechDivision\Import\Category\Observers\UrlRewriteUpdateObserver">
-            <argument type="service" id="import_category.processor.category.bunch"/>
+            <argument type="service" id="import_category.processor.url.rewrite"/>
         </service>
         <service id="import_category.observer.category.url.rewrite" class="TechDivision\Import\Category\Observers\CategoryUrlRewriteObserver"/>
 
