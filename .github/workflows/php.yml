@@ -1,4 +1,4 @@
-name: Pacemaker Import Category Library
+name: techdivision/import-category
 
 on:
   push:
