@@ -30,7 +30,6 @@ use TechDivision\Import\Category\Utils\PageLayoutKeys;
 use TechDivision\Import\Category\Utils\DisplayModeKeys;
 use TechDivision\Import\Category\Utils\ConfigurationKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
-use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Category\Utils\RegistryKeys;
 
 /**
