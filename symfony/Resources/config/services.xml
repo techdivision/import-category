@@ -71,79 +71,149 @@
             <argument type="service" id="cache.configurable"/>
         </service>
 
-        <service id="import_category.action.processor.category.create" class="TechDivision\Import\Category\Actions\Processors\CategoryCreateProcessor">
+        <service id="import_category.action.processor.category.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
             <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::CREATE_CATEGORY</argument>
+            </argument>
         </service>
-        <service id="import_category.action.processor.category.update" class="TechDivision\Import\Category\Actions\Processors\CategoryUpdateProcessor">
+        <service id="import_category.action.processor.category.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
             <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::UPDATE_CATEGORY</argument>
+            </argument>
         </service>
-        <service id="import_category.action.processor.category.delete" class="TechDivision\Import\Category\Actions\Processors\CategoryDeleteProcessor">
+        <service id="import_category.action.processor.category.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::DELETE_CATEGORY</argument>
+            </argument>
         </service>
-        <service id="import_category.action.processor.category.datetime.create" class="TechDivision\Import\Category\Actions\Processors\CategoryDatetimeCreateProcessor">
+        <service id="import_category.action.processor.category.datetime.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::CREATE_CATEGORY_DATETIME</argument>
+            </argument>
         </service>
-        <service id="import_category.action.processor.category.datetime.update" class="TechDivision\Import\Category\Actions\Processors\CategoryDatetimeUpdateProcessor">
+        <service id="import_category.action.processor.category.datetime.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::UPDATE_CATEGORY_DATETIME</argument>
+            </argument>
         </service>
-        <service id="import_category.action.processor.category.datetime.delete" class="TechDivision\Import\Category\Actions\Processors\CategoryDatetimeDeleteProcessor">
+        <service id="import_category.action.processor.category.datetime.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::DELETE_CATEGORY_DATETIME</argument>
+            </argument>
         </service>
-        <service id="import_category.action.processor.category.decimal.create" class="TechDivision\Import\Category\Actions\Processors\CategoryDecimalCreateProcessor">
+        <service id="import_category.action.processor.category.decimal.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::CREATE_CATEGORY_DECIMAL</argument>
+            </argument>
         </service>
-        <service id="import_category.action.processor.category.decimal.update" class="TechDivision\Import\Category\Actions\Processors\CategoryDecimalUpdateProcessor">
+        <service id="import_category.action.processor.category.decimal.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::UPDATE_CATEGORY_DECIMAL</argument>
+            </argument>
         </service>
-        <service id="import_category.action.processor.category.decimal.delete" class="TechDivision\Import\Category\Actions\Processors\CategoryDecimalDeleteProcessor">
+        <service id="import_category.action.processor.category.decimal.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::DELETE_CATEGORY_DECIMAL</argument>
+            </argument>
         </service>
-        <service id="import_category.action.processor.category.int.create" class="TechDivision\Import\Category\Actions\Processors\CategoryIntCreateProcessor">
+        <service id="import_category.action.processor.category.int.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::CREATE_CATEGORY_INT</argument>
+            </argument>
         </service>
-        <service id="import_category.action.processor.category.int.update" class="TechDivision\Import\Category\Actions\Processors\CategoryIntUpdateProcessor">
+        <service id="import_category.action.processor.category.int.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::UPDATE_CATEGORY_INT</argument>
+            </argument>
         </service>
-        <service id="import_category.action.processor.category.int.delete" class="TechDivision\Import\Category\Actions\Processors\CategoryIntDeleteProcessor">
+        <service id="import_category.action.processor.category.int.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::DELETE_CATEGORY_INT</argument>
+            </argument>
         </service>
-        <service id="import_category.action.processor.category.text.create" class="TechDivision\Import\Category\Actions\Processors\CategoryTextCreateProcessor">
+        <service id="import_category.action.processor.category.text.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::CREATE_CATEGORY_TEXT</argument>
+            </argument>
         </service>
-        <service id="import_category.action.processor.category.text.update" class="TechDivision\Import\Category\Actions\Processors\CategoryTextUpdateProcessor">
+        <service id="import_category.action.processor.category.text.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::UPDATE_CATEGORY_TEXT</argument>
+            </argument>
         </service>
-        <service id="import_category.action.processor.category.text.delete" class="TechDivision\Import\Category\Actions\Processors\CategoryTextDeleteProcessor">
+        <service id="import_category.action.processor.category.text.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::DELETE_CATEGORY_TEXT</argument>
+            </argument>
         </service>
-        <service id="import_category.action.processor.category.varchar.create" class="TechDivision\Import\Category\Actions\Processors\CategoryVarcharCreateProcessor">
+        <service id="import_category.action.processor.category.varchar.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::CREATE_CATEGORY_VARCHAR</argument>
+            </argument>
         </service>
-        <service id="import_category.action.processor.category.varchar.update" class="TechDivision\Import\Category\Actions\Processors\CategoryVarcharUpdateProcessor">
+        <service id="import_category.action.processor.category.varchar.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::UPDATE_CATEGORY_VARCHAR</argument>
+            </argument>
         </service>
-        <service id="import_category.action.processor.category.varchar.delete" class="TechDivision\Import\Category\Actions\Processors\CategoryVarcharDeleteProcessor">
+        <service id="import_category.action.processor.category.varchar.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_category.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Category\Utils\SqlStatementKeys::DELETE_CATEGORY_VARCHAR</argument>
+            </argument>
         </service>
         <service id="import_category.action.processor.url.rewrite.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\BlackHoleProcessor">
             <argument type="service" id="import.action.processor.url.rewrite.create"/>
@@ -160,6 +230,7 @@
             <argument type="service" id="import_category.action.processor.category.create"/>
             <argument type="service" id="import_category.action.processor.category.update"/>
             <argument type="service" id="import_category.action.processor.category.delete"/>
+            <argument type="constant">TechDivision\Import\Category\Utils\MemberNames::ENTITY_ID</argument>
         </service>
         <service id="import_category.action.category.datetime" class="TechDivision\Import\Dbal\Collection\Actions\GenericAction">
             <argument type="service" id="import_category.action.processor.category.datetime.create"/>
