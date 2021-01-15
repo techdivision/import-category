@@ -179,7 +179,7 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
         // update the URL key with the unique value
         $this->setValue(
             ColumnKeys::URL_KEY,
-            $urlKey = $this->makeUnique($this->getSubject(), $category, $urlKey, array(implode('/', $categoryPaths)))
+            $urlKey = $this->makeUnique($this->getSubject(), $category, $urlKey, sizeof($categoryPaths) > 0 ? array(implode('/', $categoryPaths)) : array())
         );
 
         // finally, append the URL key as last element to the path
