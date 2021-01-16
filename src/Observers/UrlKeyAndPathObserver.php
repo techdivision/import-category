@@ -21,13 +21,15 @@
 namespace TechDivision\Import\Category\Observers;
 
 use Zend\Filter\FilterInterface;
-use TechDivision\Import\Category\Utils\ColumnKeys;
-use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\UrlKeyUtilInterface;
 use TechDivision\Import\Utils\Filter\UrlKeyFilterTrait;
 use TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface;
+use TechDivision\Import\Category\Utils\ConfigurationKeys;
+use TechDivision\Import\Category\Utils\ColumnKeys;
+use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
+use TechDivision\Import\Utils\Generators\GeneratorInterface;
 
 /**
  * Observer that extracts the URL key/path from the category path
@@ -64,22 +66,32 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
     protected $categoryBunchProcessor;
 
     /**
+     * The reverse sequence generator instance.
+     *
+     * @var \TechDivision\Import\Utils\Generators\GeneratorInterface
+     */
+    protected $reverseSequenceGenerator;
+
+    /**
      * Initialize the observer with the passed product bunch processor instance.
      *
-     * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface $categoryBunchProcessor  The category bunch processor instance
-     * @param \Zend\Filter\FilterInterface                                           $convertLiteralUrlFilter The URL filter instance
-     * @param \TechDivision\Import\Utils\UrlKeyUtilInterface                         $urlKeyUtil              The URL key utility instance
+     * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface $categoryBunchProcessor   The category bunch processor instance
+     * @param \Zend\Filter\FilterInterface                                           $convertLiteralUrlFilter  The URL filter instance
+     * @param \TechDivision\Import\Utils\UrlKeyUtilInterface                         $urlKeyUtil               The URL key utility instance
+     * @param \TechDivision\Import\Utils\Generators\GeneratorInterface               $reverseSequenceGenerator The reverse sequence generator instance
      */
     public function __construct(
         CategoryBunchProcessorInterface $categoryBunchProcessor,
         FilterInterface $convertLiteralUrlFilter,
-        UrlKeyUtilInterface $urlKeyUtil
+        UrlKeyUtilInterface $urlKeyUtil,
+        GeneratorInterface $reverseSequenceGenerator
     ) {
 
         // set the processor and the URL filter instance
         $this->categoryBunchProcessor = $categoryBunchProcessor;
         $this->convertLiteralUrlFilter = $convertLiteralUrlFilter;
         $this->urlKeyUtil = $urlKeyUtil;
+        $this->reverseSequenceGenerator = $reverseSequenceGenerator;
     }
 
     /**
@@ -90,37 +102,62 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
     protected function process()
     {
 
-        // initialize the URL key and array for the categories
+        // initialize the URL key, the entity and the category
         $urlKey = null;
-        $categories = array();
+        $entity = null;
+        $category = array();
+
+        // prepare the store view code
+        $this->prepareStoreViewCode();
 
         // set the entity ID for the category with the passed path
         try {
-            $this->setIds($this->getCategoryByPath($this->getValue(ColumnKeys::PATH)));
+            $entity = $this->getCategoryByPath($path = $this->getValue(ColumnKeys::PATH));
+            $this->setIds($category = $entity);
         } catch (\Exception $e) {
             $this->setIds(array());
+            $category[MemberNames::ENTITY_ID] = $this->getReverseSequenceGenerator()->generate();
         }
 
         // query whether or not the URL key column has a value
         if ($this->hasValue(ColumnKeys::URL_KEY)) {
-            $urlKey = $this->makeUnique($this->getSubject(), $this->getValue(ColumnKeys::URL_KEY));
+            $urlKey = $this->getValue(ColumnKeys::URL_KEY);
         } else {
-            $this->setValue(
-                ColumnKeys::URL_KEY,
-                $urlKey = $this->makeUnique($this->getSubject(), $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME)))
-            );
+            // query whether or not the existing category `url_key` should be re-created from the category name
+            if (is_array($entity) && !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)) {
+                // if the category already exists and NO re-creation from the category name has to
+                // be done, load the original `url_key`from the category and use that to proceed
+                $urlKey = $this->loadUrlKey($this->getSubject(), $this->getPrimaryKey());
+            }
+
+            // try to load the value from column `name` if URL key is still
+            // empty, because we need it to process the the rewrites later on
+            if ($urlKey === null || $urlKey === '' && $this->hasValue(ColumnKeys::NAME)) {
+                $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME));
+            }
         }
+
+        // stop processing, if no URL key is available
+        if ($urlKey === null || $urlKey === '') {
+            // throw an exception, that the URL key can not be
+            // initialized and we're in the default store view
+            if ($this->getStoreViewCode(StoreViewCodes::ADMIN) === StoreViewCodes::ADMIN) {
+                throw new \Exception(sprintf('Can\'t initialize the URL key for category "%s" because columns "url_key" or "name" have a value set for default store view', $path));
+            }
+            // stop processing, because we're in a store
+            // view row and a URL key is not mandatory
+            return;
+        }
+
+        // load ID of the actual store view
+        $storeId = $this->getRowStoreId(StoreViewCodes::ADMIN);
 
         // explode the path into the category names
         if ($categories = $this->explode($this->getValue(ColumnKeys::PATH), '/')) {
-            // initialize the category with the actual category's URL key
-            $categoryPaths = array($urlKey);
-            // prepare the store view code
-            $this->prepareStoreViewCode();
-            // load ID of the actual store view
-            $storeId = $this->getRowStoreId(StoreViewCodes::ADMIN);
-
-            // iterate over the category names and try to load the category therefore
+            // initialize the array for the category paths
+            $categoryPaths = array();
+            // iterate over the parent category names and try
+            // to load the categories to build the URL path
             for ($i = sizeof($categories) - 1; $i > 1; $i--) {
                 try {
                     // prepare the expected category name
@@ -131,21 +168,30 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
                     if (isset($existingCategory[MemberNames::URL_KEY])) {
                         array_unshift($categoryPaths, $existingCategory[MemberNames::URL_KEY]);
                     } else {
-                        $this->getSystemLogger()->debug(sprintf('Can\'t find URL key for category %s', $categoryPath));
+                        $this->getSystemLogger()->debug(sprintf('Can\'t find URL key for category "%s"', $categoryPath));
                     }
                 } catch (\Exception $e) {
-                    $this->getSystemLogger()->debug(sprintf('Can\'t load parent category %s', $categoryPath));
+                    $this->getSystemLogger()->debug(sprintf('Can\'t load parent category "%s"', $categoryPath));
                 }
             }
-
-            // create the header for the URL path
-            if (!$this->hasHeader(ColumnKeys::URL_PATH)) {
-                $this->addHeader(ColumnKeys::URL_PATH);
-            }
-
-            // set the URL path
-            $this->setValue(ColumnKeys::URL_PATH, implode('/', $categoryPaths));
         }
+
+        // update the URL key with the unique value
+        $this->setValue(
+            ColumnKeys::URL_KEY,
+            $urlKey = $this->makeUnique($this->getSubject(), $category, $urlKey, sizeof($categoryPaths) > 0 ? array(implode('/', $categoryPaths)) : array())
+        );
+
+        // finally, append the URL key as last element to the path
+        array_push($categoryPaths, $urlKey);
+
+        // create the virtual column for the URL path
+        if ($this->hasHeader(ColumnKeys::URL_PATH) === false) {
+            $this->addHeader(ColumnKeys::URL_PATH);
+        }
+
+        // set the URL path
+        $this->setValue(ColumnKeys::URL_PATH, implode('/', $categoryPaths));
     }
 
     /**
@@ -176,6 +222,16 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
     protected function getUrlKeyUtil()
     {
         return $this->urlKeyUtil;
+    }
+
+    /**
+     * Returns the reverse sequence generator instance.
+     *
+     * @return \TechDivision\Import\Utils\Generators\GeneratorInterface The reverse sequence generator
+     */
+    protected function getReverseSequenceGenerator() : GeneratorInterface
+    {
+        return $this->reverseSequenceGenerator;
     }
 
     /**
@@ -213,7 +269,7 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
      */
     protected function setIds(array $category)
     {
-        $this->setLastEntityId(isset($category[$this->getPkMemberName()]) ? $category[$this->getPkMemberName()] : null);
+        $this->setLastEntityId(isset($category[MemberNames::ENTITY_ID]) ? $category[MemberNames::ENTITY_ID] : null);
     }
 
     /**
@@ -229,15 +285,40 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
     }
 
     /**
+     * Return's the PK to of the product.
+     *
+     * @return integer The PK to create the relation with
+     */
+    protected function getPrimaryKey()
+    {
+        $this->getSubject()->getLastEntityId();
+    }
+
+    /**
+     * Load's and return's the url_key with the passed primary ID.
+     *
+     * @param \TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface $subject      The subject to load the URL key
+     * @param int                                                       $primaryKeyId The ID from category
+     *
+     * @return string|null url_key or null
+     */
+    protected function loadUrlKey(UrlKeyAwareSubjectInterface $subject, $primaryKeyId)
+    {
+        return $this->getUrlKeyUtil()->loadUrlKey($subject, $primaryKeyId);
+    }
+
+    /**
      * Make's the passed URL key unique by adding the next number to the end.
      *
-     * @param \TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface $subject The subject to make the URL key unique for
-     * @param string                                                    $urlKey  The URL key to make unique
+     * @param \TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface $subject  The subject to make the URL key unique for
+     * @param array                                                     $entity   The entity to make the URL key unique for
+     * @param string                                                    $urlKey   The URL key to make unique
+     * @param array                                                     $urlPaths The URL paths to make unique
      *
      * @return string The unique URL key
      */
-    protected function makeUnique(UrlKeyAwareSubjectInterface $subject, $urlKey)
+    protected function makeUnique(UrlKeyAwareSubjectInterface $subject, array $entity, string $urlKey, array $urlPaths = array())
     {
-        return $this->getUrlKeyUtil()->makeUnique($subject, $urlKey);
+        return $this->getUrlKeyUtil()->makeUnique($subject, $entity, $urlKey, $urlPaths);
     }
 }

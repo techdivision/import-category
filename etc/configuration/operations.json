@@ -266,7 +266,8 @@
                     "copy-images": false,
                     "media-directory" : "pub/media/catalog/category",
                     "images-file-directory" : "var/importexport/media/catalog/category",
-                    "clean-up-empty-columns": []
+                    "clean-up-empty-columns": [],
+                    "update-url-key-from-name": true
                   },
                   "observers": [
                     {

@@ -59,49 +59,49 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
     /**
      * Return's the action with the category CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getCategoryAction();
 
     /**
      * Return's the action with the category varchar attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getCategoryVarcharAction();
 
     /**
      * Return's the action with the category text attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getCategoryTextAction();
 
     /**
      * Return's the action with the category int attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getCategoryIntAction();
 
     /**
      * Return's the action with the category decimal attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getCategoryDecimalAction();
 
     /**
      * Return's the action with the category datetime attribute CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getCategoryDatetimeAction();
 
     /**
      * Return's the action with the URL rewrite CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getUrlRewriteAction();
 
@@ -220,27 +220,6 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
     public function getCategoryVarcharsByEntityIds(array $entityIds);
 
     /**
-     * Return's the URL rewrites for the passed URL entity type and ID.
-     *
-     * @param string  $entityType The entity type to load the URL rewrites for
-     * @param integer $entityId   The entity ID to laod the rewrites for
-     *
-     * @return array The URL rewrites
-     */
-    public function getUrlRewritesByEntityTypeAndEntityId($entityType, $entityId);
-
-    /**
-     * Return's the URL rewrites for the passed URL entity type and ID.
-     *
-     * @param string  $entityType The entity type to load the URL rewrites for
-     * @param integer $entityId   The entity ID to load the URL rewrites for
-     * @param integer $storeId    The store ID to load the URL rewrites for
-     *
-     * @return array The URL rewrites
-     */
-    public function getUrlRewritesByEntityTypeAndEntityIdAndStoreId($entityType, $entityId, $storeId);
-
-    /**
      * Intializes the existing attributes for the entity with the passed primary key.
      *
      * @param string  $pk      The primary key of the entity to load the attributes for
@@ -344,6 +323,18 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
      * @return array|null The varchar attribute
      */
     public function loadCategoryVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndValue($attributeCode, $entityTypeId, $storeId, $value);
+
+    /**
+     * Load's and return's the varchar attribute with the passed params.
+     *
+     * @param integer $attributeCode The attribute code of the varchar attribute
+     * @param integer $entityTypeId  The entity type ID of the varchar attribute
+     * @param integer $storeId       The store ID of the varchar attribute
+     * @param string  $pk            The primary key ID of the category
+     *
+     * @return string|null The url_key from category
+     */
+    public function loadCategoryVarcharAttributeByAttributeCodeAndEntityTypeIdAndStoreIdAndPk($attributeCode, $entityTypeId, $storeId, $pk);
 
     /**
      * Load's and return's the EAV attribute option value with the passed entity type ID, code, store ID and value.

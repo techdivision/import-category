@@ -23,7 +23,7 @@ namespace TechDivision\Import\Category\Observers;
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Utils\CoreConfigDataKeys;
-use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
+use TechDivision\Import\Category\Services\CategoryUrlRewriteProcessorInterface;
 
 /**
  * Observer that creates/updates the category's URL rewrites.
@@ -47,28 +47,28 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
     /**
      * The processor to read/write the necessary category data.
      *
-     * @var \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface
+     * @var \TechDivision\Import\Category\Services\CategoryUrlRewriteProcessorInterface
      */
-    protected $categoryBunchProcessor;
+    protected $categoryUrlRewriteProcessor;
 
     /**
      * Initialize the subject instance.
      *
-     * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface $categoryBunchProcessor The category bunch processor instance
+     * @param \TechDivision\Import\Category\Services\CategoryUrlRewriteProcessorInterface $categoryUrlRewriteProcessor The category URL rewrite processor instance
      */
-    public function __construct(CategoryBunchProcessorInterface $categoryBunchProcessor)
+    public function __construct(CategoryUrlRewriteProcessorInterface $categoryUrlRewriteProcessor)
     {
-        $this->categoryBunchProcessor = $categoryBunchProcessor;
+        $this->categoryUrlRewriteProcessor = $categoryUrlRewriteProcessor;
     }
 
     /**
-     * Return's the category bunch processor instance.
+     * Return's the category URL rewrite processor instance.
      *
-     * @return \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface The category bunch processor instance
+     * @return \TechDivision\Import\Category\Services\CategoryUrlRewriteProcessorInterface The category URL rewrite processor instance
      */
-    protected function getCategoryBunchProcessor()
+    protected function getCategoryUrlRewriteProcessor()
     {
-        return $this->categoryBunchProcessor;
+        return $this->categoryUrlRewriteProcessor;
     }
 
     /**
@@ -197,7 +197,7 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
      */
     protected function loadCategory($id)
     {
-        return $this->getCategoryBunchProcessor()->loadCategory($id);
+        return $this->getCategoryUrlRewriteProcessor()->loadCategory($id);
     }
 
     /**
@@ -235,7 +235,7 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
      */
     protected function persistUrlRewrite($row)
     {
-        return $this->getCategoryBunchProcessor()->persistUrlRewrite($row);
+        return $this->getCategoryUrlRewriteProcessor()->persistUrlRewrite($row);
     }
 
     /**

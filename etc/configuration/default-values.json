@@ -2,7 +2,8 @@
   "default-values": {
     "catalog_category": {
       "is_anchor": null,
-      "include_in_menu": null
+      "include_in_menu": null,
+      "store_view_code": null
     }
   }
 }
