@@ -172,7 +172,7 @@
                   "observers": [
                     {
                       "import": [
-                        "import_category.observer.clear.category"
+                        "import_category.observer.composite.base.delete"
                       ]
                     }
                   ]

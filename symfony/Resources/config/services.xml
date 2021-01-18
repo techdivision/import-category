@@ -373,6 +373,21 @@
             <argument type="service" id="import_category.processor.url.rewrite"/>
         </service>
         <service id="import_category.observer.category.url.rewrite" class="TechDivision\Import\Category\Observers\CategoryUrlRewriteObserver"/>
+        <service id="import_category.observer.clear.url.rewrite" class="TechDivision\Import\Category\Observers\ClearUrlRewriteObserver">
+            <argument type="service" id="import_category.processor.url.rewrite"/>
+        </service>
+
+        <!--
+         | The DI configuration for the composite observers of the delete operation.
+         |-->
+        <service id="import_category.observer.composite.base.delete" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_category.observer.clear.url.rewrite" type="service"/>
+            </call>
+            <call method="addObserver">
+                <argument id="import_category.observer.clear.category" type="service"/>
+            </call>
+        </service>
 
         <!--
          | The DI configuration for the composite observers of the category create replace operation.

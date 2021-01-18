@@ -4,14 +4,18 @@
 
 * Fixed techdivision/import-category#69
 * Fixed techdivision/import-category#68
+* Fixed techdivision/import-category#62
+* Fixed #PAC-264: PDOException: SQLSTATE[23000] : Integrity constraint violation: 1062 Duplicate entry xxx.html-0 for key 'URL_REWRITE_REQUEST_PATH_STORE_ID
+* Fixed #PAC-265: Also use url_path when generate unique url_key for categories
 * Fixed issue when root category has to be created
 
 ## Features
 
 * Add `"include_in_menu": null` to `etc/configuration/default-values.json`
 * Remove stack trace of exception for missing media directories > log a simple debug message instead
+* Add functionality to clear URL rewrites when categories have been deleted
+* Add #PAC-326: Cross-entity import of URLs (rewrites + redirects)  
 * Add #PAC-57: Deleting dedicated attribute values via import by setting a configurable value
-
 
 # Version 20.0.4
 
