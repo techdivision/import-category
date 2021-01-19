@@ -91,10 +91,10 @@ class ClearUrlRewriteObserver extends AbstractCategoryImportObserver
                 ),
                 SqlStatementKeys::DELETE_URL_REWRITE_BY_ENTITY_ID_AND_ENTITY_TYPE
             );
-        } catch (\Exception $wce) {
+        } catch (\Exception $e) {
             $this->getSubject()
                  ->getSystemLogger()
-                 ->debug(sprintf('Category with path "%s" can\'t be loaded to clear URL rewrites', $path));
+                 ->debug(sprintf('Category with path "%s" can\'t be loaded to clear URL rewrites, reason: "%s"', $path, $e->getMessage()));
         }
     }
 
