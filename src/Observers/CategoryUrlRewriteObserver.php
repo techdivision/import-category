@@ -22,6 +22,7 @@ namespace TechDivision\Import\Category\Observers;
 
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Category\Utils\ColumnKeys;
+use TechDivision\Import\Utils\CategoryPathUtilInterface;
 
 /**
  * Observer that extracts the URL rewrite data to a specific CSV file.
@@ -50,6 +51,23 @@ class CategoryUrlRewriteObserver extends AbstractCategoryImportObserver
     protected $artefacts = array();
 
     /**
+     * The utility to handle catgory paths.
+     *
+     * @var \TechDivision\Import\Utils\CategoryPathUtilInterface
+     */
+    protected $categoryPathUtil;
+
+    /**
+     * Initialize the observer with the category path utility instance.
+     *
+     * @param \TechDivision\Import\Utils\CategoryPathUtilInterface $categoryPathUtil The utility to handle category paths
+     */
+    public function __construct(CategoryPathUtilInterface $categoryPathUtil)
+    {
+        $this->categoryPathUtil = $categoryPathUtil;
+    }
+
+    /**
      * Process the observer's business logic.
      *
      * @return array The processed row
@@ -73,7 +91,7 @@ class CategoryUrlRewriteObserver extends AbstractCategoryImportObserver
         // query whether or not we've a store view code
         if ($storeViewCode === StoreViewCodes::ADMIN) {
             // if not, load the available store view codes for the root category of the given path
-            $storeViewCodes = $this->getRootCategoryStoreViewCodes($this->getValue(ColumnKeys::PATH));
+            $storeViewCodes = $this->getRootCategoryStoreViewCodes($this->categoryPathUtil->normalize($this->getValue(ColumnKeys::PATH)));
         } else {
             array_push($storeViewCodes, $storeViewCode);
         }

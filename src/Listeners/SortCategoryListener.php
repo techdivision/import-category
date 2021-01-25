@@ -29,6 +29,7 @@ use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Utils\RegistryKeys;
 use TechDivision\Import\Category\Observers\CopyCategoryObserver;
+use TechDivision\Import\Utils\CategoryPathUtilInterface;
 
 /**
  * A listener implementation that sorts categories by their path and the position that has
@@ -102,20 +103,30 @@ class SortCategoryListener extends AbstractListener
     private $subject;
 
     /**
+     * The utility to handle catgory paths.
+     *
+     * @var \TechDivision\Import\Utils\CategoryPathUtilInterface
+     */
+    private $categoryPathUtil;
+
+    /**
      * The subject's serializer instance.
      *
-     * @var \TechDivision\Import\Serializers\SerializerInterface
+     * @var \TechDivision\Import\Serializer\SerializerInterface
      */
     private $serializer;
+
 
     /**
      * Initializes the listener with the registry processor instance.
      *
      * @param \TechDivision\Import\Services\RegistryProcessorInterface $registryProcessor The registry processor instance
+     * @param \TechDivision\Import\Utils\CategoryPathUtilInterface     $categoryPathUtil  The utility to handle category paths
      */
-    public function __construct(RegistryProcessorInterface $registryProcessor)
+    public function __construct(RegistryProcessorInterface $registryProcessor, CategoryPathUtilInterface $categoryPathUtil)
     {
         $this->registryProcessor = $registryProcessor;
+        $this->categoryPathUtil = $categoryPathUtil;
     }
 
     /**
@@ -155,10 +166,8 @@ class SortCategoryListener extends AbstractListener
                 if ($newCategory[ColumnKeys::STORE_VIEW_CODE]) {
                     $this->storeViewRows[] = $this->template($newCategory);
                 } else {
-                    // clean-up the path to avoid encoding/quotation specific differences
-                    $path = implode('/', $this->serializer->unserialize($newCategory[ColumnKeys::PATH], '/'));
                     // add the main category to the new categories (we want to load/update the position for)
-                    $this->mainRows[$path] = $newCategory;
+                    $this->mainRows[$newCategory[ColumnKeys::PATH]] = $newCategory;
                 }
             }
 

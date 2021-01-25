@@ -31,6 +31,7 @@
 
         <service id="import_category.listener.sort.category" class="TechDivision\Import\Category\Listeners\SortCategoryListener">
             <argument type="service" id="import.processor.registry"/>
+            <argument type="service" id="import.utils.category.path"/>
         </service>
         <service id="import_category.listeners.category.reduce" class="TechDivision\Import\Category\Listeners\CategoryReduceListener">
             <argument type="service" id="import.processor.registry"/>
@@ -286,6 +287,7 @@
             <argument type="service" id="import_category.repository.category"/>
             <argument type="service" id="import_category.repository.category.varchar"/>
             <argument type="service" id="import_category.assembler.category.attribute"/>
+            <argument type="service" id="import.utils.category.path"/>
         </service>
 
         <service id="import_category.loader.raw.entity" class="TechDivision\Import\Category\Loaders\RawEntityLoader">
@@ -359,6 +361,7 @@
             <argument type="service" id="import_category.processor.category.bunch"/>
             <argument type="service" id="import.observer.dynamic.attribute.loader"/>
             <argument type="service" id="import_category.entity.merger.composite.category"/>
+            <argument type="service" id="import.utils.category.path"/>
         </service>
         <service id="import_category.observer.category.path" class="TechDivision\Import\Category\Observers\CategoryPathObserver">
             <argument type="service" id="import_category.processor.category.bunch"/>
@@ -372,7 +375,9 @@
         <service id="import_category.observer.url.rewrite.update" class="TechDivision\Import\Category\Observers\UrlRewriteUpdateObserver">
             <argument type="service" id="import_category.processor.url.rewrite"/>
         </service>
-        <service id="import_category.observer.category.url.rewrite" class="TechDivision\Import\Category\Observers\CategoryUrlRewriteObserver"/>
+        <service id="import_category.observer.category.url.rewrite" class="TechDivision\Import\Category\Observers\CategoryUrlRewriteObserver">
+            <argument type="service" id="import.utils.category.path"/>
+        </service>
         <service id="import_category.observer.clear.url.rewrite" class="TechDivision\Import\Category\Observers\ClearUrlRewriteObserver">
             <argument type="service" id="import_category.processor.url.rewrite"/>
         </service>

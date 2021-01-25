@@ -31,6 +31,7 @@ use TechDivision\Import\Observers\AttributeLoaderInterface;
 use TechDivision\Import\Observers\DynamicAttributeObserverInterface;
 use TechDivision\Import\Observers\EntityMergers\EntityMergerInterface;
 use TechDivision\Import\Utils\StoreViewCodes;
+use TechDivision\Import\Utils\CategoryPathUtilInterface;
 
 /**
  * Observer that create's the category itself.
@@ -94,17 +95,26 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
     protected $entityMerger;
 
     /**
+     * The utility to handle catgory paths.
+     *
+     * @var \TechDivision\Import\Utils\CategoryPathUtilInterface
+     */
+    private $categoryPathUtil;
+
+    /**
      * Initialize the subject instance.
      *
      * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface  $categoryBunchProcessor The category bunch processor instance
-     * @param \TechDivision\Import\Observers\AttributeLoaderInterface|null            $attributeLoader        The attribute loader instance
-     * @param \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface|null $entityMerger           The entity merger instance
+     * @param \TechDivision\Import\Observers\AttributeLoaderInterface                 $attributeLoader        The attribute loader instance
+     * @param \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface      $entityMerger           The entity merger instance
+     * @param \TechDivision\Import\Utils\CategoryPathUtilInterface                    $categoryPathUtil       The utility to handle category paths
      * @param \TechDivision\Import\Observers\StateDetectorInterface|null              $stateDetector          The state detector instance to use
      */
     public function __construct(
         CategoryBunchProcessorInterface $categoryBunchProcessor,
-        AttributeLoaderInterface $attributeLoader = null,
-        EntityMergerInterface $entityMerger = null,
+        AttributeLoaderInterface $attributeLoader,
+        EntityMergerInterface $entityMerger,
+        CategoryPathUtilInterface $categoryPathUtil,
         StateDetectorInterface $stateDetector = null
     ) {
 
@@ -112,6 +122,7 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
         $this->categoryBunchProcessor = $categoryBunchProcessor;
         $this->attributeLoader = $attributeLoader;
         $this->entityMerger = $entityMerger;
+        $this->categoryPathUtil = $categoryPathUtil;
 
         // pass the state detector to the parent method
         parent::__construct($stateDetector);
@@ -139,7 +150,7 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
         $this->prepareStoreViewCode();
 
         // explode the path into the category names
-        if ($categories = $this->explode($this->getValue(ColumnKeys::PATH), '/')) {
+        if ($categories = $this->getValue(ColumnKeys::PATH, array(), function ($value) { return $this->categoryPathUtil->explode($value); })) {
             // initialize the flag to query whether or not the category is a leaf
             $leaf = false;
             // initialize the artefacts and reset the category IDs
@@ -154,7 +165,7 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
                 }
 
                 // prepare the expected category name
-                $this->categoryPath = implode('/', array_slice($categories, 0, $i + 1));
+                $this->categoryPath = $this->categoryPathUtil->implode(array_slice($categories, 0, $i + 1));
 
                 // Attention: Prepare the static entity values, whether the category is
                 // a leaf or not, because ONLY when the category is a leaf, we want to
