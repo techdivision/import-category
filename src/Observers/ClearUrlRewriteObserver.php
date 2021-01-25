@@ -24,7 +24,6 @@ use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Utils\SqlStatementKeys;
 use TechDivision\Import\Category\Services\CategoryUrlRewriteProcessorInterface;
-use TechDivision\Import\Exceptions\WrappedColumnException;
 
 /**
  * Observer that removes the URL rewrite for the category with the path found in the CSV file.

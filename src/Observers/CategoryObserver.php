@@ -21,17 +21,19 @@
 namespace TechDivision\Import\Category\Observers;
 
 use TechDivision\Import\Utils\EntityStatus;
+use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\BackendTypeKeys;
+use TechDivision\Import\Subjects\SubjectInterface;
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
-use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
 use TechDivision\Import\Category\Utils\EntityTypeCodes;
+use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
+use TechDivision\Import\Serializer\SerializerFactoryInterface;
 use TechDivision\Import\Observers\StateDetectorInterface;
 use TechDivision\Import\Observers\AttributeLoaderInterface;
+use TechDivision\Import\Observers\ObserverFactoryInterface;
 use TechDivision\Import\Observers\DynamicAttributeObserverInterface;
 use TechDivision\Import\Observers\EntityMergers\EntityMergerInterface;
-use TechDivision\Import\Utils\StoreViewCodes;
-use TechDivision\Import\Utils\CategoryPathUtilInterface;
 
 /**
  * Observer that create's the category itself.
@@ -42,7 +44,7 @@ use TechDivision\Import\Utils\CategoryPathUtilInterface;
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
-class CategoryObserver extends AbstractCategoryImportObserver implements DynamicAttributeObserverInterface
+class CategoryObserver extends AbstractCategoryImportObserver implements DynamicAttributeObserverInterface, ObserverFactoryInterface
 {
 
     /**
@@ -95,11 +97,18 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
     protected $entityMerger;
 
     /**
-     * The utility to handle catgory paths.
+     * The serializer used to serializer/unserialize the categories from the path column.
      *
-     * @var \TechDivision\Import\Utils\CategoryPathUtilInterface
+     * @var \TechDivision\Import\Serializer\SerializerInterface
      */
-    private $categoryPathUtil;
+    protected $serializer;
+
+    /**
+     * The serializer factory instance.
+     *
+     * @var \TechDivision\Import\Serializer\SerializerFactoryInterface
+     */
+    protected $serializerFactory;
 
     /**
      * Initialize the subject instance.
@@ -107,14 +116,14 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
      * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface  $categoryBunchProcessor The category bunch processor instance
      * @param \TechDivision\Import\Observers\AttributeLoaderInterface                 $attributeLoader        The attribute loader instance
      * @param \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface      $entityMerger           The entity merger instance
-     * @param \TechDivision\Import\Utils\CategoryPathUtilInterface                    $categoryPathUtil       The utility to handle category paths
+     * @param \TechDivision\Import\Serializer\SerializerFactoryInterface              $serializerFactory      The serializer factory instance
      * @param \TechDivision\Import\Observers\StateDetectorInterface|null              $stateDetector          The state detector instance to use
      */
     public function __construct(
         CategoryBunchProcessorInterface $categoryBunchProcessor,
         AttributeLoaderInterface $attributeLoader,
         EntityMergerInterface $entityMerger,
-        CategoryPathUtilInterface $categoryPathUtil,
+        SerializerFactoryInterface $serializerFactory,
         StateDetectorInterface $stateDetector = null
     ) {
 
@@ -122,10 +131,27 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
         $this->categoryBunchProcessor = $categoryBunchProcessor;
         $this->attributeLoader = $attributeLoader;
         $this->entityMerger = $entityMerger;
-        $this->categoryPathUtil = $categoryPathUtil;
+        $this->serializerFactory = $serializerFactory;
 
         // pass the state detector to the parent method
         parent::__construct($stateDetector);
+    }
+
+    /**
+     * Will be invoked by the observer visitor when a factory has been defined to create the observer instance.
+     *
+     * @param \TechDivision\Import\Subjects\SubjectInterface $subject The subject instance
+     *
+     * @return \TechDivision\Import\Observers\ObserverInterface The observer instance
+     */
+    public function createObserver(SubjectInterface $subject)
+    {
+
+        // initialize the serializer instance
+        $this->serializer = $this->serializerFactory->createSerializer($subject->getConfiguration()->getImportAdapter());
+
+        // return the initialized instance
+        return $this;
     }
 
     /**
@@ -150,7 +176,7 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
         $this->prepareStoreViewCode();
 
         // explode the path into the category names
-        if ($categories = $this->getValue(ColumnKeys::PATH, array(), function ($value) { return $this->categoryPathUtil->explode($value); })) {
+        if ($categories = $this->getValue(ColumnKeys::PATH, array(), function ($value) { return $this->serializer->explode($value); })) {
             // initialize the flag to query whether or not the category is a leaf
             $leaf = false;
             // initialize the artefacts and reset the category IDs
@@ -165,7 +191,7 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
                 }
 
                 // prepare the expected category name
-                $this->categoryPath = $this->categoryPathUtil->implode(array_slice($categories, 0, $i + 1));
+                $this->categoryPath = $this->serializer->implode(array_slice($categories, 0, $i + 1));
 
                 // Attention: Prepare the static entity values, whether the category is
                 // a leaf or not, because ONLY when the category is a leaf, we want to

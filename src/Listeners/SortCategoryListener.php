@@ -25,11 +25,11 @@ use League\Event\AbstractListener;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Subjects\SubjectInterface;
 use TechDivision\Import\Services\RegistryProcessorInterface;
+use TechDivision\Import\Serializer\SerializerFactoryInterface;
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Utils\RegistryKeys;
 use TechDivision\Import\Category\Observers\CopyCategoryObserver;
-use TechDivision\Import\Utils\CategoryPathUtilInterface;
 
 /**
  * A listener implementation that sorts categories by their path and the position that has
@@ -58,7 +58,7 @@ class SortCategoryListener extends AbstractListener
      *
      * @var \TechDivision\Import\Services\RegistryProcessorInterface
      */
-    protected $registryProcessor;
+    private $registryProcessor;
 
     /**
      * The array with the already existing categories.
@@ -103,30 +103,31 @@ class SortCategoryListener extends AbstractListener
     private $subject;
 
     /**
-     * The utility to handle catgory paths.
-     *
-     * @var \TechDivision\Import\Utils\CategoryPathUtilInterface
-     */
-    private $categoryPathUtil;
-
-    /**
      * The subject's serializer instance.
      *
      * @var \TechDivision\Import\Serializer\SerializerInterface
      */
     private $serializer;
 
+    /**
+     * The serializer factory instance.
+     *
+     * @var \TechDivision\Import\Serializer\SerializerFactoryInterface
+     */
+    private $serializerFactory;
 
     /**
      * Initializes the listener with the registry processor instance.
      *
-     * @param \TechDivision\Import\Services\RegistryProcessorInterface $registryProcessor The registry processor instance
-     * @param \TechDivision\Import\Utils\CategoryPathUtilInterface     $categoryPathUtil  The utility to handle category paths
+     * @param \TechDivision\Import\Services\RegistryProcessorInterface   $registryProcessor The registry processor instance
+     * @param \TechDivision\Import\Serializer\SerializerFactoryInterface $serializerFactory The serializer factory instance
      */
-    public function __construct(RegistryProcessorInterface $registryProcessor, CategoryPathUtilInterface $categoryPathUtil)
-    {
+    public function __construct(
+        RegistryProcessorInterface $registryProcessor,
+        SerializerFactoryInterface $serializerFactory
+    ) {
         $this->registryProcessor = $registryProcessor;
-        $this->categoryPathUtil = $categoryPathUtil;
+        $this->serializerFactory = $serializerFactory;
     }
 
     /**
@@ -142,7 +143,9 @@ class SortCategoryListener extends AbstractListener
 
         // initialize subject and serializer
         $this->subject = $subject;
-        $this->serializer = $subject->getImportAdapter()->getSerializer();
+
+        // create a new serializer instance
+        $this->serializer = $this->serializerFactory->createSerializer($subject->getConfiguration()->getImportAdapter());
 
         // load the status of the actual import
         $status = $this->registryProcessor->getAttribute(RegistryKeys::STATUS);
@@ -245,7 +248,7 @@ class SortCategoryListener extends AbstractListener
         $categoriesOnSameLevel = array();
 
         // explode the path by the category separator
-        $elements = $this->serializer->unserialize($path, '/');
+        $elements = $this->serializer->explode($path);
 
         // iterate over the existing categories to load the one's on the same level
         foreach ($this->existingCategories as $p => $category) {
@@ -257,7 +260,7 @@ class SortCategoryListener extends AbstractListener
             // the same level, but NOT if it has the same parent category!!!!!
             if ((int) $category[MemberNames::LEVEL] == $sizeOfElements && $sizeOfElements > 1) {
                 // extract the category's path by the category separator
-                $el = $this->serializer->unserialize($p, '/');
+                $el = $this->serializer->explode($p);
                 // diff the path of the parent category to make sure they are children of the same parent node
                 $diff = array_diff(array_slice($elements, 0, sizeof($elements) - 1), array_slice($el, 0, sizeof($elements)));
                 // BINGO: We found a category on the same level that has the same parent
@@ -280,7 +283,7 @@ class SortCategoryListener extends AbstractListener
         // the existing ones.
         foreach ($this->artefacts as $p => $artefact) {
             // extract the category's path by the category separator
-            $el = $this->serializer->unserialize($p, '/');
+            $el = $this->serializer->explode($p);
             // query whether or not the categories are at least on the same level
             if (sizeof($el) == sizeof($elements)) {
                 // diff the path of the parent category to make sure they are children of the same parent node
@@ -447,7 +450,7 @@ class SortCategoryListener extends AbstractListener
 
             // add the category name to the array with the paths
             foreach ($existingCategories as $existingCategory) {
-                $path[] = $this->serializer->serialize(array($existingCategory[MemberNames::NAME]), '/');
+                $path[] = $this->serializer->implode(array($existingCategory[MemberNames::NAME]));
             }
         }
 

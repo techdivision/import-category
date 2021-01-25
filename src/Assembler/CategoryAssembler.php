@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Category\Assembler;
 
+use TechDivision\Import\Serializer\SerializerInterface;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Repositories\CategoryRepositoryInterface;
 use TechDivision\Import\Category\Repositories\CategoryVarcharRepositoryInterface;
-use TechDivision\Import\Utils\CategoryPathUtilInterface;
 
 /**
  * Assembler implementation that provides functionality to assemble category data.
@@ -50,17 +50,17 @@ class CategoryAssembler extends \TechDivision\Import\Assembler\CategoryAssembler
      * @param \TechDivision\Import\Category\Repositories\CategoryRepositoryInterface        $categoryRepository         The repository to access categories
      * @param \TechDivision\Import\Category\Repositories\CategoryVarcharRepositoryInterface $categoryVarcharRepository  The repository instance
      * @param \TechDivision\Import\Category\Assembler\CategoryAttributeAssemblerInterface   $categoryAttributeAssembler The category attribute assembler instance
-     * @param \TechDivision\Import\Utils\CategoryPathUtilInterface                          $categoryPathUtil           The utility to handle category paths
+     * @param \TechDivision\Import\Serializer\SerializerInterface                           $serializer                 The serializer instance
      */
     public function __construct(
         CategoryRepositoryInterface $categoryRepository,
         CategoryVarcharRepositoryInterface $categoryVarcharRepository,
         CategoryAttributeAssemblerInterface $categoryAttributeAssembler,
-        CategoryPathUtilInterface $categoryPathUtil
+        SerializerInterface $serializer
     ) {
 
         // pass the repositories to the parent instance
-        parent::__construct($categoryRepository, $categoryVarcharRepository, $categoryPathUtil);
+        parent::__construct($categoryRepository, $categoryVarcharRepository, $serializer);
 
         // set the category attribute assembler instance
         $this->categoryAttributeAssembler = $categoryAttributeAssembler;
