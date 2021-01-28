@@ -255,6 +255,18 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
     }
 
     /**
+     * Find the path from mapping when only entity ID exists
+     *
+     * @param string $id The entoty_id to find in mapping
+     *
+     * @return string|bool
+     */
+    public function findPathfromEntityIdMapping($id)
+    {
+        return \array_search($id, $this->pathEntityIdMapping);
+    }
+
+    /**
      * Return's the entity ID for the passed path.
      *
      * @param string $path The path to return the entity ID for

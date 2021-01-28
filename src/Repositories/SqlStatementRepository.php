@@ -44,6 +44,8 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
             'SELECT * FROM ${table:catalog_category_entity} WHERE entity_id = :entity_id',
         SqlStatementKeys::CATEGORY_BY_PATH =>
             'SELECT * FROM ${table:catalog_category_entity} WHERE path = :path',
+        SqlStatementKeys::CATEGORY_BY_PATH_CHILDREN =>
+            'SELECT * FROM ${table:catalog_category_entity} WHERE path LIKE :path',
         SqlStatementKeys::CATEGORY_DATETIMES =>
             'SELECT *
                FROM ${table:catalog_category_entity_datetime}

@@ -47,6 +47,13 @@ class SqlStatementKeys extends \TechDivision\Import\Utils\SqlStatementKeys
     const CATEGORY_BY_PATH = 'category.by.path';
 
     /**
+     * The SQL statement to load the category with the passed path and all children.
+     *
+     * @var string
+     */
+    const CATEGORY_BY_PATH_CHILDREN = 'category.by.path.children';
+
+    /**
      * The SQL statement to load the category datetime attributes with the passed entity/store ID.
      *
      * @var string
