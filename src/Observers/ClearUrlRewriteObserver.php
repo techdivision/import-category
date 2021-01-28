@@ -105,9 +105,10 @@ class ClearUrlRewriteObserver extends AbstractCategoryImportObserver
     /**
      * Delete url rewrites from Category
      *
-     * @param $category
+     * @param array $category $category to delete the url rewrites
+     * @return void
      */
-    protected function deleteCategory($category)
+    protected function deleteCategory(array $category)
     {
         // delete all URL rewrites for products with passed categorie entity ID
         $this->deleteUrlRewrite(array(MemberNames::CATEGORY_ID => $category[MemberNames::ENTITY_ID]), SqlStatementKeys::DELETE_URL_REWRITE_BY_CATEGORY_ID);
@@ -136,7 +137,7 @@ class ClearUrlRewriteObserver extends AbstractCategoryImportObserver
     /**
      * Return's the category with the passed ID.
      *
-     * @param string $id The ID of the category to return
+     * @param string $path The ID of the category to return
      *
      * @return array The category
      */

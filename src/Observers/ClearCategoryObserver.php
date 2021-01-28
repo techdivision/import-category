@@ -87,7 +87,7 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
         $categories = $this->loadCategoriesByPath($category[MemberNames::PATH]);
 
         // First delete category children
-        foreach($categories as $categoryChild) {
+        foreach ($categories as $categoryChild) {
             $this->deleteSingleCategory($categoryChild);
         }
 
@@ -101,9 +101,10 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
     /**
      * Delete Category
      *
-     * @param $category
+     * @param array $category category data to delete
+     * @return void
      */
-    protected function deleteSingleCategory($category)
+    protected function deleteSingleCategory(array $category)
     {
         // delete the category with the passed path
         $this->deleteCategory(array(ColumnKeys::PATH => $category[MemberNames::PATH]));
@@ -115,7 +116,6 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
             // remove the path => entity ID mapping from the subject
             $this->removePathEntityIdMapping($path);
         }
-
     }
 
     /**
@@ -184,7 +184,7 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
     /**
      * Return's the category with the passed ID.
      *
-     * @param string $id The ID of the category to return
+     * @param string $path The ID of the category to return
      *
      * @return array The category
      */
