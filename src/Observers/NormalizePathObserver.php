@@ -94,6 +94,8 @@ class NormalizePathObserver extends AbstractCategoryImportObserver implements Ob
      */
     protected function process()
     {
-        $this->setValue(ColumnKeys::PATH, $this->getValue(ColumnKeys::PATH, null, function ($value) { return $this->serializer->normalize($value); } ));
+        $this->setValue(ColumnKeys::PATH, $this->getValue(ColumnKeys::PATH, null, function ($value) {
+            return $this->serializer->normalize($value);
+        }));
     }
 }

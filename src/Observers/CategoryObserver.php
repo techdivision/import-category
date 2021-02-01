@@ -113,11 +113,11 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
     /**
      * Initialize the subject instance.
      *
-     * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface  $categoryBunchProcessor The category bunch processor instance
-     * @param \TechDivision\Import\Observers\AttributeLoaderInterface                 $attributeLoader        The attribute loader instance
-     * @param \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface      $entityMerger           The entity merger instance
-     * @param \TechDivision\Import\Serializer\SerializerFactoryInterface              $serializerFactory      The serializer factory instance
-     * @param \TechDivision\Import\Observers\StateDetectorInterface|null              $stateDetector          The state detector instance to use
+     * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface $categoryBunchProcessor The category bunch processor instance
+     * @param \TechDivision\Import\Observers\AttributeLoaderInterface                $attributeLoader        The attribute loader instance
+     * @param \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface     $entityMerger           The entity merger instance
+     * @param \TechDivision\Import\Serializer\SerializerFactoryInterface             $serializerFactory      The serializer factory instance
+     * @param \TechDivision\Import\Observers\StateDetectorInterface|null             $stateDetector          The state detector instance to use
      */
     public function __construct(
         CategoryBunchProcessorInterface $categoryBunchProcessor,
@@ -176,7 +176,9 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
         $this->prepareStoreViewCode();
 
         // explode the path into the category names
-        if ($categories = $this->getValue(ColumnKeys::PATH, array(), function ($value) { return $this->serializer->explode($value); })) {
+        if ($categories = $this->getValue(ColumnKeys::PATH, array(), function ($value) {
+            return $this->serializer->explode($value);
+        })) {
             // initialize the flag to query whether or not the category is a leaf
             $leaf = false;
             // initialize the artefacts and reset the category IDs
