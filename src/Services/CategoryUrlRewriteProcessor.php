@@ -180,7 +180,7 @@ class CategoryUrlRewriteProcessor implements CategoryUrlRewriteProcessorInterfac
      *
      * @return void
      */
-    public function setUrlRewriteAction(ActionInterface $urlRewriteAction) : void
+    public function setUrlRewriteAction(ActionInterface $urlRewriteAction)
     {
         $this->urlRewriteAction = $urlRewriteAction;
     }
@@ -202,7 +202,7 @@ class CategoryUrlRewriteProcessor implements CategoryUrlRewriteProcessorInterfac
      *
      * @return void
      */
-    public function setUrlRewriteRepository(UrlRewriteRepositoryInterface $urlRewriteRepository) :void
+    public function setUrlRewriteRepository(UrlRewriteRepositoryInterface $urlRewriteRepository)
     {
         $this->urlRewriteRepository = $urlRewriteRepository;
     }
@@ -237,9 +237,21 @@ class CategoryUrlRewriteProcessor implements CategoryUrlRewriteProcessorInterfac
      *
      * @return array The category
      */
-    public function loadCategory($id) : array
+    public function loadCategory($id)
     {
         return $this->getCategoryRepository()->load($id);
+    }
+
+    /**
+     * Return's the category with the passed ID.
+     *
+     * @param string $path The ID of the category to return
+     *
+     * @return array The category
+     */
+    public function loadCategoriesByPath($path)
+    {
+        return $this->getCategoryRepository()->findAllByPath($path);
     }
 
     /**
@@ -263,7 +275,7 @@ class CategoryUrlRewriteProcessor implements CategoryUrlRewriteProcessorInterfac
      *
      * @return int The ID of the persisted entity
      */
-    public function persistUrlRewrite($row, $name = null) : int
+    public function persistUrlRewrite($row, $name = null)
     {
         return $this->getUrlRewriteAction()->persist($row, $name);
     }
@@ -276,7 +288,7 @@ class CategoryUrlRewriteProcessor implements CategoryUrlRewriteProcessorInterfac
      *
      * @return void
      */
-    public function deleteUrlRewrite($row, $name = null) : void
+    public function deleteUrlRewrite($row, $name = null)
     {
         $this->getUrlRewriteAction()->delete($row, $name);
     }

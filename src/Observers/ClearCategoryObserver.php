@@ -79,19 +79,43 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
 
         // load the category by it's path
         $category = $this->loadCategory($this->mapPath($path));
+        if (!$category) {
+            // TODO Logmessage ? Maybe a child who was previously deleted
+            return;
+        }
+        // Load all category children
+        $categories = $this->loadCategoriesByPath($category[MemberNames::PATH]);
 
-        // FIRST delete the data related with the category with the passed category path
-        $this->deleteUrlRewrite(array(ColumnKeys::PATH => $category[MemberNames::PATH]), SqlStatementKeys::DELETE_URL_REWRITE_BY_PATH);
-        $this->deleteUrlRewrite(array(MemberNames::CATEGORY_ID => $category[$this->getPkMemberName()]), SqlStatementKeys::DELETE_URL_REWRITE_BY_CATEGORY_ID);
+        // First delete category children
+        foreach ($categories as $categoryChild) {
+            $this->deleteSingleCategory($categoryChild);
+        }
 
-        // delete the category with the passed path
-        $this->deleteCategory(array(ColumnKeys::PATH => $category[MemberNames::PATH]));
-
-        // remove the path => entity ID mapping from the subject
-        $this->removePathEntityIdMapping($path);
+        // Second delete origin category
+        $this->deleteSingleCategory($category);
 
         // store the ID of the last deleted category
         $this->setLastEntityId($category[$this->getPkMemberName()]);
+    }
+
+    /**
+     * Delete Category
+     *
+     * @param array $category category data to delete
+     * @return void
+     */
+    protected function deleteSingleCategory(array $category)
+    {
+        // delete the category with the passed path
+        $this->deleteCategory(array(ColumnKeys::PATH => $category[MemberNames::PATH]));
+
+        // Search the path from path => entity ID mapping
+        $path = $this->findPathFromEntityIdMapping($category[MemberNames::ENTITY_ID]);
+
+        if (!empty($path)) {
+            // remove the path => entity ID mapping from the subject
+            $this->removePathEntityIdMapping($path);
+        }
     }
 
     /**
@@ -155,6 +179,18 @@ class ClearCategoryObserver extends AbstractCategoryImportObserver
     protected function loadCategory($id)
     {
         return $this->getCategoryBunchProcessor()->loadCategory($id);
+    }
+
+    /**
+     * Return's the category with the passed ID.
+     *
+     * @param string $path The ID of the category to return
+     *
+     * @return array The category
+     */
+    protected function loadCategoriesByPath($path)
+    {
+        return $this->getCategoryBunchProcessor()->loadCategoriesByPath($path);
     }
 
     /**

@@ -50,6 +50,13 @@ class CategoryRepository extends \TechDivision\Import\Repositories\CategoryRepos
     protected $categoryByPathStmt;
 
     /**
+     * The prepared statement to load an existing category by it's path and children
+     *
+     * @var \PDOStatement
+     */
+    protected $categoryByPathChildrenStmt;
+
+    /**
      * The prepared statement to load the children count of an existing category.
      *
      * @var \PDOStatement
@@ -74,6 +81,8 @@ class CategoryRepository extends \TechDivision\Import\Repositories\CategoryRepos
             $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::CATEGORY_BY_PATH));
         $this->categoryCountChildrenStmt =
             $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::CATEGORY_COUNT_CHILDREN));
+        $this->categoryByPathChildrenStmt =
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::CATEGORY_BY_PATH_CHILDREN));
     }
 
     /**
@@ -102,6 +111,21 @@ class CategoryRepository extends \TechDivision\Import\Repositories\CategoryRepos
         // load and return the category with the passed path
         $this->categoryByPathStmt->execute(array(MemberNames::PATH => $path));
         return $this->categoryByPathStmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Return's the categories with the passed path.
+     *
+     * @param string $path The path of the category to return
+     *
+     * @return array The category
+     */
+    public function findAllByPath($path)
+    {
+        // load and return the categories with the passed path
+        $this->categoryByPathChildrenStmt->execute(array(MemberNames::PATH => $path.'/%'));
+        $result = $this->categoryByPathChildrenStmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $result ? $result : [];
     }
 
     /**

@@ -118,7 +118,16 @@ interface CategoryUrlRewriteProcessorInterface
      *
      * @return array The category
      */
-    public function loadCategory($id) : array;
+    public function loadCategory($id);
+
+    /**
+     * Return's the category with the passed ID.
+     *
+     * @param string $path The ID of the category to return
+     *
+     * @return array The category
+     */
+    public function loadCategoriesByPath($path);
 
     /**
      * Load's and return's the URL rewrite for the given request path and store ID
@@ -138,7 +147,7 @@ interface CategoryUrlRewriteProcessorInterface
      *
      * @return int The ID of the persisted entity
      */
-    public function persistUrlRewrite($row, $name = null) : int;
+    public function persistUrlRewrite($row, $name = null);
 
     /**
      * Delete's the URL rewrite with the passed attributes.
@@ -148,5 +157,5 @@ interface CategoryUrlRewriteProcessorInterface
      *
      * @return void
      */
-    public function deleteUrlRewrite($row, $name = null) : void;
+    public function deleteUrlRewrite($row, $name = null);
 }

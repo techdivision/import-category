@@ -139,6 +139,18 @@ abstract class AbstractCategoryImportObserver extends AbstractObserver implement
     }
 
     /**
+     * Find the path from mapping when only entity ID exists
+     *
+     * @param string $id The entoty_id to find in mapping
+     *
+     * @return string
+     */
+    protected function findPathFromEntityIdMapping($id)
+    {
+        return $this->getSubject()->findPathfromEntityIdMapping($id);
+    }
+
+    /**
      * Add the passed path => store view code mapping.
      *
      * @param string $path          The path

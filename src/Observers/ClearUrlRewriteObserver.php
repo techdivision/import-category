@@ -81,21 +81,45 @@ class ClearUrlRewriteObserver extends AbstractCategoryImportObserver
         try {
             // try to load the entity ID for the product with the passed path
             $category = $this->loadCategory($this->mapPath($path));
-            // delete the URL rewrites of the category with the passed path
-            $this->deleteUrlRewrite(array(MemberNames::CATEGORY_ID => $category[MemberNames::ENTITY_ID]), SqlStatementKeys::DELETE_URL_REWRITE_BY_CATEGORY_ID);
-            // delete the URL rewrites of the category with the passed path
-            $this->deleteUrlRewrite(
-                array(
-                    MemberNames::ENTITY_ID   => $category[MemberNames::ENTITY_ID],
-                    MemberNames::ENTITY_TYPE => 'category'
-                ),
-                SqlStatementKeys::DELETE_URL_REWRITE_BY_ENTITY_ID_AND_ENTITY_TYPE
-            );
+            if (!$category) {
+                // TODO Logmessage ? Maybe a child who was previously deleted
+                return;
+            }
+            // Load all category children
+            $categories = $this->loadCategoriesByPath($category[MemberNames::PATH]);
+
+            // First delete category children
+            foreach ($categories as $categoryChild) {
+                $this->deleteCategory($categoryChild);
+            }
+
+            // second delete origin category
+            $this->deleteCategory($category);
         } catch (\Exception $e) {
             $this->getSubject()
                  ->getSystemLogger()
                  ->debug(sprintf('Category with path "%s" can\'t be loaded to clear URL rewrites, reason: "%s"', $path, $e->getMessage()));
         }
+    }
+
+    /**
+     * Delete url rewrites from Category
+     *
+     * @param array $category $category to delete the url rewrites
+     * @return void
+     */
+    protected function deleteCategory(array $category)
+    {
+        // delete all URL rewrites for products with passed categorie entity ID
+        $this->deleteUrlRewrite(array(MemberNames::CATEGORY_ID => $category[MemberNames::ENTITY_ID]), SqlStatementKeys::DELETE_URL_REWRITE_BY_CATEGORY_ID);
+        // delete the URL rewrites of the category with the passed categorie entity ID
+        $this->deleteUrlRewrite(
+            array(
+                MemberNames::ENTITY_ID   => $category[MemberNames::ENTITY_ID],
+                MemberNames::ENTITY_TYPE => 'category'
+            ),
+            SqlStatementKeys::DELETE_URL_REWRITE_BY_ENTITY_ID_AND_ENTITY_TYPE
+        );
     }
 
     /**
@@ -108,6 +132,18 @@ class ClearUrlRewriteObserver extends AbstractCategoryImportObserver
     protected function loadCategory($id)
     {
         return $this->getCategoryUrlRewriteProcessor()->loadCategory($id);
+    }
+
+    /**
+     * Return's the category with the passed ID.
+     *
+     * @param string $path The ID of the category to return
+     *
+     * @return array The category
+     */
+    protected function loadCategoriesByPath($path)
+    {
+        return $this->getCategoryUrlRewriteProcessor()->loadCategoriesByPath($path);
     }
 
     /**

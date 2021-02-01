@@ -258,6 +258,15 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
     public function loadCategory($id);
 
     /**
+     * Return's the category with the passed ID.
+     *
+     * @param string $path The ID of the category to return
+     *
+     * @return array The category
+     */
+    public function loadCategoriesByPath($path);
+
+    /**
      * Load's and return's the datetime attribute with the passed entity/attribute/store ID.
      *
      * @param integer $entityId    The entity ID of the attribute
