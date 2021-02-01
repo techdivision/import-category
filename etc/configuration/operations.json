@@ -81,7 +81,7 @@
                   "observers": [
                     {
                       "import": [
-                        "import_converter_product_category.observer.product.to.category"
+                        "import_converter_product_category.observer.composite.convert"
                       ]
                     }
                   ]

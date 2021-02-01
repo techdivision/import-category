@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Category\Assembler;
 
+use TechDivision\Import\Serializer\SerializerInterface;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Repositories\CategoryRepositoryInterface;
 use TechDivision\Import\Category\Repositories\CategoryVarcharRepositoryInterface;
@@ -49,15 +50,17 @@ class CategoryAssembler extends \TechDivision\Import\Assembler\CategoryAssembler
      * @param \TechDivision\Import\Category\Repositories\CategoryRepositoryInterface        $categoryRepository         The repository to access categories
      * @param \TechDivision\Import\Category\Repositories\CategoryVarcharRepositoryInterface $categoryVarcharRepository  The repository instance
      * @param \TechDivision\Import\Category\Assembler\CategoryAttributeAssemblerInterface   $categoryAttributeAssembler The category attribute assembler instance
+     * @param \TechDivision\Import\Serializer\SerializerInterface                           $serializer                 The serializer instance
      */
     public function __construct(
         CategoryRepositoryInterface $categoryRepository,
         CategoryVarcharRepositoryInterface $categoryVarcharRepository,
-        CategoryAttributeAssemblerInterface $categoryAttributeAssembler
+        CategoryAttributeAssemblerInterface $categoryAttributeAssembler,
+        SerializerInterface $serializer
     ) {
 
         // pass the repositories to the parent instance
-        parent::__construct($categoryRepository, $categoryVarcharRepository);
+        parent::__construct($categoryRepository, $categoryVarcharRepository, $serializer);
 
         // set the category attribute assembler instance
         $this->categoryAttributeAssembler = $categoryAttributeAssembler;
