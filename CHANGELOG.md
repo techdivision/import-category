@@ -1,3 +1,13 @@
+# Version 20.0.9
+
+## Bugfixes
+
+* Fixed #PAC-338: Exception when category sorting changes
+
+## Features
+
+* None
+
 # Version 20.0.8
 
 ## Bugfixes

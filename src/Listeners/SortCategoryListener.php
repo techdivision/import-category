@@ -29,6 +29,7 @@ use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Utils\RegistryKeys;
 use TechDivision\Import\Category\Observers\CopyCategoryObserver;
+use TechDivision\Import\Category\Filters\FilterInterface;
 
 /**
  * A listener implementation that sorts categories by their path and the position that has
@@ -109,13 +110,22 @@ class SortCategoryListener extends AbstractListener
     private $serializer;
 
     /**
+     * The upgrade filter instance.
+     *
+     * @var \TechDivision\Import\Category\Filters\FilterInterface
+     */
+    private $upgradeFilter;
+
+    /**
      * Initializes the listener with the registry processor instance.
      *
      * @param \TechDivision\Import\Services\RegistryProcessorInterface $registryProcessor The registry processor instance
+     * @param \TechDivision\Import\Category\Filters\FilterInterface    $upgradeFilter     The upgrade filter instance
      */
-    public function __construct(RegistryProcessorInterface $registryProcessor)
+    public function __construct(RegistryProcessorInterface $registryProcessor, FilterInterface $upgradeFilter)
     {
         $this->registryProcessor = $registryProcessor;
+        $this->upgradeFilter = $upgradeFilter;
     }
 
     /**
@@ -438,11 +448,12 @@ class SortCategoryListener extends AbstractListener
 
             // add the category name to the array with the paths
             foreach ($existingCategories as $existingCategory) {
-                $path[] = $this->serializer->serialize(array($existingCategory[MemberNames::NAME]), '/');
+                $path[] = $existingCategory[MemberNames::NAME];
             }
         }
 
-        // implode the paths and return it
-        return implode('/', $path);
+        // implode the paths by using the upgrade filter to normalize the
+        // path because of compatibility with database and return it
+        return implode('/', $this->upgradeFilter->filter($this->subject, $path));
     }
 }

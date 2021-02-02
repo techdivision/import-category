@@ -5,6 +5,8 @@
 
     <services>
 
+        <service id="import_category.filter.category.upgrade" class="TechDivision\Import\Category\Filters\CategoryUpgradeFilter"/>
+
         <!--
          | The DI configuration for the entity mergers
          |-->
@@ -23,6 +25,7 @@
 
         <service id="import_category.listener.sort.category" class="TechDivision\Import\Category\Listeners\SortCategoryListener">
             <argument type="service" id="import.processor.registry"/>
+            <argument type="service" id="import_category.filter.category.upgrade"/>
         </service>
         <service id="import_category.listeners.category.reduce" class="TechDivision\Import\Category\Listeners\CategoryReduceListener">
             <argument type="service" id="import.processor.registry"/>
