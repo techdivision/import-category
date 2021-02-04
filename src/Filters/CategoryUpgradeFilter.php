@@ -25,11 +25,12 @@ use TechDivision\Import\Subjects\SubjectInterface;
 /**
  * Filter implementation to upgrade the enclosure chars in a CSV column.
  *
- * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2021 TechDivision GmbH <info@techdivision.com>
- * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
- * @link      https://github.com/techdivision/import-category
- * @link      http://www.techdivision.com
+ * @author     Tim Wagner <t.wagner@techdivision.com>
+ * @copyright  2021 TechDivision GmbH <info@techdivision.com>
+ * @license    http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @link       https://github.com/techdivision/import-category
+ * @link       http://www.techdivision.com
+ * @deprecated Since 20.0.9
  */
 class CategoryUpgradeFilter implements FilterInterface
 {
