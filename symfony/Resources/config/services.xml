@@ -37,10 +37,14 @@
             <argument type="service" id="import.processor.registry"/>
         </service>
 
+        <service id="import_category.enum.url.rewrite.entity.type" class="TechDivision\Import\Utils\UrlRewriteEntityType">
+            <argument type="constant">TechDivision\Import\Utils\UrlRewriteEntityType::CATEGORY</argument>
+        </service>
         <service id="import_category.util.url.key" class="TechDivision\Import\Utils\UrlKeyUtil">
             <argument type="service" id="import_category.processor.category.bunch"/>
             <argument type="service" id="import.loader.core.config.data"/>
             <argument type="service" id="import.loader.store.view.id"/>
+            <argument type="service" id="import_category.enum.url.rewrite.entity.type"/>
         </service>
 
         <service id="import_category.repository.sql.statement" class="TechDivision\Import\Category\Repositories\SqlStatementRepository">
