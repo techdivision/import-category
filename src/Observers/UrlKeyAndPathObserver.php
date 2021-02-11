@@ -258,7 +258,7 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
      */
     protected function getPrimaryKey()
     {
-        $this->getSubject()->getLastEntityId();
+        return $this->getSubject()->getLastEntityId();
     }
 
     /**

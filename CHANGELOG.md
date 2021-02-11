@@ -1,3 +1,13 @@
+# Version 20.0.10
+
+## Bugfixes
+
+* Fixed: getPrimaryKey returned null
+
+## Features
+
+* None
+
 # Version 20.0.9
 
 ## Bugfixes
