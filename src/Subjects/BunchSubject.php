@@ -34,7 +34,6 @@ use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Category\Utils\RegistryKeys;
 use TechDivision\Import\Utils\FileUploadConfigurationKeys;
 
-
 /**
  * The subject implementation that handles the business logic to persist products.
  *
