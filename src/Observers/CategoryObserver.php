@@ -162,7 +162,16 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
                 $category = $this->initializeCategory($leaf ? $this->prepareDynamicAttributes() : array());
 
                 // persist and update the category with the new/existing entity ID
-                $category[$this->getPkMemberName()] = $this->persistCategory($category);
+                try {
+                    $category[$this->getPkMemberName()] = $this->persistCategory($category);
+                } catch (\Exception $e) {
+                    // if something went wrong in persist
+                    // show more information to localize error in CSV
+                    $message = $this->getSubject()->appendExceptionSuffix($e->getMessage());
+                    $this->getSubject()->getSystemLogger()->critical($message,['categoryPath' => $this->categoryPath]);
+                    throw $e;
+                }
+
 
                 // append the ID of the new category to array with the IDs
                 array_push($this->categoryIds, $category[MemberNames::ENTITY_ID]);
