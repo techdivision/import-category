@@ -168,7 +168,7 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
                     // if something went wrong in persist
                     // show more information to localize error in CSV
                     $message = $this->getSubject()->appendExceptionSuffix($e->getMessage());
-                    $this->getSubject()->getSystemLogger()->critical($message,['categoryPath' => $this->categoryPath]);
+                    $this->getSubject()->getSystemLogger()->critical($message, ['categoryPath' => $this->categoryPath]);
                     throw $e;
                 }
 
