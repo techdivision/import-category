@@ -16,6 +16,10 @@
 * Add functionality to clear URL rewrites when categories have been deleted
 * Add #PAC-326: Cross-entity import of URLs (rewrites + redirects)  
 * Add #PAC-57: Deleting dedicated attribute values via import by setting a configurable value
+* PAC-96: Use new constands for FileUploadConfiguration
+    * https://github.com/techdivision/import/issues/181
+* PAC-361: Don't check file system if copy-images defined as false
+    * https://github.com/techdivision/import-cli-simple/issues/262
 
 # Version 20.0.4
 
