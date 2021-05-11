@@ -42,6 +42,6 @@ class SelectCallback extends AbstractSelectCallback
      */
     protected function getUniqueIdentifier()
     {
-        return $this->getValue(ColumnKeys::SKU);
+        return $this->getValue(ColumnKeys::PATH);
     }
 }

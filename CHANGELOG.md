@@ -1,3 +1,13 @@
+# Version 20.0.12
+
+## Bugfixes
+
+* Fixed: getUniqueIdentifier returned category path
+
+## Features
+
+* None
+
 # Version 20.0.11
 
 ## Improvement
