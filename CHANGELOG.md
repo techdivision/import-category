@@ -8,6 +8,7 @@
 * Fixed #PAC-264: PDOException: SQLSTATE[23000] : Integrity constraint violation: 1062 Duplicate entry xxx.html-0 for key 'URL_REWRITE_REQUEST_PATH_STORE_ID
 * Fixed #PAC-265: Also use url_path when generate unique url_key for categories
 * Fixed issue when root category has to be created
+* Fixed: getUniqueIdentifier returned category path
 
 ## Features
 
