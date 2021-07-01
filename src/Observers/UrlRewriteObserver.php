@@ -78,7 +78,6 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
      */
     protected function process()
     {
-
         // load the path of the category we want to create the URL rewrites for
         $path = $this->getValue(ColumnKeys::PATH);
 
@@ -92,7 +91,7 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
             if ($this->getSubject()->isDebugMode()) {
                 $this->getSubject()->getSystemLogger()->warning($message);
                 return;
-            } else {
+            } elseif ($this->getSubject()->isStrictMode()) {
                 throw new \Exception($message);
             }
         }
