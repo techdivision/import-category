@@ -166,7 +166,7 @@ class SortCategoryListener extends AbstractListener
             // iterate over ALL rows found in the actual CSV file
             foreach ($newCategories as $newCategory) {
                 // we only want to process main rows, so temporary persist store view specific rows
-                if ($newCategory[ColumnKeys::STORE_VIEW_CODE]) {
+                if (isset($newCategory[ColumnKeys::STORE_VIEW_CODE])) {
                     $this->storeViewRows[] = $this->template($newCategory);
                 } else {
                     // add the main category to the new categories (we want to load/update the position for)

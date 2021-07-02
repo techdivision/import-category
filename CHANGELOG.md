@@ -9,6 +9,7 @@
 * Fixed #PAC-265: Also use url_path when generate unique url_key for categories
 * Fixed issue when root category has to be created
 * Fixed: getUniqueIdentifier returned category path
+* Fixed: PHP 7.4 warning
 
 ## Features
 
