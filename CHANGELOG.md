@@ -1,3 +1,13 @@
+# Version 20.0.13
+
+## Bugfixes
+
+* Fixed: PHP 7.4 warning
+
+## Features
+
+* None
+
 # Version 20.0.12
 
 ## Bugfixes
