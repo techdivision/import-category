@@ -1,3 +1,13 @@
+# Version 20.0.14
+
+## Bugfixes
+
+* Update multistore categories only on new category from default line
+
+## Features
+
+* None
+
 # Version 20.0.13
 
 ## Bugfixes
