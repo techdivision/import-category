@@ -359,7 +359,15 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
         // update the categories of the global data with the new ones
         foreach (array_keys($this->stores) as $storeWebsiteCode) {
             foreach ($this->categories as $path => $category) {
-                $categories[$storeWebsiteCode][$path] = $category;
+                if ($storeWebsiteCode === StoreViewCodes::ADMIN) {
+                    $categories[$storeWebsiteCode][$path] = $category;
+                } else {
+                    // for store code only just add new category
+                    // never update store code specific with admin row information
+                    if (!isset($categories[$storeWebsiteCode][$path])) {
+                        $categories[$storeWebsiteCode][$path] = $category;
+                    }
+                }
             }
         }
 

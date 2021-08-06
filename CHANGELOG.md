@@ -10,6 +10,7 @@
 * Fixed issue when root category has to be created
 * Fixed: getUniqueIdentifier returned category path
 * Fixed: PHP 7.4 warning
+* Update multistore categories only on new category from default line
 
 ## Features
 
