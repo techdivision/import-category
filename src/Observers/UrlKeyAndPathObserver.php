@@ -3,17 +3,11 @@
 /**
  * TechDivision\Import\Category\Observers\UrlKeyAndPathObserver
  *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- *
- * PHP version 5
+ * PHP version 7
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2019 TechDivision GmbH <info@techdivision.com>
- * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @license   https://opensource.org/licenses/MIT
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
@@ -21,11 +15,11 @@
 namespace TechDivision\Import\Category\Observers;
 
 use Zend\Filter\FilterInterface;
+use TechDivision\Import\Utils\ConfigurationKeys;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\UrlKeyUtilInterface;
 use TechDivision\Import\Utils\Filter\UrlKeyFilterTrait;
 use TechDivision\Import\Subjects\UrlKeyAwareSubjectInterface;
-use TechDivision\Import\Category\Utils\ConfigurationKeys;
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Services\CategoryBunchProcessorInterface;
@@ -37,7 +31,7 @@ use TechDivision\Import\Utils\Generators\GeneratorInterface;
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2019 TechDivision GmbH <info@techdivision.com>
- * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @license   https://opensource.org/licenses/MIT
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
