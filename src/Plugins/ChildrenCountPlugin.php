@@ -15,7 +15,7 @@
 namespace TechDivision\Import\Category\Plugins;
 
 use TechDivision\Import\ApplicationInterface;
-use TechDivision\Import\Utils\EntityStatus;
+use TechDivision\Import\Dbal\Utils\EntityStatus;
 use TechDivision\Import\Plugins\AbstractPlugin;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Services\CategoryProcessorInterface;

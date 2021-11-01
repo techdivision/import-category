@@ -14,7 +14,7 @@
 
 namespace TechDivision\Import\Category\Observers;
 
-use TechDivision\Import\Utils\EntityStatus;
+use TechDivision\Import\Dbal\Utils\EntityStatus;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\BackendTypeKeys;
 use TechDivision\Import\Subjects\SubjectInterface;
