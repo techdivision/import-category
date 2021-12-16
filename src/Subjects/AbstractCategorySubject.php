@@ -3,17 +3,11 @@
 /**
  * TechDivision\Import\Category\Subjects\AbstractCategorySubject
  *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- *
- * PHP version 5
+ * PHP version 7
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2019 TechDivision GmbH <info@techdivision.com>
- * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @license   https://opensource.org/licenses/MIT
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
@@ -33,7 +27,7 @@ use TechDivision\Import\Utils\StoreViewCodes;
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2019 TechDivision GmbH <info@techdivision.com>
- * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @license   https://opensource.org/licenses/MIT
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
@@ -359,7 +353,15 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
         // update the categories of the global data with the new ones
         foreach (array_keys($this->stores) as $storeWebsiteCode) {
             foreach ($this->categories as $path => $category) {
-                $categories[$storeWebsiteCode][$path] = $category;
+                if ($storeWebsiteCode === StoreViewCodes::ADMIN) {
+                    $categories[$storeWebsiteCode][$path] = $category;
+                } else {
+                    // for store code only just add new category
+                    // never update store code specific with admin row information
+                    if (!isset($categories[$storeWebsiteCode][$path])) {
+                        $categories[$storeWebsiteCode][$path] = $category;
+                    }
+                }
             }
         }
 

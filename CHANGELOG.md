@@ -9,9 +9,12 @@
 * Fixed #PAC-265: Also use url_path when generate unique url_key for categories
 * Fixed issue when root category has to be created
 * Fixed: getUniqueIdentifier returned category path
+* Fixed: PHP 7.4 warning
+* Update multistore categories only on new category from default line
 
 ## Features
 
+* Refactoring deprecated classes. see https://github.com/techdivision/import-cli-simple/blob/master/UPGRADE-4.0.0.md
 * Add `"include_in_menu": null` to `etc/configuration/default-values.json`
 * Remove stack trace of exception for missing media directories > log a simple debug message instead
 * Add functionality to clear URL rewrites when categories have been deleted

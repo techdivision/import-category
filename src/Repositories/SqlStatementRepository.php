@@ -3,17 +3,11 @@
 /**
  * TechDivision\Import\Category\Repositories\SqlStatementRepository
  *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- *
- * PHP version 5
+ * PHP version 7
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2019 TechDivision GmbH <info@techdivision.com>
- * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @license   https://opensource.org/licenses/MIT
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
@@ -27,7 +21,7 @@ use TechDivision\Import\Category\Utils\SqlStatementKeys;
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2019 TechDivision GmbH <info@techdivision.com>
- * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @license   https://opensource.org/licenses/MIT
  * @link      https://github.com/techdivision/import-category
  * @link      http://www.techdivision.com
  */
@@ -258,7 +252,7 @@ class SqlStatementRepository extends \TechDivision\Import\Repositories\SqlStatem
     /**
      * Initializes the SQL statement repository with the primary key and table prefix utility.
      *
-     * @param \IteratorAggregate<\TechDivision\Import\Utils\SqlCompilerInterface> $compilers The array with the compiler instances
+     * @param \IteratorAggregate<\TechDivision\Import\Dbal\Utils\SqlCompilerInterface> $compilers The array with the compiler instances
      */
     public function __construct(\IteratorAggregate $compilers)
     {
