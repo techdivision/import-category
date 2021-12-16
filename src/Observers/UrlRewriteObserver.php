@@ -91,7 +91,7 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
             if ($this->getSubject()->isDebugMode()) {
                 $this->getSubject()->getSystemLogger()->warning($message);
                 return;
-            } elseif ($this->getSubject()->isStrictMode()) {
+            } else {
                 throw new \Exception($message);
             }
         }
