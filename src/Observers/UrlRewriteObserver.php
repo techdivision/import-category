@@ -18,6 +18,7 @@ use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Utils\CoreConfigDataKeys;
 use TechDivision\Import\Category\Services\CategoryUrlRewriteProcessorInterface;
+use TechDivision\Import\Utils\RegistryKeys;
 
 /**
  * Observer that creates/updates the category's URL rewrites.
@@ -72,7 +73,6 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
      */
     protected function process()
     {
-
         // load the path of the category we want to create the URL rewrites for
         $path = $this->getValue(ColumnKeys::PATH);
 
@@ -83,8 +83,19 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
             // prepare a log message
             $message = sprintf('Category with path "%s" can\'t be loaded to create URL rewrites', $path);
             // query whether or not we're in debug mode
-            if ($this->getSubject()->isDebugMode()) {
+            if (!$this->getSubject()->isStrictMode()) {
                 $this->getSubject()->getSystemLogger()->warning($message);
+                $this->mergeStatus(
+                    array(
+                        RegistryKeys::NO_STRICT_VALIDATIONS => array(
+                            basename($this->getFilename()) => array(
+                                $this->getLineNumber() => array(
+                                    ColumnKeys::PATH =>  $message
+                                )
+                            )
+                        )
+                    )
+                );
                 return;
             } else {
                 throw new \Exception($message);
