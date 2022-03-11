@@ -26,11 +26,110 @@
     * https://github.com/techdivision/import-cli-simple/issues/262
 * PAC-294: Integration strict mode
 
+# Version 20.0.14
+
+## Bugfixes
+
+* Update multistore categories only on new category from default line
+
+## Features
+
+* None
+
+# Version 20.0.13
+
+## Bugfixes
+
+* Fixed: PHP 7.4 warning
+
+## Features
+
+* None
+
+# Version 20.0.12
+
+## Bugfixes
+
+* Fixed: getUniqueIdentifier returned category path
+
+## Features
+
+* None
+
+# Version 20.0.11
+
+## Improvement
+
+* PAC-96: Use new constands for FileUploadConfiguration
+  * https://github.com/techdivision/import/issues/181
+* PAC-361: Don't check file system if copy-images defined as false
+  * https://github.com/techdivision/import-cli-simple/issues/262
+
+# Version 20.0.10
+
+## Bugfixes
+
+* Fixed: getPrimaryKey returned null
+
+## Features
+
+* None
+
+# Version 20.0.9
+
+## Bugfixes
+
+* Fixed #PAC-338: Exception when category sorting changes
+
+## Features
+
+* None
+
+# Version 20.0.8
+
+## Bugfixes
+
+* Fixed issue with missing `sprintf()` function when creating an exception in `UrlKeyAndPathObserver::process()` method
+
+## Features
+
+* None
+
+# Version 20.0.7
+
+## Bugfixes
+
+* Fixed invalid behaviour of #PAC-307: Add fallback for URL key to value of default store view when initial import has been done without store view rows
+
+## Features
+
+* None
+
+# Version 20.0.6
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add #PAC-307: Functionality to control automatic update of URL rewrites when product or category name changes
+
+# Version 20.0.5
+
+## Bugfixes
+
+* Fixed techdivision/import-category#69
+
+## Features
+
+* Switch log level for exception stack trace for missing media directories from warning to debug
+
 # Version 20.0.4
 
 ## Bugfixes
 
-* Fixed techdivision/import-category#66
+* Fixed techdivision/import-category#68
 
 ## Features
 

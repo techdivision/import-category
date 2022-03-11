@@ -163,8 +163,11 @@ class SortCategoryListener extends AbstractListener
                 if (isset($newCategory[ColumnKeys::STORE_VIEW_CODE])) {
                     $this->storeViewRows[] = $this->template($newCategory);
                 } else {
+                    // clean-up the path to avoid encoding/quotation specific differences
+                    $path = $this->serializer->serialize(explode('/', $newCategory[ColumnKeys::PATH]), '/');
+
                     // add the main category to the new categories (we want to load/update the position for)
-                    $this->mainRows[$newCategory[ColumnKeys::PATH]] = $newCategory;
+                    $this->mainRows[$path] = $newCategory;
                 }
             }
 
@@ -190,7 +193,8 @@ class SortCategoryListener extends AbstractListener
             usort($this->artefacts, function ($a, $b) {
                 return
                     strcmp($a[ColumnKeys::PATH], $b[ColumnKeys::PATH]) ?:
-                    strcmp($a[ColumnKeys::STORE_VIEW_CODE], $b[ColumnKeys::STORE_VIEW_CODE]);
+                    strcmp($a[ColumnKeys::STORE_VIEW_CODE], $b[ColumnKeys::STORE_VIEW_CODE]) ?:
+                    strcmp($a[ColumnKeys::POSITION], $b[ColumnKeys::POSITION]);
             });
 
             // replace the artefacts to be exported later
