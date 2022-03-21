@@ -25,6 +25,7 @@
 * PAC-361: Don't check file system if copy-images defined as false
     * https://github.com/techdivision/import-cli-simple/issues/262
 * PAC-294: Integration strict mode
+* PAC-541: Update composer with php Version ">=^7.3"
 
 # Version 20.0.14
 

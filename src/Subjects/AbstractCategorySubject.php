@@ -184,7 +184,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
      */
     protected function unifyPath($path)
     {
-        return str_replace('"', null, strtolower($path));
+        return str_replace('"', '', strtolower($path));
     }
 
     /**
