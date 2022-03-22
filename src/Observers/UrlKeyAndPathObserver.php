@@ -14,7 +14,7 @@
 
 namespace TechDivision\Import\Category\Observers;
 
-use Zend\Filter\FilterInterface;
+use Laminas\Filter\FilterInterface;
 use TechDivision\Import\Utils\ConfigurationKeys;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\UrlKeyUtilInterface;
@@ -70,7 +70,7 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
      * Initialize the observer with the passed product bunch processor instance.
      *
      * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface $categoryBunchProcessor   The category bunch processor instance
-     * @param \Zend\Filter\FilterInterface                                           $convertLiteralUrlFilter  The URL filter instance
+     * @param \Laminas\Filter\FilterInterface                                           $convertLiteralUrlFilter  The URL filter instance
      * @param \TechDivision\Import\Utils\UrlKeyUtilInterface                         $urlKeyUtil               The URL key utility instance
      * @param \TechDivision\Import\Utils\Generators\GeneratorInterface               $reverseSequenceGenerator The reverse sequence generator instance
      */
