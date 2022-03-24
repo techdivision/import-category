@@ -197,7 +197,7 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
 
                 // empty $category failed on persisting, of course
                 if (empty($category)) {
-                    $message = sprintf('Categorie "%s" can\'t prepare for saving',$this->categoryPath);
+                    $message = sprintf('Categorie "%s" can\'t prepare for saving', $this->categoryPath);
                     $this->getSubject()->getSystemLogger()->error($this->getSubject()->appendExceptionSuffix($message));
                     if (!$this->getSubject()->isStrictMode()) {
                         $this->getSubject()->mergeStatus(
