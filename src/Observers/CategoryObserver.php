@@ -15,6 +15,7 @@
 namespace TechDivision\Import\Category\Observers;
 
 use TechDivision\Import\Dbal\Utils\EntityStatus;
+use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\BackendTypeKeys;
 use TechDivision\Import\Subjects\SubjectInterface;
@@ -193,6 +194,28 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
                 // a leaf or not, because ONLY when the category is a leaf, we want to
                 // OVERRIDE the values from the DB with the values from the import file
                 $category = $this->initializeCategory($leaf ? $this->prepareDynamicAttributes() : array());
+
+                // empty $category failed on persisting, of course
+                if (empty($category)) {
+                    $message = sprintf('Categorie "%s" can\'t prepare for saving',$this->categoryPath);
+                    $this->getSubject()->getSystemLogger()->error($this->getSubject()->appendExceptionSuffix($message));
+                    if (!$this->getSubject()->isStrictMode()) {
+                        $this->getSubject()->mergeStatus(
+                            array(
+                                RegistryKeys::NO_STRICT_VALIDATIONS => array(
+                                    basename($this->getSubject()->getFilename()) => array(
+                                        $this->getSubject()->getLineNumber() => array(
+                                            ColumnKeys::PATH  => $message
+                                        )
+                                    )
+                                )
+                            )
+                        );
+                        $this->skipRow();
+                        return;
+                    }
+                    throw new \Exception($message);
+                }
 
                 // persist and update the category with the new/existing entity ID
                 try {
