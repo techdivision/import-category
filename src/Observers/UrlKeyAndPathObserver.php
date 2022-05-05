@@ -94,6 +94,8 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
         // initialize the URL key and array for the categories
         $urlKey = null;
         $category = array();
+        // prepare the store view code
+        $this->prepareStoreViewCode();
 
         // set the entity ID for the category with the passed path
         try {
@@ -138,8 +140,7 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
         if ($categories = $this->explode($this->getValue(ColumnKeys::PATH), '/')) {
             // initialize the category with the actual category's URL key
             $categoryPaths = array($urlKey);
-            // prepare the store view code
-            $this->prepareStoreViewCode();
+
             // load ID of the actual store view
             $storeId = $this->getRowStoreId(StoreViewCodes::ADMIN);
 

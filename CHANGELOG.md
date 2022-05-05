@@ -1,3 +1,13 @@
+# Version 20.0.15
+
+## Bugfixes
+
+* Prepare the store view code for set url_key as unique
+
+## Features
+
+* None
+
 # Version 20.0.14
 
 ## Bugfixes
