@@ -184,11 +184,11 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
      * @return string The request path
      */
     protected function prepareRequestPath()
-    { 
+    {
         $configData = $this->getMagentoConfig();
         // load the category URL suffix to use
         $categoryUrlSuffix = isset($configData['category_url_suffix']) ?
-            (!empty($configData['category_url_suffix']) ? '.' . $configData['category_url_suffix'] :$configData['category_url_suffix']) :
+            (!empty($configData['category_url_suffix']) ? '.' . $configData['category_url_suffix'] : $configData['category_url_suffix']) :
             '.html';
         $urlSuffix = $this->getSubject()->getCoreConfigData(CoreConfigDataKeys::CATALOG_SEO_CATEGORY_URL_SUFFIX, $categoryUrlSuffix);
        
