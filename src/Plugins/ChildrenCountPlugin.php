@@ -40,6 +40,13 @@ class ChildrenCountPlugin extends AbstractPlugin
     protected $processor;
 
     /**
+     * Loaded category.
+     *
+     * @var array
+     */
+    protected $category;
+
+    /**
      * Initializes the plugin with the application instance.
      *
      * @param \TechDivision\Import\ApplicationInterface                         $application The application instance

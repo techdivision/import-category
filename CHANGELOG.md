@@ -1,3 +1,9 @@
+# Version 21.0.1
+
+## Bugfixes
+
+* Start fix php8.2 deprecated warnings
+
 # Version 21.0.0
 
 ## Bugfixes
@@ -26,6 +32,12 @@
     * https://github.com/techdivision/import-cli-simple/issues/262
 * PAC-294: Integration strict mode
 * PAC-541: Update composer with php Version ">=^7.3"
+
+# Version 20.0.15
+
+## Bugfixes
+
+* Prepare the store view code for set url_key as unique
 
 # Version 20.0.14
 

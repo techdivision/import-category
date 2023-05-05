@@ -65,6 +65,13 @@ class CategoryVarcharRepository extends \TechDivision\Import\Repositories\Catego
     protected $categoryVarcharByAttributeCodeAndEntityTypeIdAndStoreIdAndPrimaryKeyStmt;
 
     /**
+     * The cache adapter instance
+     *
+     * @var \TechDivision\Import\Cache\CacheAdapterInterface
+     */
+    protected $cacheAdapter;
+
+    /**
      * Initialize the repository with the passed connection and utility class name.
      * .
      * @param \TechDivision\Import\Dbal\Connection\ConnectionInterface               $connection             The connection instance
