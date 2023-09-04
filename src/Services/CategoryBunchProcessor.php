@@ -14,6 +14,7 @@
 
 namespace TechDivision\Import\Category\Services;
 
+use TechDivision\Import\Dbal\Utils\PrimaryKeyUtilInterface;
 use TechDivision\Import\Loaders\LoaderInterface;
 use TechDivision\Import\Dbal\Actions\ActionInterface;
 use TechDivision\Import\Dbal\Connection\ConnectionInterface;
@@ -190,6 +191,13 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     protected $rawEntityLoader;
 
     /**
+     * The primary key util instance.
+     *
+     * @var \TechDivision\Import\Dbal\Utils\PrimaryKeyUtilInterface
+     */
+    protected $primaryKeyUtil;
+
+    /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
      * @param \TechDivision\Import\Dbal\Connection\ConnectionInterface                       $connection                        The connection to use
@@ -235,7 +243,8 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
         ActionInterface $urlRewriteAction,
         CategoryAssemblerInterface $categoryAssembler,
         CategoryAttributeAssemblerInterface $categoryAttributeAssembler,
-        LoaderInterface $rawEntityLoader
+        LoaderInterface $rawEntityLoader,
+        PrimaryKeyUtilInterface $primaryKeyUtil
     ) {
         $this->setConnection($connection);
         $this->setCategoryRepository($categoryRepository);
@@ -258,6 +267,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
         $this->setCategoryAssembler($categoryAssembler);
         $this->setCategoryAttributeAssembler($categoryAttributeAssembler);
         $this->setRawEntityLoader($rawEntityLoader);
+        $this->setPrimaryKeyUtil($primaryKeyUtil);
     }
 
     /**
@@ -1247,5 +1257,38 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
     public function deleteCategoryVarcharAttribute($row, $name = null)
     {
         $this->getCategoryVarcharAction()->delete($row, $name);
+    }
+
+    /**
+     * Sets the passed primary key util instance.
+     *
+     * @param \TechDivision\Import\Dbal\Utils\PrimaryKeyUtilInterface $primaryKeyUtil The primary key util instance
+     *
+     * @return void
+     */
+    public function setPrimaryKeyUtil(PrimaryKeyUtilInterface $primaryKeyUtil)
+    {
+        $this->primaryKeyUtil = $primaryKeyUtil;
+    }
+
+    /**
+     * Returns the primary key util instance.
+     *
+     * @return \TechDivision\Import\Dbal\Utils\PrimaryKeyUtilInterface The primary key util instance
+     */
+    public function getPrimaryKeyUtil()
+    {
+        return $this->primaryKeyUtil;
+    }
+
+    /**
+     * Returns the primary key member name for the actual Magento edition.
+     *
+     * @return string The primary key member name
+     * @see \TechDivision\Import\Dbal\Utils\PrimaryKeyUtilInterface::getPrimaryKeyMemberName()
+     */
+    public function getPrimaryKeyMemberName()
+    {
+        return $this->getPrimaryKeyUtil()->getPrimaryKeyMemberName();
     }
 }

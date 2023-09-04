@@ -440,4 +440,12 @@ interface CategoryBunchProcessorInterface extends CategoryProcessorInterface, Ea
      * @return void
      */
     public function deleteCategory($row, $name = null);
+
+    /**
+     * Returns the primary key member name for the actual Magento edition.
+     *
+     * @return string The primary key member name
+     * @see \TechDivision\Import\Dbal\Utils\PrimaryKeyUtilInterface::getPrimaryKeyMemberName()
+     */
+    public function getPrimaryKeyMemberName();
 }

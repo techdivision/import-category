@@ -16,6 +16,7 @@ namespace TechDivision\Import\Category\Observers;
 
 use Laminas\Filter\FilterInterface;
 use TechDivision\Import\Utils\ConfigurationKeys;
+use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\UrlKeyUtilInterface;
 use TechDivision\Import\Utils\Filter\UrlKeyFilterTrait;
@@ -67,6 +68,11 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
     protected $reverseSequenceGenerator;
 
     /**
+     * @var bool The flag to check if the URL key has been read from database
+     */
+    protected $originUrlKey = false;
+
+    /**
      * Initialize the observer with the passed product bunch processor instance.
      *
      * @param \TechDivision\Import\Category\Services\CategoryBunchProcessorInterface $categoryBunchProcessor   The category bunch processor instance
@@ -96,8 +102,7 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
     protected function process()
     {
 
-        // initialize the URL key, the entity and the category
-        $urlKey = null;
+        // initialize the entity and the category
         $entity = null;
         $category = array();
 
@@ -113,28 +118,13 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
             $category[MemberNames::ENTITY_ID] = $this->getReverseSequenceGenerator()->generate();
         }
 
-        // query whether or not the URL key column has a value
-        if ($this->hasValue(ColumnKeys::URL_KEY)) {
-            $urlKey = $this->getValue(ColumnKeys::URL_KEY);
-        } else {
-            // query whether or not the existing category `url_key` should be re-created from the category name
-            if (is_array($entity) && !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)) {
-                // if the category already exists and NO re-creation from the category name has to
-                // be done, load the original `url_key`from the category and use that to proceed
-                $urlKey = $this->loadUrlKey($this->getSubject(), $this->getPrimaryKey());
-            }
-
-            // try to load the value from column `name` if URL key is still
-            // empty, because we need it to process the the rewrites later on
-            if ($urlKey === null || $urlKey === '' && $this->hasValue(ColumnKeys::NAME)) {
-                $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME));
-            }
-        }
+        // load the URL key from the actual row.
+        $urlKey = $this->getUrlKeyFromRow($entity);
 
         // stop processing, if no URL key is available
         if ($urlKey === null || $urlKey === '') {
             // throw an exception, that the URL key can not be
-            // initialized and we're in the default store view
+            // initialized, we're in the default store view
             if ($this->getStoreViewCode(StoreViewCodes::ADMIN) === StoreViewCodes::ADMIN) {
                 throw new \Exception(sprintf('Can\'t initialize the URL key for category "%s" because columns "url_key" or "name" have a value set for default store view', $path));
             }
@@ -158,7 +148,7 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
                     $categoryPath = implode('/', array_slice($categories, 0, $i));
                     // load the existing category and prepend the URL key the array with the category URL keys
                     $existingCategory = $this->getCategoryByPkAndStoreId($this->mapPath($categoryPath), $storeId);
-                    // query whether or not an URL key is available or not
+                    // query whether a URL key is available or not
                     if (isset($existingCategory[MemberNames::URL_KEY])) {
                         array_unshift($categoryPaths, $existingCategory[MemberNames::URL_KEY]);
                     } else {
@@ -170,14 +160,40 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
             }
         }
 
-        // update the URL key with the unique value
-        $this->setValue(
-            ColumnKeys::URL_KEY,
-            $urlKey = $this->makeUnique($this->getSubject(), $category, $urlKey, sizeof($categoryPaths) > 0 ? array(implode('/', $categoryPaths)) : array())
+        // generate the unique URL key
+        $uniqueUrlKey = $this->makeUnique(
+            $this->getSubject(),
+            $category,
+            $urlKey,
+            sizeof($categoryPaths) > 0 ? array(implode('/', $categoryPaths)) : array()
         );
 
+        if ($urlKey !== $uniqueUrlKey && !$this->getSubject()->isStrictMode()) {
+            $message = sprintf(
+                'Generate new unique URL key "%s" for store "%s" and category with PATH "%s"',
+                $uniqueUrlKey,
+                $this->getStoreViewCode(StoreViewCodes::ADMIN),
+                $path
+            );
+            $this->getSubject()->getSystemLogger()->warning($message);
+            $this->mergeStatus(
+                array(
+                    RegistryKeys::NO_STRICT_VALIDATIONS => array(
+                        basename($this->getFilename()) => array(
+                            $this->getLineNumber() => array(
+                                ColumnKeys::URL_KEY => $message
+                            )
+                        )
+                    )
+                )
+            );
+        }
+
+        // update the URL key with the unique value
+        $this->setValue(ColumnKeys::URL_KEY, $uniqueUrlKey);
+
         // finally, append the URL key as last element to the path
-        array_push($categoryPaths, $urlKey);
+        array_push($categoryPaths, $uniqueUrlKey);
 
         // create the virtual column for the URL path
         if ($this->hasHeader(ColumnKeys::URL_PATH) === false) {
@@ -186,6 +202,37 @@ class UrlKeyAndPathObserver extends AbstractCategoryImportObserver
 
         // set the URL path
         $this->setValue(ColumnKeys::URL_PATH, implode('/', $categoryPaths));
+    }
+
+    /**
+     * @param array|null $entity category entity
+     * @return mixed|string
+     * @throws \Exception
+     */
+    protected function getUrlKeyFromRow($entity)
+    {
+        $this->originUrlKey = false;
+        $urlKey = null;
+        // query whether the URL key column has a value
+        if ($this->hasValue(ColumnKeys::URL_KEY)) {
+            $urlKey = $this->getValue(ColumnKeys::URL_KEY);
+        } else {
+            // query whether the existing category `url_key` should be re-created from the category name
+            if (is_array($entity) && !$this->getSubject()->getConfiguration()->getParam(ConfigurationKeys::UPDATE_URL_KEY_FROM_NAME, true)) {
+                // if the category already exists and NO re-creation from the category name has to
+                // be done, load the original `url_key`from the category and use that to proceed
+                $urlKey = $this->loadUrlKey($this->getSubject(), $this->getPrimaryKey());
+                $this->originUrlKey = !empty($urlKey);
+            }
+
+            // try to load the value from column `name` if URL key is still
+            // empty, because we need it to process the the rewrites later on
+            if ($urlKey === null || ($urlKey === '' && $this->hasValue(ColumnKeys::NAME))) {
+                $urlKey = $this->convertNameToUrlKey($this->getValue(ColumnKeys::NAME));
+            }
+        }
+
+        return $urlKey;
     }
 
     /**
