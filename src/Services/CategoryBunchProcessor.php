@@ -221,6 +221,7 @@ class CategoryBunchProcessor implements CategoryBunchProcessorInterface
      * @param \TechDivision\Import\Category\Assembler\CategoryAssemblerInterface             $categoryAssembler                 The category assembler to use
      * @param \TechDivision\Import\Category\Assembler\CategoryAttributeAssemblerInterface    $categoryAttributeAssembler        The assembler to load the category attributes with
      * @param \TechDivision\Import\Loaders\LoaderInterface                                   $rawEntityLoader                   The raw entity loader instance
+     * @param \TechDivision\Import\Dbal\Utils\PrimaryKeyUtilInterface                        $primaryKeyUtil                    The primary key util instance
      */
     public function __construct(
         ConnectionInterface $connection,
