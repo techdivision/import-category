@@ -1,3 +1,9 @@
+# Version 21.0.2
+
+## Bugfixes
+
+* Fixed #METSUP-32: Rewrites for the multistore store views are updated unintentionally
+
 # Version 21.0.1
 
 ## Bugfixes

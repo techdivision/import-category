@@ -322,6 +322,7 @@
             <argument type="service" id="import_category.assembler.category"/>
             <argument type="service" id="import_category.assembler.category.attribute"/>
             <argument type="service" id="import_category.loader.raw.entity"/>
+            <argument type="service" id="import.util.primary.key"/>
         </service>
 
         <service id="import_category.processor.url.rewrite" class="TechDivision\Import\Category\Services\CategoryUrlRewriteProcessor">
@@ -379,7 +380,10 @@
         <service id="import_category.observer.url.rewrite.update" class="TechDivision\Import\Category\Observers\UrlRewriteUpdateObserver">
             <argument type="service" id="import_category.processor.url.rewrite"/>
         </service>
-        <service id="import_category.observer.category.url.rewrite" class="TechDivision\Import\Category\Observers\CategoryUrlRewriteObserver"/>
+        <service id="import_category.observer.category.url.rewrite" class="TechDivision\Import\Category\Observers\CategoryUrlRewriteObserver">
+            <argument type="service" id="import_category.processor.category.bunch"/>
+            <argument type="service" id="import.serializer.factory.csv.category"/>
+        </service>
         <service id="import_category.observer.clear.url.rewrite" class="TechDivision\Import\Category\Observers\ClearUrlRewriteObserver">
             <argument type="service" id="import_category.processor.url.rewrite"/>
         </service>
