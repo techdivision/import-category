@@ -1,3 +1,9 @@
+# Version 21.0.3
+
+## Bugfixes
+
+* Fix php8.2 deprecated warnings
+
 # Version 21.0.2
 
 ## Bugfixes

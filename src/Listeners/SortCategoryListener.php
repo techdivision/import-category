@@ -174,10 +174,12 @@ class SortCategoryListener extends AbstractListener
             // sort the main rows by the path, store_view_code and position
             // ATTENTION: we use uasort, because we NEED to preserve the keys
             uasort($this->mainRows, function ($a, $b) {
+                $a[ColumnKeys::STORE_VIEW_CODE] = $a[ColumnKeys::STORE_VIEW_CODE] ?: '';
+                $b[ColumnKeys::STORE_VIEW_CODE] = $b[ColumnKeys::STORE_VIEW_CODE] ?: '';
                 return
                     strcmp($a[ColumnKeys::PATH], $b[ColumnKeys::PATH]) ?:
-                    strcmp($a[ColumnKeys::STORE_VIEW_CODE], $b[ColumnKeys::STORE_VIEW_CODE]) ?:
-                    strcmp($a[ColumnKeys::POSITION], $b[ColumnKeys::POSITION]);
+                        strcmp($a[ColumnKeys::STORE_VIEW_CODE], $b[ColumnKeys::STORE_VIEW_CODE]) ?:
+                            strcmp($a[ColumnKeys::POSITION], $b[ColumnKeys::POSITION]);
             });
 
             // update the position of the categories and the categories on the same level
@@ -191,6 +193,8 @@ class SortCategoryListener extends AbstractListener
 
             // sort the artefacts again, because we want to export them in the expected order
             usort($this->artefacts, function ($a, $b) {
+                $a[ColumnKeys::STORE_VIEW_CODE] = $a[ColumnKeys::STORE_VIEW_CODE] ?: '';
+                $b[ColumnKeys::STORE_VIEW_CODE] = $b[ColumnKeys::STORE_VIEW_CODE] ?: '';
                 return
                     strcmp($a[ColumnKeys::PATH], $b[ColumnKeys::PATH]) ?:
                     strcmp($a[ColumnKeys::STORE_VIEW_CODE], $b[ColumnKeys::STORE_VIEW_CODE]) ?:
