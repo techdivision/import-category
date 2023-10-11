@@ -178,8 +178,8 @@ class SortCategoryListener extends AbstractListener
                 $b[ColumnKeys::STORE_VIEW_CODE] = $b[ColumnKeys::STORE_VIEW_CODE] ?: '';
                 return
                     strcmp($a[ColumnKeys::PATH], $b[ColumnKeys::PATH]) ?:
-                        strcmp($a[ColumnKeys::STORE_VIEW_CODE], $b[ColumnKeys::STORE_VIEW_CODE]) ?:
-                            strcmp($a[ColumnKeys::POSITION], $b[ColumnKeys::POSITION]);
+                    strcmp($a[ColumnKeys::STORE_VIEW_CODE], $b[ColumnKeys::STORE_VIEW_CODE]) ?:
+                    strcmp($a[ColumnKeys::POSITION], $b[ColumnKeys::POSITION]);
             });
 
             // update the position of the categories and the categories on the same level
