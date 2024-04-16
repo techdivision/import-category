@@ -110,7 +110,29 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
 
         // initialize and persist the URL rewrite
         if ($urlRewrite = $this->initializeUrlRewrite($this->prepareAttributes())) {
-            $this->persistUrlRewrite($urlRewrite);
+            try {
+                $this->persistUrlRewrite($urlRewrite);
+            } catch (\PDOException $pdoe) {
+                $message = sprintf('%s with Urlrewrite Data %s "', $pdoe->getMessage(), $urlRewrite);
+                if (!$this->getSubject()->isStrictMode()) {
+                    $this->getSubject()
+                        ->getSystemLogger()
+                        ->warning($this->getSubject()->appendExceptionSuffix($message));
+                    $this->mergeStatus(
+                        array(
+                            RegistryKeys::NO_STRICT_VALIDATIONS => array(
+                                basename($this->getFilename()) => array(
+                                    $this->getLineNumber() => array(
+                                        \TechDivision\Import\Product\UrlRewrite\Utils\ColumnKeys::URL_KEY =>  $message
+                                    )
+                                )
+                            )
+                        )
+                    );
+                } else {
+                    throw new \PDOException($pdoe);
+                }
+            }
         }
     }
 

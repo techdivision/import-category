@@ -18,6 +18,7 @@ use TechDivision\Import\Category\Utils\MemberNames;
 use TechDivision\Import\Category\Utils\CoreConfigDataKeys;
 use TechDivision\Import\Category\Utils\ColumnKeys;
 use TechDivision\Import\Category\Utils\ConfigurationKeys;
+use TechDivision\Import\Utils\RegistryKeys;
 
 /**
  * Observer that creates/updates the category's URL rewrites.
@@ -106,9 +107,30 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
 
                 // merge and return the prepared URL rewrite
                 $existingUrlRewrite = $this->mergeEntity($existingUrlRewrite, $attr);
-
-                // create the URL rewrite
-                $this->persistUrlRewrite($existingUrlRewrite);
+                try {
+                    // create the URL rewrite
+                    $this->persistUrlRewrite($existingUrlRewrite);
+                } catch (\PDOException $pdoe) {
+                    if (!$this->getSubject()->isStrictMode()) {
+                        $message = sprintf('%s with Urlrewrite Data %s "', $pdoe->getMessage(), $existingUrlRewrite);
+                        $this->getSubject()
+                            ->getSystemLogger()
+                            ->warning($this->getSubject()->appendExceptionSuffix($message));
+                        $this->mergeStatus(
+                            array(
+                                RegistryKeys::NO_STRICT_VALIDATIONS => array(
+                                    basename($this->getFilename()) => array(
+                                        $this->getLineNumber() => array(
+                                            \TechDivision\Import\Product\UrlRewrite\Utils\ColumnKeys::URL_KEY =>  $message
+                                        )
+                                    )
+                                )
+                            )
+                        );
+                    } else {
+                        throw new \PDOException($pdoe);
+                    }
+                }
             } else {
                 // query whether or not the URL rewrite has to be removed
                 if ($this->getSubject()->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_URL_REWRITES) &&
