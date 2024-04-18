@@ -112,7 +112,16 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
                     $this->persistUrlRewrite($existingUrlRewrite);
                 } catch (\PDOException $pdoe) {
                     if (!$this->getSubject()->isStrictMode()) {
-                        $message = sprintf('%s with Urlrewrite Data %s "', $pdoe->getMessage(), $existingUrlRewrite);
+                        $message = sprintf(
+                            'Is a PDO exception is thrown: with Urlrewrite Data \\n
+                            ("entity_id": "%s" && "request_path": "%s" && "target_path": "%s" && "entity_type": "%s" && "redirect_type": "%s" && "store_id": "%s")',
+                            $existingUrlRewrite[MemberNames::ENTITY_ID],
+                            $existingUrlRewrite[MemberNames::REQUEST_PATH],
+                            $existingUrlRewrite[MemberNames::TARGET_PATH],
+                            $existingUrlRewrite[MemberNames::ENTITY_TYPE],
+                            $existingUrlRewrite[MemberNames::REDIRECT_TYPE],
+                            $existingUrlRewrite[MemberNames::STORE_ID]
+                        );
                         $this->getSubject()
                             ->getSystemLogger()
                             ->warning($this->getSubject()->appendExceptionSuffix($message));

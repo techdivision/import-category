@@ -113,7 +113,16 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
             try {
                 $this->persistUrlRewrite($urlRewrite);
             } catch (\PDOException $pdoe) {
-                $message = sprintf('%s with Urlrewrite Data %s "', $pdoe->getMessage(), $urlRewrite);
+                $message = sprintf(
+                    'Is a PDO exception is thrown: with Urlrewrite Data \\n
+                            ("entity_id": "%s" && "request_path": "%s" && "target_path": "%s" && "entity_type": "%s" && "redirect_type": "%s" && "store_id": "%s")',
+                    $urlRewrite[MemberNames::ENTITY_ID],
+                    $urlRewrite[MemberNames::REQUEST_PATH],
+                    $urlRewrite[MemberNames::TARGET_PATH],
+                    $urlRewrite[MemberNames::ENTITY_TYPE],
+                    $urlRewrite[MemberNames::REDIRECT_TYPE],
+                    $urlRewrite[MemberNames::STORE_ID]
+                );
                 if (!$this->getSubject()->isStrictMode()) {
                     $this->getSubject()
                         ->getSystemLogger()
