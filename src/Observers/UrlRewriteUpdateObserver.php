@@ -113,7 +113,7 @@ class UrlRewriteUpdateObserver extends UrlRewriteObserver
                 } catch (\PDOException $pdoe) {
                     if (!$this->getSubject()->isStrictMode()) {
                         $message = sprintf(
-                            'Is a PDO exception is thrown: with Urlrewrite Data \\n
+                            'Is a "Duplicate entry" PDO exception is thrown: with Urlrewrite Data \\n
                             ("entity_id": "%s" && "request_path": "%s" && "target_path": "%s" && "entity_type": "%s" && "redirect_type": "%s" && "store_id": "%s")',
                             $existingUrlRewrite[MemberNames::ENTITY_ID],
                             $existingUrlRewrite[MemberNames::REQUEST_PATH],

@@ -114,7 +114,7 @@ class UrlRewriteObserver extends AbstractCategoryImportObserver
                 $this->persistUrlRewrite($urlRewrite);
             } catch (\PDOException $pdoe) {
                 $message = sprintf(
-                    'Is a PDO exception is thrown: with Urlrewrite Data \\n
+                    'Is a "Duplicate entry" PDO exception is thrown: with Urlrewrite Data \\n
                             ("entity_id": "%s" && "request_path": "%s" && "target_path": "%s" && "entity_type": "%s" && "redirect_type": "%s" && "store_id": "%s")',
                     $urlRewrite[MemberNames::ENTITY_ID],
                     $urlRewrite[MemberNames::REQUEST_PATH],
