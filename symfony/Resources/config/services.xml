@@ -229,7 +229,7 @@
         <service id="import_category.action.processor.url.rewrite.delete" class="TechDivision\Import\Dbal\Collection\Actions\Processors\BlackHoleProcessor">
             <argument type="service" id="import.action.processor.url.rewrite.delete"/>
         </service>
-        
+
 
         <service id="import_category.action.category" class="TechDivision\Import\Dbal\Collection\Actions\GenericIdentifierAction">
             <argument type="service" id="import_category.action.processor.category.create"/>
@@ -270,10 +270,10 @@
             <argument type="service" id="import_category.repository.category.text"/>
             <argument type="service" id="import_category.repository.category.varchar"/>
         </service>
-        
+
         <!--
-         | The DI configuration for the black hole enabled URL rewrite action because 
-         | we do NOT want to persist the URL rewrites here, we ONLY want tempoarily 
+         | The DI configuration for the black hole enabled URL rewrite action because
+         | we do NOT want to persist the URL rewrites here, we ONLY want tempoarily
          | add them to cache used to make sure we generate unique request paths
          |-->
         <service id="import_category.action.wrapped.url.rewrite" class="TechDivision\Import\Dbal\Collection\Actions\GenericIdentifierAction">
@@ -285,7 +285,7 @@
             <argument type="service" id="import.events.emitter"/>
             <argument type="service" id="import_category.action.wrapped.url.rewrite"/>
             <argument type="service" id="import_category.cache.key.url.rewrite"/>
-        </service>  
+        </service>
 
         <service id="import_category.assembler.category" class="TechDivision\Import\Category\Assembler\CategoryAssembler">
             <argument type="service" id="import_category.repository.category"/>
@@ -344,6 +344,9 @@
         <service id="import_category.callback.select" class="TechDivision\Import\Product\Callbacks\SelectCallback">
             <argument type="service" id="configuration"/>
             <argument type="service" id="import_category.processor.category.bunch"/>
+        </service>
+        <service id="import_category.callback.valid_category_path" class="TechDivision\Import\Category\Callbacks\CategoryPathValidatorCallback">
+            <argument type="service" id="import.loader.custom.validations"/>
         </service>
 
         <service id="import_category.observer.clean.up" class="TechDivision\Import\Category\Observers\CleanUpObserver"/>
@@ -486,7 +489,7 @@
                 <argument id="import.observer.generic.validator" type="service"/>
             </call>
         </service>
- 
+
         <service id="import_category.subject.bunch" class="TechDivision\Import\Category\Subjects\BunchSubject" shared="false">
             <argument type="service" id="import.processor.registry"/>
             <argument type="service" id="import.generator.core.config.data.uid"/>
