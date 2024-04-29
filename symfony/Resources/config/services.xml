@@ -347,6 +347,9 @@
         </service>
         <service id="import_category.callback.valid_category_path" class="TechDivision\Import\Category\Callbacks\CategoryPathValidatorCallback">
             <argument type="service" id="import.loader.custom.validations"/>
+            <argument>%array_validator.nullable.false%</argument>
+            <argument>%array_validator.nullable.false%</argument>
+            <argument>%array_validator.nullable.false%</argument>
         </service>
 
         <service id="import_category.observer.clean.up" class="TechDivision\Import\Category\Observers\CleanUpObserver"/>
