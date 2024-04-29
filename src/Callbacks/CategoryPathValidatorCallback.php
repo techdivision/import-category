@@ -29,7 +29,7 @@ class CategoryPathValidatorCallback extends IndexedArrayValidatorCallback
     /**
      * Will be invoked by a observer it has been registered for.
      *
-     * @param string|null $attributeCode The code of the attribute that has to be validated
+     * @param string|null $attributeCode  The code of the attribute that has to be validated
      * @param string|null $attributeValue The attribute value to be validated
      *
      * @return mixed The modified value
@@ -53,7 +53,7 @@ class CategoryPathValidatorCallback extends IndexedArrayValidatorCallback
             // Get category name attribute
             $attributeCategoryName = $subject->getValue(ColumnKeys::NAME);
 
-            // Check if category name matches the attribute value
+            // Check if category name matches the attribute value (path)
             if (str_replace('"', '', $categoryName) === $attributeCategoryName) {
                 $message = sprintf(
                     'Value "%s" for column "%s" (matches category name: "%s")',
