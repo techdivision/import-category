@@ -349,7 +349,7 @@
             <argument type="service" id="import.loader.custom.validations"/>
             <argument>%array_validator.nullable.false%</argument>
             <argument>%array_validator.nullable.false%</argument>
-            <argument>%array_validator.nullable.false%</argument>
+            <argument>%array_validator.nullable.true%</argument>
         </service>
 
         <service id="import_category.observer.clean.up" class="TechDivision\Import\Category\Observers\CleanUpObserver"/>
