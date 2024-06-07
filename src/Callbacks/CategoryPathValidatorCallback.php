@@ -42,7 +42,7 @@ class CategoryPathValidatorCallback extends IndexedArrayValidatorCallback
         $subject->prepareStoreViewCode();
 
         // Explode the path of the category
-        $categoryNames = explode('/', $attributeValue);
+        $categoryNames = $this->getSubject()->explode($attributeValue, "/");
         $categoryName = end($categoryNames);
 
         // Get store view code value
@@ -54,7 +54,7 @@ class CategoryPathValidatorCallback extends IndexedArrayValidatorCallback
             $attributeCategoryName = $subject->getValue(ColumnKeys::NAME);
 
             // Check if category name matches the attribute value (path)
-            if (str_replace('"', '', $categoryName) === $attributeCategoryName) {
+            if ($categoryName === $attributeCategoryName) {
                 $message = sprintf(
                     'Value "%s" for column "%s" (matches category name: "%s")',
                     $attributeValue,
