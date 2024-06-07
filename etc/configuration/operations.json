@@ -41,7 +41,10 @@
                   ],
                   "callbacks": [
                     {
-                      "path": [ "import.callback.custom.regex.validator" ],
+                      "path": [
+                          "import.callback.custom.regex.validator",
+                          "import_category.callback.valid_category_path"
+                      ],
                       "store_view_code": [ "import.callback.store.view.code.validator" ],
                       "attribute_set_code": [ "import.callback.attribute.set.name.validator" ],
                       "created_at" : [ "import.callback.validator.datetime" ],

@@ -1,3 +1,14 @@
+# Version 21.1.0
+
+## Features
+
+* New callback added to validate the category path if it matches a valid name
+`\TechDivision\Import\Category\Observers\CategoryUrlRewriteObserver`
+
+## Bugfixes
+
+* None
+
 # Version 21.0.3
 
 ## Bugfixes
