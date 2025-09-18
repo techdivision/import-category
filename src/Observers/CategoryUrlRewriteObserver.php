@@ -68,12 +68,12 @@ class CategoryUrlRewriteObserver extends AbstractCategoryImportObserver implemen
     /**
      * @param CategoryBunchProcessorInterface $categoryBunchProcessor category bunch processor instance
      * @param SerializerFactoryInterface      $serializerFactory      serializer factory instance
-     * @param StateDetectorInterface|null     $stateDetector          state detector instance
+     * @param StateDetectorInterface|null $stateDetector          state detector instance
      */
     public function __construct(
         CategoryBunchProcessorInterface $categoryBunchProcessor,
         SerializerFactoryInterface $serializerFactory,
-        StateDetectorInterface $stateDetector = null
+        ?StateDetectorInterface $stateDetector = null
     ) {
         $this->categoryBunchProcessor = $categoryBunchProcessor;
         $this->serializerFactory = $serializerFactory;
