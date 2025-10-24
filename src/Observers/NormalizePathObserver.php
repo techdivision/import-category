@@ -50,11 +50,11 @@ class NormalizePathObserver extends AbstractCategoryImportObserver implements Ob
      * Initializes the observer with the state detector instance.
      *
      * @param \TechDivision\Import\Serializer\SerializerFactoryInterface $serializerFactory The serializer factory instance
-     * @param \TechDivision\Import\Observers\StateDetectorInterface      $stateDetector     The state detector instance
+     * @param \TechDivision\Import\Observers\StateDetectorInterface|null $stateDetector     The state detector instance
      */
     public function __construct(
         SerializerFactoryInterface $serializerFactory,
-        StateDetectorInterface $stateDetector = null
+        ?StateDetectorInterface $stateDetector = null
     ) {
 
         // initialize the serializer factory

@@ -128,11 +128,11 @@ class SortCategoryListener extends AbstractListener
      * Handle an event.
      *
      * @param \League\Event\EventInterface                   $event   The event that triggered the event
-     * @param \TechDivision\Import\Subjects\SubjectInterface $subject The subject instance
+     * @param \TechDivision\Import\Subjects\SubjectInterface|null $subject The subject instance
      *
      * @return void
      */
-    public function handle(EventInterface $event, SubjectInterface $subject = null) : void
+    public function handle(EventInterface $event, ?SubjectInterface $subject = null) : void
     {
 
         // initialize subject and serializer

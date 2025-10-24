@@ -112,14 +112,14 @@ class CategoryObserver extends AbstractCategoryImportObserver implements Dynamic
      * @param \TechDivision\Import\Observers\AttributeLoaderInterface                $attributeLoader        The attribute loader instance
      * @param \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface     $entityMerger           The entity merger instance
      * @param \TechDivision\Import\Serializer\SerializerFactoryInterface             $serializerFactory      The serializer factory instance
-     * @param \TechDivision\Import\Observers\StateDetectorInterface|null             $stateDetector          The state detector instance to use
+     * @param \TechDivision\Import\Observers\StateDetectorInterface|null $stateDetector          The state detector instance to use
      */
     public function __construct(
         CategoryBunchProcessorInterface $categoryBunchProcessor,
         AttributeLoaderInterface $attributeLoader,
         EntityMergerInterface $entityMerger,
         SerializerFactoryInterface $serializerFactory,
-        StateDetectorInterface $stateDetector = null
+        ?StateDetectorInterface $stateDetector = null
     ) {
 
         // initialize the bunch processor and the attribute loader instance

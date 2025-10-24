@@ -35,7 +35,7 @@ class PageLayoutCallback extends AbstractCategoryImportCallback
      *
      * @return mixed The modified value
      */
-    public function handle(AttributeCodeAndValueAwareObserverInterface $observer = null)
+    public function handle(?AttributeCodeAndValueAwareObserverInterface $observer = null)
     {
 
         // set the observer
