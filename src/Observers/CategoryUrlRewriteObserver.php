@@ -245,7 +245,7 @@ class CategoryUrlRewriteObserver extends AbstractCategoryImportObserver implemen
 
         // initialize the entity type ID
         $entityType = $this->getSubject()->getEntityType();
-        $entityTypeId = (integer) $entityType[MemberNames::ENTITY_TYPE_ID];
+        $entityTypeId = (int)$entityType[MemberNames::ENTITY_TYPE_ID];
 
         // initialize store ID from store code
         $storeId = $this->getSubject()->getRowStoreId($storeViewCode);

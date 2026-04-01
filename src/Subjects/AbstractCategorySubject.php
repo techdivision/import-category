@@ -403,7 +403,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
 
         // query whether or not, the requested store is available
         if (isset($this->stores[$storeViewCode])) {
-            return (integer) $this->stores[$storeViewCode][MemberNames::STORE_ID];
+            return (int)$this->stores[$storeViewCode][MemberNames::STORE_ID];
         }
 
         // throw an exception, if not
@@ -427,7 +427,7 @@ abstract class AbstractCategorySubject extends AbstractEavSubject implements Ent
 
         // query whether or not, the requested store website is available
         if (isset($this->storeWebsites[$code])) {
-            return (integer) $this->storeWebsites[$code][MemberNames::WEBSITE_ID];
+            return (int)$this->storeWebsites[$code][MemberNames::WEBSITE_ID];
         }
 
         // throw an exception, if not

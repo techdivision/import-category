@@ -237,7 +237,7 @@ class BunchSubject extends AbstractCategorySubject implements ExportableSubjectI
             // try to assemble the store view codes by iterating over the available root categories
             foreach ($this->rootCategories as $storeViewCode => $category) {
                 // query whether or not the entity ID of the root category matches
-                if ((integer) $category[$this->getPrimaryKeyMemberName()] === (integer) $rootCategory[$this->getPrimaryKeyMemberName()]) {
+                if ((int)$category[$this->getPrimaryKeyMemberName()] === (int)$rootCategory[$this->getPrimaryKeyMemberName()]) {
                     $storeViewCodes[] = $storeViewCode;
                 }
             }
