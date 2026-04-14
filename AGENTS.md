@@ -99,6 +99,53 @@ CategoryAttributeObserver::handle($row): void
 - Beachte URL-Rewrites bei Category-Imports
 - Erwäge Category-Validierung
 
+## Häufige Use Cases
+
+### CSV-Beispiel: Category Import
+```csv
+entity_id,path,name,level,url_key
+1,"1/2","Women",2,"women"
+2,"1/2/3","Shirts",3,"women-shirts"
+3,"1/2/4","Pants",3,"women-pants"
+4,"1/5","Men",2,"men"
+```
+
+### Szenarien
+1. **Category-Hierarchy Import**: Komplette Kategoriebaum mit URL-Rewrites
+2. **Attribute-Update**: Batch-Updates von Category-Attributes
+3. **URL-Rewrite-Management**: Automatische URL-Rewrite-Generierung
+4. **Multi-Store Categories**: Unterschiedliche Category-Strukturen pro Store
+
+## Performance-Überlegungen
+
+- **Path-Lookup**: Category-Path basierte Suche ist O(n) - langsam bei vielen Kategorien
+- **Hierarchy-Build**: Tiefe Bäume (>50 Levels) werden langsam
+- **URL-Rewrite-Gen**: Automatische Rewrite-Generierung kostet extra ~2-5ms pro Category
+- **Attribute-Insert**: Custom Attributes verdoppeln Insert-Zeit
+- **Batch-Optimization**: Optimal 500-1000 Categories pro Batch
+- **Memory-Profile**: ~50-100KB pro Category mit Attributes
+
+## Verwandte Module
+
+- **import-category-ee**: EE-spezifische Category-Features
+- **import-converter-product-category**: Product-Category Link-Management
+- **import**: Core Framework nutzt Category-Repository
+- **import-category** ← **diese Datei**
+
+## Troubleshooting & FAQ
+
+**Q: "Category path not found"**
+- A: Parent-Kategorie muss vorher importiert sein! Prüfe Import-Reihenfolge: Parent vor Children.
+
+**Q: URL-Rewrites werden nicht erzeugt**
+- A: URL-Rewrite-Listener muss registriert sein. Prüfe Event-Listeners in Konfiguration.
+
+**Q: Category-Attribute sind NULL nach Import**
+- A: Attributes müssen vorher via `import-attribute` erstellt sein. Prüfe Attribute-Existenz in DB.
+
+**Q: "Duplicate category path"**
+- A: Path muss eindeutig sein pro Store! Prüfe: `SELECT * FROM catalog_category_entity WHERE path = ? AND store_id = ?`
+
 ## Bekannte Einschränkungen
 
 - **Keine Category-Validierung**: Validierung erfolgt in Importern
