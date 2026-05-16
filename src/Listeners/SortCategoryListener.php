@@ -256,7 +256,7 @@ class SortCategoryListener extends AbstractListener
         foreach ($this->existingCategories as $p => $category) {
             // initialize the counter with the size of elements
             $sizeOfElements = sizeof($elements);
-            // query whether or not the level (integer) is the same as the number of elements
+            // query whether or not the level (int)is the same as the number of elements
             // AND the category is NOT a root category. This means we virtually cut off the
             // last element of the passed category. Then we know the category is at least on
             // the same level, but NOT if it has the same parent category!!!!!
